@@ -1,0 +1,6 @@
+Author  - John Allard
+Cration - 11/10/2014
+
+The purpose of this project is to implement a general graph data structure in C++, which I will then add to my collection of homemade data-structures.
+The plan is to implement a grpah as both an adj. matrix and adj. list, with both of these classes deriving from the same interface.
+
