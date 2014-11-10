@@ -27,6 +27,10 @@ template <class VertexType>
 class uGraph : public GraphInterface <VertexType>
 {
 
+
+//////////////////////////////////////////////////////
+////////         PUBLIC FUNCTIONS    /////////////////
+//////////////////////////////////////////////////////
 public:
 
     // @func - Constructor#1
@@ -87,6 +91,11 @@ public:
     // @info   - Performs a breadth first traversal, calling the visit() function on each item
     void breadthFirst(VertexType, void visit(VertexType&));
 
+
+
+//////////////////////////////////////////////////////
+////////         PUBLIC FUNCTIONS    /////////////////
+//////////////////////////////////////////////////////
 private:
 
     // @member - numVertices
