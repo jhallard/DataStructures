@@ -50,7 +50,7 @@ public:
 	// @func   - insertEdge
 	// @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 	// @return - Boolean indicating succes 
-	bool insertEdge(VertexType v1, VertexType v2, int weight);
+	bool insertEdge(VertexType v1, VertexType v2, int weight = 1);
 
 	// @func   - deleteEdge
 	// @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
