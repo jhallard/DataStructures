@@ -15,26 +15,26 @@ class GraphInterface
 {
 public:
 
-		/*
+	/*
 	* @func   - insertNode
 	* @args   - #1 The value of the node to be inserted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool insertNode(NodeType);
+	virtual bool insertNode(NodeType) = 0;
 
 	/*
 	* @func   - deleteNode
 	* @args   - #1 The value of the node to be deleted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool deleteNode(NodeType);
+	virtual bool deleteNode(NodeType) = 0;
 
 	/*
 	* @func   - insertEdge
 	* @args   - #1 From node, #2 "To" Node, #3 Weight Value (default = 1.0)
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool insertEdge(NodeType, NodeType, int = 1);
+	virtual bool insertEdge(NodeType, NodeType) = 0;
 
 	/*
 	* @func   - deleteEdge
