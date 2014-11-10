@@ -14,12 +14,28 @@
 #ifndef GRAPH_A_LIST_H
 #define GRAPH_A_LIST_H
 
+#include <vector>
+#include <string>
+
+#include "../GraphInterface/GraphInterface.h"
+#include "../Vertex/Vertex.h"
+
 
 template <class VertexType>
 class Graph : public GraphInterface <VertexType>
 {
 
 public:
+
+	// @func - Coonstructor#1
+	// @args - None
+	// @info - Initializes everything to empty
+	Graph(bool directed);
+
+	// @func  - Coonstructor#2
+	// @args  - #1 String that contains the filename from which to load a graph
+	// @error - Can throw IO error if invalid filename or file structure to build graph 
+	Graph(bool directed, std::string fn);
 
 	// @func   - insertNode
 	// @args   - #1 The value of the node to be inserted
@@ -71,6 +87,9 @@ public:
 
 
 private:
+	// Must be set by the user during object instantiation. If true, the graph will be treated as directed and each function above will act as such.
+	// if set to false, then the graph will be undirected and any edges will be assumed to be symmetric between vertices in our implementation.
+	const bool directed;
 
 
 };
