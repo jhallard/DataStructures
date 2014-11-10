@@ -27,7 +27,7 @@ public:
 	* @args   - #1 The value of the node to be deleted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool deleteNode(NodeType) ;
+	virtual bool deleteNode(NodeType) = 0;
 
 	/*
 	* @func   - insertEdge

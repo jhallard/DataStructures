@@ -2,12 +2,12 @@
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.h
 *   @Data     - 11/11/2014
-*   @Purpose  - This is my defintion of an undirected graph data structure using an adjascency list, as apposed to an adjascency matrix. I will also implement 
-*               a graph using an adjascency matrix in the future, and it can be found in ../Graph_A_Mat/. This graph is templated to allow the user to choose 
-*               what type of values to store in the vertices. 
+*   @Purpose  - This is my defintion of an undirected graph data structure using an adjascency list, as apposed to an adjascency matrix.
+*               I will also implement a graph using an adjascency matrix in the future, and it can be found in ../Graph_A_Mat/. This 
+*               graph is templated to allow the user to choose what type of values to store in the vertices. 
 *
-*   @TODO     - Decide on if the graph is going to be weighted or not, if it is, what type of values are going to be the weights? Will it be templated?
-*             - Is this going to be a directed or undirected graph? Undirected would certainly be easier.
+*   @TODO     - Decide on if the graph is going to be weighted or not, if it is, what type of values are going to be the weights? 
+*               Will it be templated?  Is this going to be a directed or undirected graph? Undirected would certainly be easier.
 *
 **/
 
@@ -47,7 +47,7 @@ public:
     // @func   - deleteNode
     // @args   - none
     // @return - Boolean indicating succes 
-    bool deleteNode();
+    bool deleteNode(VertexType);
 
     // @func   - insertEdge
     // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
