@@ -25,7 +25,7 @@ public:
 	// @func   - getVertex
 	// @args   - None
 	// @return - The vertex object pointed to by this edge. 
-	VetexType getVertex() const;
+	VertexType getVertex() const;
 
 	// @func   - getNext
 	// @args   - None
@@ -40,17 +40,18 @@ public:
 	// @func   - setNext #2
 	// @args   - #1 Pointer to the next edge object, #2 the weight of this new edge object
 	// @return - The vertex object pointed to by this edge. 
-	bool setNext(VertexType, double = 1.0)
+	bool setNext(VertexType, double = 1.0);
 
 
 private:
 
-	// The vertex that the edge is pointing to
+	// @info - The vertex that the edge is pointing to
 	VertexType vertex;
 
-	// The weight associated with this vertex, default value will be 1.0
+	// @info - The weight associated with this vertex, default value will be 1.0
 	double weight;
 
+	// @info - A pointer to the next edge object in the list
 	Edge * nextEdge;
 
 };

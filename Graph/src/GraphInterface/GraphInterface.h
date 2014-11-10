@@ -27,14 +27,14 @@ public:
 	* @args   - #1 The value of the node to be deleted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool deleteNode(NodeType) = 0;
+	virtual bool deleteNode(NodeType) ;
 
 	/*
 	* @func   - insertEdge
 	* @args   - #1 From node, #2 "To" Node, #3 Weight Value (default = 1.0)
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool insertEdge(NodeType, NodeType) = 0;
+	virtual bool insertEdge(NodeType, NodeType, double = 1.0) = 0;
 
 	/*
 	* @func   - deleteEdge
@@ -56,14 +56,14 @@ public:
 	* @args   - None
 	* @return - The number of vertices currently in the graph.
 	*/
-	virtual int numVertices() const = 0;
+	virtual int getNumVertices() const = 0;
 
 	/*
 	* @func   - numEdges
 	* @args   - None
 	* @return - The number of edges currently in the graph.
 	*/
-	virtual int numEdges() const = 0;
+	virtual int getNumEdges() const = 0;
 
 	/*
 	* @func   - depthFirst
