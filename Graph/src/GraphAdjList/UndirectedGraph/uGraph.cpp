@@ -2,16 +2,24 @@
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.cpp
 *   @Data     - 11/12/2014
-*   @Purpose  - This is my implementation of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, undirected graph,
-*               upon which a user can perform operation like searches, path finding, and other things. This class was implemented as part of my C++ 
-*               Data Structures personal project. All code is open license and free to use.
+*   @Purpose  - This is my implementation of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
+*				undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
+*				This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
+*
+*	@Details  - This class uses an adjacency list to represent a graph data structure. An adjacency list consists of some container of vertices
+*				(can be an array, list, map, I'm using a vector), and pointers from those vertices to a list of edges that eminate from them. Thus
+*				if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like
+*				v -> a* -> b* -> c* -> d* -> null
+*				Where x* is an edge that leads from vertex v to vertex x.
+*				This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So 
+
 **/
 
 #include "uGraph.h"
 
 
 //////////////////////////////////////////////////////
-////////         PUBLIC FUNCTIONS    /////////////////
+//////////        PUBLIC FUNCTIONS     ///////////////
 //////////////////////////////////////////////////////
 
 // @func - Constructor#1
@@ -45,10 +53,13 @@ Vertex<VertexType> newVertex;
 if(!newVertex.setData(data))
 	return false;
 
+// allocate a new adjacency list on the heap for the new vertex
 AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
+// push the new AdjList onto the vector of AdjLists
 list.push_back(newList);
 
+// increment number of vertices
 numVertices++;
 
 return true;
@@ -173,7 +184,7 @@ int uGraph<VertexType>::getNumEdges() const{
 template<class VertexType>
 void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 
-	// TODO - Perform Depth First Search
+	// #TODO - Perform Depth First Search
     
 }
 
@@ -184,8 +195,36 @@ void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 template<class VertexType>
 void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 
-	// TODO - Perform Breadth First Search
+	// #TODO - Perform Breadth First Search
     
+}
+
+
+// @func   - getVerex
+// @args   - #1 data associated with the vertex that you wish to retrieve
+// @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
+template<class VertexType>
+Vertex<VertexType> * uGraph<VertexType>::getVertex(VertexType v) {
+
+	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
+
+	if(vert1 == list.end())
+		return nullptr;
+
+	AdjList<VertexType> * adj1 = *vert1;
+
+	return adj1->getVertex();
+
+}
+
+// @func   - getEdge
+// @args   - #1 data associated with vetex #1, data associated with vertex #2
+// @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
+template<class VertexType>
+Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType, VertexType) {
+
+	// #TODO - Implement getEdge function, this will scan through the vertices for the two containing the data values passed in, 
+	// it will check if there is an edge between these two vertices. If there is, it will reurn it, else it will return false;
 }
 
 
@@ -218,32 +257,5 @@ typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::find
  }
 
 
-// @func   - getVerex
-// @args   - #1 data associated with the vertex that you wish to retrieve
-// @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
-template<class VertexType>
-Vertex<VertexType> * uGraph<VertexType>::getVertex(VertexType v) {
-
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
-
-	if(vert1 == list.end())
-		return nullptr;
-
-	AdjList<VertexType> * adj1 = *vert1;
-
-	return adj1->getVertex();
-
-}
-
-// @func   - getVerex
-// @args   - #1 data associated with vetex #1, data associated with vertex #2
-// @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
-template<class VertexType>
-Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType, VertexType) {
-
-	// !!!! TODO !!!!!
-	// Implement getEdge function, this will scan through the vertices for the two containing the data values passed in, it will check if there is an edge
-	// between these two vertices. If there is, it will reurn it, else it will return false;
-}
 
 

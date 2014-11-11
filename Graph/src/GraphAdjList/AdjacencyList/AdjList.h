@@ -38,6 +38,10 @@ public:
     // @args - #1 A vertex object to set as our vertex
     AdjList(Vertex<VertexType>);
 
+    // @func - Destructor
+    // @args - Cleans up the edges allocated with new()
+    ~AdjList();
+
     // @func - setVertex
     // @args - #1 A vertex object to set as our vertex
     // @ret  - bool indicating success or failure

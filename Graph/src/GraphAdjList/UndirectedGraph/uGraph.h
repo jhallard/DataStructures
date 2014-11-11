@@ -48,7 +48,7 @@ public:
 
     // @func   - deleteVertex
     // @args   - none
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating success 
     bool deleteVertex(VertexType);
 
     // @func   - insertEdge
@@ -89,13 +89,13 @@ public:
     Edge<VertexType> * getEdge(VertexType, VertexType);
 
     // @func   - depthFirst
-    // @args   - None
+    // @args   - #1 Value contained in node to be searched for
     // @return - nothing
     // @info   - Performs a depth first traversal, calling the visit() function on each item
     void depthFirst(VertexType, void visit(VertexType&));
 
     // @func   - breadthFirst
-    // @args   - None
+    // @args   - #1 Value contained in node to be searched for
     // @return - nothing
     // @info   - Performs a breadth first traversal, calling the visit() function on each item
     void breadthFirst(VertexType, void visit(VertexType&));

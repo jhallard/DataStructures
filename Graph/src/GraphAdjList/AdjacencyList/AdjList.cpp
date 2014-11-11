@@ -24,6 +24,16 @@
 
     }
 
+
+    // @func - Destructor
+    // @args - Cleans up the edges allocated with new()
+    template <class VertexType>
+    AdjList<VertexType>::~AdjList() {
+
+        // #TODO - Clean up lost node memory
+    }
+
+
     // @func - setData
     template <class VertexType>
     bool AdjList<VertexType>::setVertex(Vertex<VertexType> newData){
