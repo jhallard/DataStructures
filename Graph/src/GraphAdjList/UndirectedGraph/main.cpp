@@ -2,7 +2,9 @@
 
 int main()
 {
-	uGraph<int> graph;
+	//uGraph<int> graph;
+
+	Vertex<int> x;
 	
 	return 0;
 }

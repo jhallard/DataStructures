@@ -17,14 +17,14 @@
 // @func - Constructor#1
 // @args - None
 // @info - Initializes everything to empty
-template<class VertexType> uGraph::uGraph() numEdges(0), numVertices(0) {
+template<class VertexType> uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0) {
 	
 }
 
 // @func  - Constructor#2
 // @args  - #1 String that contains the filename from which to load a graph
 // @error - Can throw IO error if invalid filename or file structure to build graph 
-template<class VertexType> uGraph::uGraph(std::string fn){
+template<class VertexType> uGraph<VertexType>::uGraph(std::string fn){
 
 // #TODO Load the file given by 'fn' into the graph.
 	
@@ -33,36 +33,38 @@ template<class VertexType> uGraph::uGraph(std::string fn){
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
 // @return - Boolean indicating succes 
-template<class VertexType> bool uGraph::insertNode(VertexType data) {
+template<class VertexType> bool uGraph<VertexType>::insertVertex(VertexType data) {
 
 // Start by creating a new vertex
 Vertex<VertexType>* newVertex = new Vertex<VertexType>();
 newVertex.setData(data);
 newVertex.setIndex(list.size());
 
-std::pair<Vertex<VertexType> , Edge<VertexType> *> adjList = new std::pair<Vertex<VertexType> , Edge<VertexType> *>();
-list.push_back()
+std::pair<Vertex<VertexType> , Edge<VertexType> *> * adjList = new std::pair<Vertex<VertexType> , Edge<VertexType> *>();
+
+// *adjList = make_pair()
+// list.push_back();
 	
 }
 
 // @func   - deleteNode
 // @args   - none
 // @return - Boolean indicating succes 
-template<class VertexType> bool uGraph::deleteNode(VertexType){
+template<class VertexType> bool uGraph<VertexType>::deleteVertex(VertexType){
 	
 }
 
 // @func   - insertEdge
 // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 // @return - Boolean indicating succes 
-template<class VertexType> bool insertEdge(VertexType v1, VertexType v2, double weight = 1.0){
+template<class VertexType> bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight){
 	
 }
 
 // @func   - deleteEdge
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
 // @return - Boolean indicating succes 
-template<class VertexType> bool deleteEdge(VertexType v1, VertexType v2){
+template<class VertexType> bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2){
 	
 }
 
@@ -70,7 +72,7 @@ template<class VertexType> bool deleteEdge(VertexType v1, VertexType v2){
 // @func   - getWeight
 // @args   - #1 From node, #2 "To" Node
 // @return - Boolean indicating succes 
-template<class VertexType> int getWeight(VertexType, VertexType) const{
+template<class VertexType> int uGraph<VertexType>::getWeight(VertexType, VertexType) const{
 	
 }
 
@@ -78,14 +80,14 @@ template<class VertexType> int getWeight(VertexType, VertexType) const{
 // @args   - None
 // @return - The number of vertices currently in the graph.
 
-template<class VertexType> int getNumVertices() const{
+template<class VertexType> int uGraph<VertexType>::getNumVertices() const{
 	
 }
 // @func   - numEdges
 // @args   - None
 // @return - The number of edges currently in the graph.
 
-template<class VertexType>int getNumEdges() const{
+template<class VertexType>int uGraph<VertexType>::getNumEdges() const{
 	
 }
 // @func   - depthFirst
@@ -93,7 +95,7 @@ template<class VertexType>int getNumEdges() const{
 // @return - nothing
 // @info   - Performs a depth first traversal, calling the visit() function on each item
 
-template<class VertexType> void depthFirst(VertexType, void visit(VertexType&)){
+template<class VertexType> void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 	
 }
 
@@ -101,7 +103,7 @@ template<class VertexType> void depthFirst(VertexType, void visit(VertexType&)){
 // @args   - None
 // @return - nothing
 // @info   - Performs a breadth first traversal, calling the visit() function on each item
-template<class VertexType> void breadthFirst(VertexType, void visit(VertexType&)){
+template<class VertexType> void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 	
 }
 

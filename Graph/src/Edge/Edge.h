@@ -46,7 +46,7 @@ public:
 private:
 
 	// @info - The vertex that the edge is pointing to
-	VertexType vertex;
+	VertexType * vertex;
 
 	// @info - The weight associated with this vertex, default value will be 1.0
 	double weight;

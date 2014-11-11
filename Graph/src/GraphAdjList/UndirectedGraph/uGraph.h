@@ -19,6 +19,7 @@
 #include <string>
 
 #include "../../GraphInterface/GraphInterface.h"
+#include "../AdjacencyList/AdjList.h"
 #include "../../Vertex/Vertex.h"
 #include "../../Edge/Edge.h"
 
@@ -46,12 +47,12 @@ public:
     // @func   - insertNode
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
-    bool insertNode(VertexType);
+    bool insertVertex(VertexType);
 
     // @func   - deleteNode
     // @args   - none
     // @return - Boolean indicating succes 
-    bool deleteNode(VertexType);
+    bool deleteVertex(VertexType);
 
     // @func   - insertEdge
     // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
@@ -108,7 +109,7 @@ private:
 
     // @member - list
     // @info   - Our list of vertices, along with pointers to the enges the eminate from those vertices. It looks messy as hell, but it should work.
-    std::vector< std::pair<Vertex<VertexType> , Edge<VertexType> *> > list;
+    std::vector< AdjList<VertexType> > list;
 
 };
 
