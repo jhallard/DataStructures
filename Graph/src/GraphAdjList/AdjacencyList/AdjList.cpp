@@ -52,7 +52,7 @@
 
 		if(pEdge == nullptr) {
 			pEdge = newEdge;
-			return true
+			return true;
 		}
 
 		Edge<VertexType> * temp;

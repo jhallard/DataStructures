@@ -20,8 +20,8 @@
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
-#include "../../Vertex/Vertex.h"
-#include "../../Edge/Edge.h"
+#include "../Vertex/Vertex.h"
+#include "../Edge/Edge.h"
 
 
 template <class VertexType>

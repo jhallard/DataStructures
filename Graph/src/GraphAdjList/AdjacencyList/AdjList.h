@@ -17,8 +17,8 @@
 #include <vector>
 #include <string>
 
-#include "../../Vertex/Vertex.h"
-#include "../../Edge/Edge.h"
+#include "../Vertex/Vertex.h"
+#include "../Edge/Edge.h"
 
 
 template <class VertexType>
