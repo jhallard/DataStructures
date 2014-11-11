@@ -194,10 +194,10 @@ void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 /////////        PRIVATE FUNCTIONS    ////////////////
 //////////////////////////////////////////////////////
 
-    // @func   - findVertex
-    // @args   - #1 Value contained in the vertex to be found
-    // @return - pointer to the vertex to be found, null if not found
-    // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
+// @func   - findVertex
+// @args   - #1 Value contained in the vertex to be found
+// @return - pointer to the vertex to be found, null if not found
+// @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
 typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
 
@@ -216,5 +216,34 @@ typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::find
 	return list.end();
 
  }
+
+
+// @func   - getVerex
+// @args   - #1 data associated with the vertex that you wish to retrieve
+// @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
+template<class VertexType>
+Vertex<VertexType> * uGraph<VertexType>::getVertex(VertexType v) {
+
+	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
+
+	if(vert1 == list.end())
+		return nullptr;
+
+	AdjList<VertexType> * adj1 = *vert1;
+
+	return adj1->getVertex();
+
+}
+
+// @func   - getVerex
+// @args   - #1 data associated with vetex #1, data associated with vertex #2
+// @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
+template<class VertexType>
+Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType, VertexType) {
+
+	// !!!! TODO !!!!!
+	// Implement getEdge function, this will scan through the vertices for the two containing the data values passed in, it will check if there is an edge
+	// between these two vertices. If there is, it will reurn it, else it will return false;
+}
 
 

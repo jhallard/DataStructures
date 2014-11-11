@@ -2,13 +2,9 @@
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.h
 *   @Data     - 11/11/2014
-*   @Purpose  - This is my defintion of an undirected graph data structure using an adjascency list, as apposed to an adjascency matrix.
-*               I will also implement a graph using an adjascency matrix in the future, and it can be found in ../Graph_A_Mat/. This 
-*               graph is templated to allow the user to choose what type of values to store in the vertices. 
-*
-*   @TODO     - Decide on if the graph is going to be weighted or not, if it is, what type of values are going to be the weights? 
-*               Will it be templated?  Is this going to be a directed or undirected graph? Undirected would certainly be easier.
-*
+*   @Purpose  - This is the defintion of the uGraph class. This class represents a weighted (optional), undirected, tamplated graph data structure
+*               that uses an adjacency list as an internal representation of the graph. The graph is templated to allow vertices to contain any
+*               type of data that the user wishes it to contain. This class depends on the AdjList, Edge, and Vertex classes.
 **/
 
 #ifndef U_GRAPH_A_LIST_H
@@ -81,6 +77,16 @@ public:
     // @args   - None
     // @return - The number of edges currently in the graph.
     int getNumEdges() const;
+
+    // @func   - getVerex
+    // @args   - #1 data associated with the vertex that you wish to retrieve
+    // @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
+    Vertex<VertexType> * getVertex(VertexType);
+
+    // @func   - getVerex
+    // @args   - #1 data associated with vetex #1, data associated with vertex #2
+    // @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
+    Edge<VertexType> * getEdge(VertexType, VertexType);
 
     // @func   - depthFirst
     // @args   - None

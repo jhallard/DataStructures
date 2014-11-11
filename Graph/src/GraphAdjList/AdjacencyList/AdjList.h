@@ -8,8 +8,6 @@
 **/
 
 
-// V E -> E -> E -> E ->
-
 #ifndef ADJ_LIST_H
 #define ADJ_LIST_H
 
