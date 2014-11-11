@@ -11,7 +11,9 @@
 #ifndef  EDGE_H
 #define  EDGE_H
 
-
+// !!!!
+#define nullptr 0 // <---- REMOVE THIS LINE, FOR SUBLIME DEBUGGING ONLY !!!!!!!!!!!
+// !!!!
 #include "../Vertex/Vertex.h"
 
 template <class VertexType>
@@ -20,12 +22,17 @@ class Edge
 public:
 	// @func - Constructor
 	// @args - #1 Vertex that the edge points to, #2 the weighting of the edge
-	Edge(VertexType, double = 1.0);
+	Edge(Vertex<VertexType> *, double = 1.0);
 
 	// @func   - getVertex
 	// @args   - None
 	// @return - The vertex object pointed to by this edge. 
-	VertexType getVertex() const;
+	Vertex<VertexType> * getVertex() const;
+
+	// @func   - setVertex
+	// @args   - Pointer to the vertex that you wish to set
+	// @return - Bool indicating success or failure
+	bool setVertex(Vertex<VertexType> *);
 
 	// @func   - getNext
 	// @args   - None
@@ -35,12 +42,19 @@ public:
 	// @func   - setNext #1
 	// @args   - #1 Pointer to the next Edge object
 	// @return - The vertex object pointed to by this edge. 
-	bool setNext(Edge &);
+	bool setNext(Edge *);
 
-	// @func   - setNext #2
-	// @args   - #1 Pointer to the next edge object, #2 the weight of this new edge object
-	// @return - The vertex object pointed to by this edge. 
-	bool setNext(VertexType, double = 1.0);
+
+	// @func - setWeight 
+	// @arg  - #1 A double value representing the weight of the edge
+	// @ret  - bool indicating success
+	bool setWeight(double);
+
+
+	// @func - getWeight 
+	// @arg  - none
+	// @ret  - the weight assocaited with this edge
+	double getWeight() const;
 
 
 private:
@@ -55,4 +69,6 @@ private:
 	Edge * nextEdge;
 
 };
+
+#include "Edge.cpp"
 #endif

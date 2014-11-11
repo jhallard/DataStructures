@@ -20,10 +20,6 @@
 #include "../../Vertex/Vertex.h"
 #include "../../Edge/Edge.h"
 
-// !!!!!!!!!
-// REMOVE FOLLOWING LINE WHEN ACTUAL DEBUGGING
-#define nullptr 0
-// !!!!!!!!!
 
 template <class VertexType>
 class AdjList
@@ -44,9 +40,15 @@ public:
     // @args - #1 A vertex object to set as our vertex
 	AdjList(Vertex<VertexType>);
 
-	bool setVertex(Vertex);
+	// @func - setVertex
+    // @args - #1 A vertex object to set as our vertex
+    // @ret  - bool indicating success or failure
+	bool setVertex(Vertex<VertexType>);
 
-	Vertex getVertex(VertexType);
+	// @func - getVertex
+    // @args - none
+    // @ret  - pointer to the vertex object in this adj list
+	Vertex<VertexType> * getVertex() const;
 
 	// @func - addEdge #1
     // @args - #1 Vertex that the edge points to, #2 weighting of the edge
