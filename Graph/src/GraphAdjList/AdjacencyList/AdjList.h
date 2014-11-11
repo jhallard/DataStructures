@@ -3,8 +3,8 @@
 *   @File     - adjList.h
 *   @Data     - 11/13/2014
 *   @Purpose  - This file defines the adjascency list class, which consists of a vertex and a pointer to an edge. The purpose of this class
-*				is mostly to simplify the syntax of the code inside of the uGraph class. The uGraph class will simply consist of a vector of this AdjLists,
-*				where each AdjList corresponds to a single vertex in the graph and all of the edges that have contact with the vertex.
+*               is mostly to simplify the syntax of the code inside of the uGraph class. The uGraph class will simply consist of a vector of this AdjLists,
+*               where each AdjList corresponds to a single vertex in the graph and all of the edges that have contact with the vertex.
 **/
 
 
@@ -24,61 +24,56 @@
 template <class VertexType>
 class AdjList
 {
-	
+    
 public:
 
     // @func - Constructor#1
     // @args - None
     // @info - Initializes everything to empty
-	AdjList();
+    AdjList();
 
     // @func - Constructor#2
     // @args - #1 Vertex data
-	AdjList(VertexType);
+    AdjList(VertexType);
 
-	// @func - Constructor#3
+    // @func - Constructor#3
     // @args - #1 A vertex object to set as our vertex
-	AdjList(Vertex<VertexType>);
+    AdjList(Vertex<VertexType>);
 
-	// @func - setVertex
+    // @func - setVertex
     // @args - #1 A vertex object to set as our vertex
     // @ret  - bool indicating success or failure
-	bool setVertex(Vertex<VertexType>);
+    bool setVertex(Vertex<VertexType>);
 
-	// @func - getVertex
+    // @func - getVertex
     // @args - none
     // @ret  - pointer to the vertex object in this adj list
-	Vertex<VertexType> * getVertex() const;
+    Vertex<VertexType> * getVertex() const;
 
-	// @func - addEdge #1
+    // @func - addEdge #1
     // @args - #1 Vertex that the edge points to, #2 weighting of the edge
     // @info - pusheds this edge onto the back of the edge list.
-	bool addEdge(Vertex<VertexType> * , double = 1.0);
+    bool addEdge(Vertex<VertexType> * , double = 1.0);
 
-	// @func - addEdge #2
-    // @args - value contained in the vertex that the new edge will point to, #2 weighting of the edge
-    // @info - This function is like the one above, but we have to go search through the vertices to see which one contains the matching data, then add that
-    //			vertex as an edge in the graph
-	bool addEdge(VertexType , double = 1.0);
 
-	// @func - deleteEdge
+    // @func - deleteEdge
     // @args - #1 the data contained by the vertex that you wish to delete the edge from
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
-	bool deleteEdge(VertexType);
+    bool deleteEdge(VertexType);
 
 
-	// @func - deleteEdge
+    // @func - deleteEdge
     // @args - #1 Pointer to the vertex to be deleted.
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
-	bool deleteEdge(Vertex<VertexType> *);
+    bool deleteEdge(Vertex<VertexType> *);
 
 
 
 private:
 
-	Vertex<VertexType> vertex;
+    Vertex<VertexType> vertex;
 
-	Edge<VertexType> * pEdge;
+    Edge<VertexType> * pEdge;
 
 
 };

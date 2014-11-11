@@ -3,8 +3,8 @@
 *   @File     - uGraph.cpp
 *   @Data     - 11/12/2014
 *   @Purpose  - This is my implementation of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, undirected graph,
-*				upon which a user can perform operation like searches, path finding, and other things. This class was implemented as part of my C++ 
-*				Data Structures personal project. All code is open license and free to use.
+*               upon which a user can perform operation like searches, path finding, and other things. This class was implemented as part of my C++ 
+*               Data Structures personal project. All code is open license and free to use.
 **/
 
 #include "uGraph.h"
@@ -18,7 +18,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType> uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0) {
-	
+    
 }
 
 // @func  - Constructor#2
@@ -27,7 +27,7 @@ template<class VertexType> uGraph<VertexType>::uGraph() : numEdges(0), numVertic
 template<class VertexType> uGraph<VertexType>::uGraph(std::string fn){
 
 // #TODO Load the file given by 'fn' into the graph.
-	
+    
 }
 
 // @func   - insertNode
@@ -44,28 +44,28 @@ std::pair<Vertex<VertexType> , Edge<VertexType> *> * adjList = new std::pair<Ver
 
 // *adjList = make_pair()
 // list.push_back();
-	
+    
 }
 
 // @func   - deleteNode
 // @args   - none
 // @return - Boolean indicating succes 
 template<class VertexType> bool uGraph<VertexType>::deleteVertex(VertexType){
-	
+    
 }
 
 // @func   - insertEdge
 // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 // @return - Boolean indicating succes 
 template<class VertexType> bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight){
-	
+    
 }
 
 // @func   - deleteEdge
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
 // @return - Boolean indicating succes 
 template<class VertexType> bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2){
-	
+    
 }
 
 
@@ -73,7 +73,7 @@ template<class VertexType> bool uGraph<VertexType>::deleteEdge(VertexType v1, Ve
 // @args   - #1 From node, #2 "To" Node
 // @return - Boolean indicating succes 
 template<class VertexType> int uGraph<VertexType>::getWeight(VertexType, VertexType) const{
-	
+    
 }
 
 // @func   - numVertices
@@ -81,14 +81,14 @@ template<class VertexType> int uGraph<VertexType>::getWeight(VertexType, VertexT
 // @return - The number of vertices currently in the graph.
 
 template<class VertexType> int uGraph<VertexType>::getNumVertices() const{
-	
+    
 }
 // @func   - numEdges
 // @args   - None
 // @return - The number of edges currently in the graph.
 
 template<class VertexType>int uGraph<VertexType>::getNumEdges() const{
-	
+    
 }
 // @func   - depthFirst
 // @args   - None
@@ -96,7 +96,7 @@ template<class VertexType>int uGraph<VertexType>::getNumEdges() const{
 // @info   - Performs a depth first traversal, calling the visit() function on each item
 
 template<class VertexType> void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
-	
+    
 }
 
 // @func   - breadthFirst
@@ -104,7 +104,7 @@ template<class VertexType> void uGraph<VertexType>::depthFirst(VertexType, void 
 // @return - nothing
 // @info   - Performs a breadth first traversal, calling the visit() function on each item
 template<class VertexType> void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
-	
+    
 }
 
 

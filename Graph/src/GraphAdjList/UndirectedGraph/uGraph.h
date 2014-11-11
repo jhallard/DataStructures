@@ -108,7 +108,8 @@ private:
     int numEdges;
 
     // @member - list
-    // @info   - Our list of vertices, along with pointers to the enges the eminate from those vertices. It looks messy as hell, but it should work.
+    // @info   - A vector of adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
+    //           from it to other vertices in the graph
     std::vector< AdjList<VertexType> > list;
 
 };
