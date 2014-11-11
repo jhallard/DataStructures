@@ -20,14 +20,7 @@ public:
 
 	// @func - Constructor #2
 	// @args - #1 Data associated with the vertex, #2 Index associated with the vertex
-	Vertex(VertexType, unsigned int = 0);
-
-
-	// get the index of the vertex in the adjascency list or matrix
-	int getIndex() const;
-
-	// set the index of the vertex ...
-	bool setIndex(unsigned int);
+	Vertex(VertexType);
 
 	// Get the data that the vertex contains (templated)
 	VertexType getData() const;
@@ -36,8 +29,6 @@ public:
 	bool setData(VertexType);
 
 private:
-	// index in the adjascency list/ adjascency matrix
-	unsigned int index;
 
 	// Data that the vertex contains
 	VertexType data;

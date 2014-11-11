@@ -2,7 +2,7 @@
 
 int main()
 {
-	//uGraph<int> graph;
+	uGraph<int> graph;
 
 	AdjList<int> y;
 	Vertex<int> x;

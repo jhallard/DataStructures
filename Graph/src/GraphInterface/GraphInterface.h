@@ -10,38 +10,38 @@
 #ifndef GraphInterface_h
 #define GraphInterface_h
 
-template<class NodeType>
+template<class VertexType>
 class GraphInterface
 {
 public:
 
 	/*
-	* @func   - insertNode
+	* @func   - insertVertex
 	* @args   - #1 The value of the node to be inserted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool insertNode(NodeType) = 0;
+	virtual bool insertVertex(VertexType) = 0;
 
 	/*
-	* @func   - deleteNode
+	* @func   - deleteVertex
 	* @args   - #1 The value of the node to be deleted
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool deleteNode(NodeType) = 0;
+	virtual bool deleteVertex(VertexType) = 0;
 
 	/*
 	* @func   - insertEdge
 	* @args   - #1 From node, #2 "To" Node, #3 Weight Value (default = 1.0)
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool insertEdge(NodeType, NodeType, double = 1.0) = 0;
+	virtual bool insertEdge(VertexType, VertexType, double = 1.0) = 0;
 
 	/*
 	* @func   - deleteEdge
 	* @args   - #1 From node, #2 "To" Node
 	* @return - Boolean indicating succes 
 	*/
-	virtual bool deleteEdge(NodeType, NodeType) = 0;
+	virtual bool deleteEdge(VertexType, VertexType) = 0;
 
 
 	/*
@@ -49,7 +49,7 @@ public:
 	* @args   - #1 From node, #2 "To" Node
 	* @return - Boolean indicating succes 
 	*/
-	virtual int getWeight(NodeType, NodeType) const = 0;
+	virtual int getWeight(VertexType, VertexType) const = 0;
 
 	/*
 	* @func   - numVertices
@@ -71,7 +71,7 @@ public:
 	* @return - nothing
 	* @info   - Performs a depth first traversal, calling the visit() function on each item
 	*/
-	virtual void depthFirst(NodeType, void visit(NodeType&)) = 0;
+	virtual void depthFirst(VertexType, void visit(VertexType&)) = 0;
 
 	/*
 	* @func   - breadthFirst
@@ -79,7 +79,7 @@ public:
 	* @return - nothing
 	* @info   - Performs a breadth first traversal, calling the visit() function on each item
 	*/
-	virtual void breadthFirst(NodeType, void visit(NodeType&)) = 0;
+	virtual void breadthFirst(VertexType, void visit(VertexType&)) = 0;
 
 
 };

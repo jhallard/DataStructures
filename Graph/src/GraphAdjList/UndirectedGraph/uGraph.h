@@ -44,12 +44,12 @@ public:
     // @error - Can throw IO error if invalid filename or file structure to build graph 
     uGraph(std::string fn);
 
-    // @func   - insertNode
+    // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
     bool insertVertex(VertexType);
 
-    // @func   - deleteNode
+    // @func   - deleteVertex
     // @args   - none
     // @return - Boolean indicating succes 
     bool deleteVertex(VertexType);
@@ -92,6 +92,10 @@ public:
     // @info   - Performs a breadth first traversal, calling the visit() function on each item
     void breadthFirst(VertexType, void visit(VertexType&));
 
+    // ---- TODO ---- //
+    // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.
+    // #2 - Override equals operator, check to see if two graphs are equivilent
+
 
 
 //////////////////////////////////////////////////////
@@ -108,9 +112,20 @@ private:
     int numEdges;
 
     // @member - list
-    // @info   - A vector of adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
+    // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
     //           from it to other vertices in the graph
-    std::vector< AdjList<VertexType> > list;
+    std::vector< AdjList<VertexType> * > list;
+
+
+//////////////////////////////////////////////////////
+////////       PRIVATE FUNCTIONS     /////////////////
+//////////////////////////////////////////////////////
+
+    // @func   - findVertex
+    // @args   - #1 Value contained in the vertex to be found
+    // @return - pointer to the vertex to be found, null if not found
+    // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
+    Vertex<VertexType> * findVertex(VertexType) const;
 
 };
 
