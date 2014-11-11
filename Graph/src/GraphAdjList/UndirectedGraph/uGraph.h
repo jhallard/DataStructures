@@ -29,7 +29,7 @@ class uGraph : public GraphInterface <VertexType>
 
 
 //////////////////////////////////////////////////////
-////////         PUBLIC FUNCTIONS    /////////////////
+////////         PUBLIC INTERFACE       //////////////
 //////////////////////////////////////////////////////
 public:
 
@@ -94,7 +94,7 @@ public:
 
 
 //////////////////////////////////////////////////////
-////////         PUBLIC FUNCTIONS    /////////////////
+////////           PRIVATE DATA      /////////////////
 //////////////////////////////////////////////////////
 private:
 
@@ -107,7 +107,7 @@ private:
     int numEdges;
 
     // @member - list
-    // @info   - Our list of vertices, along with pointers to the endes the eminate from those vertices. It looks messy as hell, but it should work.
+    // @info   - Our list of vertices, along with pointers to the enges the eminate from those vertices. It looks messy as hell, but it should work.
     std::vector< std::pair<Vertex<VertexType> , Edge<VertexType> *> > list;
 
 };

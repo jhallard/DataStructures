@@ -13,6 +13,11 @@ class Vertex
 {
 
 public:
+	// @func - Constructor #2
+	// @args - #1 Data associated with the vertex, #2 Index associated with the vertex
+	Vertex(VertexType, unsigned int)
+
+	
 	// get the index of the vertex in the adjascency list or matrix
 	int getIndex() const;
 
