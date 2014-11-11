@@ -23,4 +23,5 @@ VertexType Vertex<VertexType>::getData() const{
 template<class VertexType> 
 bool Vertex<VertexType>::setData(VertexType newData) {
     this->data = newData;
+    return true;
 }

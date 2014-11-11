@@ -17,6 +17,7 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -67,8 +68,9 @@ public:
 
     // @func   - getWeight
     // @args   - #1 From node, #2 "To" Node
-    // @return - Boolean indicating succes 
-    int getWeight(VertexType, VertexType) const;
+    // @return - Double value that is the weight of the given edge
+    // @throws - Exception if the given edge does not exist.
+    double getWeight(VertexType, VertexType) ;
 
     // @func   - numVertices
     // @args   - None
@@ -125,7 +127,7 @@ private:
     // @args   - #1 Value contained in the vertex to be found
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-    Vertex<VertexType> * findVertex(VertexType) const;
+    typename std::vector< AdjList<VertexType> * >::iterator findVertex(VertexType) ;
 
 };
 

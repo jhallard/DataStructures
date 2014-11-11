@@ -48,7 +48,7 @@ public:
     // @func - getVertex
     // @args - none
     // @ret  - pointer to the vertex object in this adj list
-    Vertex<VertexType> * getVertex() const;
+    Vertex<VertexType> * getVertex();
 
     // @func - addEdge #1
     // @args - #1 Vertex that the edge points to, #2 weighting of the edge
@@ -66,6 +66,12 @@ public:
     // @args - #1 Pointer to the vertex to be deleted.
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
     bool deleteEdge(Vertex<VertexType> *);
+
+
+    // @func - getEdge
+    // @args - #1 Pointer to the edge to be returned.
+    // @info - ffinds and returns the given edge if it exists
+    Edge<VertexType> * getEdge(Vertex<VertexType> *);
 
 
 

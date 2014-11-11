@@ -34,9 +34,9 @@
 
     // @func getData
     template <class VertexType>
-    Vertex<VertexType> * AdjList<VertexType>::getVertex() const{
+    Vertex<VertexType> * AdjList<VertexType>::getVertex() {
 
-        return this->vertex;
+        return &(this->vertex);
 
     }
 
@@ -46,9 +46,9 @@
     template <class VertexType>
     bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 
-        Edge<VertexType> * newEdge = new Edge<VertexType>();
-        newEdge->setVertex(vert);
-        newEdge.setWeight(wt);
+        Edge<VertexType> * newEdge = new Edge<VertexType>(vert, wt);
+        // newEdge->setVertex(vert);
+        // newEdge.setWeight(wt);
 
         if(pEdge == nullptr) {
             pEdge = newEdge;
@@ -57,11 +57,11 @@
 
         Edge<VertexType> * temp;
         temp = pEdge;
-        while(temp.getNext() != nullptr){
-            temp = temp.getNext();
+        while(temp->getNext() != nullptr){
+            temp = temp->getNext();
         }
         
-        return temp.setNext(newEdge);
+        return temp->setNext(newEdge);
     
 
     }
@@ -133,11 +133,45 @@
             }
             // else we iterate to the next node in the chain
             else
-                temp = temp.getNext();
+                temp = temp->getNext();
             
         }
         // else we couldn't find an edge to the given vertex with the given data
         return false;
+
+    }
+
+
+    // @func - getEdge
+    // @args - #1 Pointer to the edge to be returned.
+    // @info - ffinds and returns the given edge if it exists
+    template <class VertexType>
+    Edge<VertexType> * AdjList<VertexType>::getEdge(Vertex<VertexType> * vert) {
+
+        Edge<VertexType> * temp;
+        temp = pEdge;
+
+        // Case #1 - No edges in the list, return false
+        if(temp == nullptr)
+            return nullptr;
+
+        if(temp->getVertex() == vert)
+            return temp;
+
+        // Case #3 - The edge may or may not be somewhere down the chain
+        while(temp->getNext() != nullptr) {
+
+            // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
+            if(temp->getNext()->getVertex() == vert){
+                return temp->getNext();
+            }
+            // else we iterate to the next node in the chain
+            else
+                temp = temp->getNext();
+            
+        }
+        // else we couldn't find an edge to the given vertex with the given data
+        return nullptr;
 
     }
 

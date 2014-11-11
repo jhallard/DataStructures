@@ -49,7 +49,7 @@ public:
 	* @args   - #1 From node, #2 "To" Node
 	* @return - Boolean indicating succes 
 	*/
-	virtual int getWeight(VertexType, VertexType) const = 0;
+	virtual double getWeight(VertexType, VertexType) = 0;
 
 	/*
 	* @func   - numVertices

@@ -61,7 +61,16 @@ return true;
 template<class VertexType>
 bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 
- Vertex<VertexType> * pVert = findVertex(vert);
+ typename std::vector< AdjList<VertexType> * >::iterator theVertex = findVertex(vert);
+
+ // if value returned in the end of the vector, the vertex doesn't exist
+ if(theVertex == list.end())
+ 	return false;
+
+ // else erase the bloody vertex
+ list.erase(theVertex);
+
+ return true;
     
 }
 
@@ -69,7 +78,26 @@ bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight){
+bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
+
+	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+	typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
+
+	if(vert1 == list.end() || vert2 == list.end())
+		return false;
+
+	AdjList<VertexType> * adj1 = *vert1;
+	AdjList<VertexType> * adj2 = *vert2;
+
+	// add an edge from vertex 1 to vertex 2
+	adj1->addEdge(adj2->getVertex(), weight);
+
+	// add an edge from vertex 2 to vertex 1
+	adj2->addEdge(adj1->getVertex(), weight);
+	
+	numEdges++;
+
+	return true;
     
 }
 
@@ -77,7 +105,25 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2){
+bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
+
+	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+	typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
+
+	if(vert1 == list.end() || vert2 == list.end())
+		return false;
+
+	AdjList<VertexType> * adj1 = *vert1;
+	AdjList<VertexType> * adj2 = *vert2;
+
+	// add an edge from vertex 1 to vertex 2
+	adj1->deleteEdge(adj2->getVertex());
+
+	// add an edge from vertex 2 to vertex 1
+	adj2->deleteEdge(adj1->getVertex());
+	
+
+	return true;
     
 }
 
@@ -86,7 +132,18 @@ bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2){
 // @args   - #1 From node, #2 "To" Node
 // @return - Boolean indicating succes 
 template<class VertexType>
-int uGraph<VertexType>::getWeight(VertexType, VertexType) const{
+double uGraph<VertexType>::getWeight(VertexType v1, VertexType v2)  {
+
+	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+	typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
+
+	if(vert1 == list.end() || vert2 == list.end())
+		throw std::logic_error("Edge Not Found");
+
+	AdjList<VertexType> * adj1 = *vert1;
+	AdjList<VertexType> * adj2 = *vert2;
+
+	return adj1->getEdge(adj2->getVertex())->getWeight();
     
 }
 
@@ -95,7 +152,8 @@ int uGraph<VertexType>::getWeight(VertexType, VertexType) const{
 // @return - The number of vertices currently in the graph.
 
 template<class VertexType>
-int uGraph<VertexType>::getNumVertices() const{
+int uGraph<VertexType>::getNumVertices() const {
+	return numVertices;
     
 }
 // @func   - numEdges
@@ -104,6 +162,7 @@ int uGraph<VertexType>::getNumVertices() const{
 
 template<class VertexType>
 int uGraph<VertexType>::getNumEdges() const{
+	return numEdges;
     
 }
 // @func   - depthFirst
@@ -113,6 +172,8 @@ int uGraph<VertexType>::getNumEdges() const{
 
 template<class VertexType>
 void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
+
+	// TODO - Perform Depth First Search
     
 }
 
@@ -122,6 +183,8 @@ void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 // @info   - Performs a breadth first traversal, calling the visit() function on each item
 template<class VertexType>
 void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
+
+	// TODO - Perform Breadth First Search
     
 }
 
@@ -136,7 +199,21 @@ void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
-Vertex<VertexType> * uGraph<VertexType>::findVertex(VertexType) const {
+typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
+
+	typename std::vector< AdjList<VertexType> * >::iterator  it = list.begin();
+
+	while(it != list.end())
+	{
+		AdjList<VertexType> * adj1 = *it;
+
+		// We have found the correct vertex
+		if(adj1->getVertex()->getData() == data)
+			return it;
+		it++;
+	}	
+
+	return list.end();
 
  }
 
