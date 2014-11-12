@@ -13,9 +13,9 @@
 // @args - #1 Vertex that the edge points to, #2 the weighting of the edge
 template <class VertexType>
 Edge<VertexType>::Edge(Vertex<VertexType> * vert , double wt) {
-	this->vertex = vert;
-	this->weight = wt;
-	this->nextEdge = nullptr;
+	this->setVertex(vert);
+	this->setWeight(wt);
+	this->setNext(nullptr);
 
 }
 
