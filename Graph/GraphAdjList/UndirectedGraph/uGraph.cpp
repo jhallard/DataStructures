@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0) {
+uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), isMultiGraph(true) {
     
 }
 
@@ -179,44 +179,21 @@ double uGraph<VertexType>::getWeight(VertexType v1, VertexType v2)  {
     
 }
 
-// @func   - numVertices
+// @func   - getNumVertices
 // @args   - None
 // @return - The number of vertices currently in the graph.
-
 template<class VertexType>
 int uGraph<VertexType>::getNumVertices() const {
 	return this->numVertices;
     
 }
-// @func   - numEdges
+
+// @func   - getNumEdges
 // @args   - None
 // @return - The number of edges currently in the graph.
-
 template<class VertexType>
 int uGraph<VertexType>::getNumEdges() const{
 	return this->numEdges;
-    
-}
-// @func   - depthFirst
-// @args   - None
-// @return - nothing
-// @info   - Performs a depth first traversal, calling the visit() function on each item
-
-template<class VertexType>
-void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
-
-	// #TODO - Perform Depth First Search
-    
-}
-
-// @func   - breadthFirst
-// @args   - None
-// @return - nothing
-// @info   - Performs a breadth first traversal, calling the visit() function on each item
-template<class VertexType>
-void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
-
-	// #TODO - Perform Breadth First Search
     
 }
 
@@ -256,6 +233,51 @@ Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType v1, VertexType v2) {
 	AdjList<VertexType> * adj2 = *vert2;
 
 	return adj1->getEdge(adj2->getVertex());
+}
+
+
+// @func   - depthFirst
+// @args   - None
+// @return - nothing
+// @info   - Performs a depth first traversal, calling the visit() function on each item
+template<class VertexType>
+void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
+
+	// #TODO - Perform Depth First Search
+    
+}
+
+// @func   - breadthFirst
+// @args   - None
+// @return - nothing
+// @info   - Performs a breadth first traversal, calling the visit() function on each item
+template<class VertexType>
+void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
+
+	// #TODO - Perform Breadth First Search
+    
+}
+
+
+
+// @func   - getMinCut
+// @args   - none
+// @return - 2 column vector of vertices, each column representing one half of the cut. 
+// @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
+template<class VertexType>
+std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
+
+	// #TODO - Implement min-cut algorithm for the graph
+}
+
+// @func   - aStarSearch
+// @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
+// @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+// @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+template<class VertexType>
+std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<VertexType>) {
+
+	// #TODO - Implement A* Search Algorithm
 }
 
 

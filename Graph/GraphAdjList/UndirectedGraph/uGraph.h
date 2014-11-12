@@ -128,6 +128,20 @@ public:
     // @info   - Performs a breadth first traversal, calling the visit() function on each item
     void breadthFirst(VertexType, void visit(VertexType&));
 
+    // @func   - getMinCut
+    // @args   - none
+    // @return - 2 column vector of vertices, each column representing one half of the cut. 
+    // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
+    std::vector<std::vector<VertexType> > getMinCut();
+
+    // @func   - aStarSearch
+    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
+    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    std::vector<VertexType> aStarSearch(VertexType, std::vector<VertexType>);
+
+
+
     // ---- TODO ---- //
     // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.
     // #2 - Override equals operator, check to see if two graphs are equivilent
@@ -151,6 +165,13 @@ private:
     // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
     //           from it to other vertices in the graph
     std::vector< AdjList<VertexType> * > list;
+
+    // @member - isMultiGraph
+    // @info   - This boolean value determines if the user is allowed to add multiple edges between the same two vertices. The default value is true.
+    //           Can only be accessed indirectly through the get and set functions, if a user tries to set it to false when there are already multiple edges
+    //           between vertices, the graph will go through and clean up redundant edges, saving the one with the lowest score.
+    // #TODO   - Figure out how to implement this
+    bool isMultiGraph;
 
 
 //////////////////////////////////////////////////////
