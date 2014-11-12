@@ -1,10 +1,10 @@
 /**
-*	@Author   - John H Allard Jr.
-*	@File     - Edge.cpp
-*	@Data     - 11/13/2014
-*	@Purpose  - This is the implementation of the Edge class, which will be used by the different Graph classes in this directory.  This edge class will
-*				contain a pointer to a vertex and a pointer to another edge, creating a linked list edges eminating from a source vertex to many other
-*				vertices in the graph
+*   @Author   - John H Allard Jr.
+*   @File     - Edge.cpp
+*   @Data     - 11/13/2014
+*   @Purpose  - This is the implementation of the Edge class, which will be used by the different Graph classes in this directory.  This edge class will
+*               contain a pointer to a vertex and a pointer to another edge, creating a linked list edges eminating from a source vertex to many other
+*               vertices in the graph
 **/
 
 #include "Edge.h"
@@ -13,9 +13,9 @@
 // @args - #1 Vertex that the edge points to, #2 the weighting of the edge
 template <class VertexType>
 Edge<VertexType>::Edge(Vertex<VertexType> * vert , double wt) {
-	this->setVertex(vert);
-	this->setWeight(wt);
-	this->setNext(nullptr);
+    this->setVertex(vert);
+    this->setWeight(wt);
+    this->setNext(nullptr);
 
 }
 
@@ -24,7 +24,7 @@ Edge<VertexType>::Edge(Vertex<VertexType> * vert , double wt) {
 // @return - The vertex object pointed to by this edge. 
 template <class VertexType>
 Vertex<VertexType> * Edge<VertexType>::getVertex() const {
-	return this->vertex;
+    return this->vertex;
 }
 
 // @func   - setVertex
@@ -32,10 +32,10 @@ Vertex<VertexType> * Edge<VertexType>::getVertex() const {
 // @return - Bool indicating success or failure
 template <class VertexType>
 bool Edge<VertexType>::setVertex(Vertex<VertexType> * vert) {
-	if(vert == nullptr)
-		return false;
+    if(vert == nullptr)
+        return false;
 
-	this->vertex = vert;
+    this->vertex = vert;
 }
 
 // @func   - getNext
@@ -44,7 +44,7 @@ bool Edge<VertexType>::setVertex(Vertex<VertexType> * vert) {
 template <class VertexType>
 Edge<VertexType> * Edge<VertexType>::getNext() const {
 
-	return this->nextEdge;
+    return this->nextEdge;
 
 }
 
@@ -54,8 +54,8 @@ Edge<VertexType> * Edge<VertexType>::getNext() const {
 template <class VertexType>
 bool Edge<VertexType>::setNext(Edge * next){
 
-	this->nextEdge = next;
-	return true;
+    this->nextEdge = next;
+    return true;
 }
 
 
@@ -64,7 +64,7 @@ bool Edge<VertexType>::setNext(Edge * next){
 // @ret  - bool indicating success
 template <class VertexType>
 bool Edge<VertexType>::setWeight(double wt){
-	this->weight = wt;
+    this->weight = wt;
 }
 
 
@@ -74,6 +74,6 @@ bool Edge<VertexType>::setWeight(double wt){
 template <class VertexType>
 double Edge<VertexType>::getWeight() const {
 
-	return this->weight;
+    return this->weight;
 
 }

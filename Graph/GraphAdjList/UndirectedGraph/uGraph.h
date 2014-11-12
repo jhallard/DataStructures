@@ -7,9 +7,9 @@
 *               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
 *               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
 *
-*   @Details  - This class uses an adjacency list to represent a graph data structure. An adjacency list consists of some container of vertices
-*               (can be an array, list, map, I'm using a vector), and pointers from those vertices to a list of edges that eminate from them. Thus
-*               if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
+*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consista vertex and a list 
+*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
+*               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
 *               v -> a* -> b* -> c* -> d* -> null
 *               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, you just need to
 *               traverse the list of edges on the AdjList that contains vertex v.
@@ -106,15 +106,20 @@ public:
     // @return - The number of edges currently in the graph.
     int getNumEdges() const;
 
-    // @func   - getVerex
-    // @args   - #1 data associated with the vertex that you wish to retrieve
-    // @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
-    Vertex<VertexType> * getVertex(VertexType);
+    // @func   - containsVertex
+    // @args   - #1 data associated with the vertex that you wish to check exists
+    // @return - Bool indicating if a vertex containing the given data is found in the graph
+    bool containsVertex(VertexType);
 
-    // @func   - getVerex
+    // @func   - getEdgeWeight
     // @args   - #1 data associated with vetex #1, data associated with vertex #2
-    // @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
-    Edge<VertexType> * getEdge(VertexType, VertexType);
+    // @return - returns the weight of the edge, throws error if edge not found
+    double getEdgeWeight(VertexType, VertexType);
+
+    // @func   - getAdjVertices
+    // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
+    // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
+    std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType);
 
     // @func   - depthFirst
     // @args   - #1 Value contained in node to be searched for

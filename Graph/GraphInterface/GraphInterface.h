@@ -1,10 +1,11 @@
 /**
-*	@Author   - John H Allard Jr.
-*	@File     - GraphInterface.h
-*	@Data     - 11/11/2014
-*	@Purpose  - Defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual functions,
-*				which ensures that the MAT_Graph and LIST_Graph classes, which will derive from this interface, must implement every function listed below.
-*
+*   @Author   - John H Allard Jr.
+*   @File     - GraphInterface.h
+*   @Data     - 11/11/2014
+*   @Purpose  - Defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual functions,
+*               which ensures that the all of the graphs I build (un/directed, adjacency lists, adjacency matrices, etc), which will derive 
+*               from this interface, must implement every function listed below. To see graph implementations that use this interface, look inside
+*               of the GraphAdjList or GraphAdjMat directories. 
 **/
 
 #ifndef GraphInterface_h
@@ -55,15 +56,20 @@ public:
     // @return - The number of edges currently in the graph.
     virtual int getNumEdges() const = 0;
 
-    // @func   - getVerex
-    // @args   - #1 data associated with the vertex that you wish to retrieve
-    // @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
-    virtual Vertex<VertexType> * getVertex(VertexType) = 0;
+    // @func   - containsVertex
+    // @args   - #1 data associated with the vertex that you wish to check exists
+    // @return - Bool indicating if a vertex containing the given data is found in the graph
+    virtual bool containsVertex(VertexType) = 0;
 
-    // @func   - getVerex
+    // @func   - getEdgeWeight
     // @args   - #1 data associated with vetex #1, data associated with vertex #2
-    // @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
-    virtual Edge<VertexType> * getEdge(VertexType, VertexType) = 0;
+    // @return - returns the weight of the edge, throws error if edge not found
+    virtual double getEdgeWeight(VertexType, VertexType) = 0;
+
+    // @func   - getAdjVertices
+    // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
+    // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
+    virtual std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType) = 0;
 
     // @func   - depthFirst
     // @args   - #1 Value contained in node to be searched for

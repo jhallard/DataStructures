@@ -1,21 +1,20 @@
 /**
 *   @Author   - John H Allard Jr.
-*   @File     - uGraph.cpp
+*   @File     - uGraph.h
 *   @Data     - 11/12/2014
-*	@Repo     - https://github.com/jhallad/DataStructures/Graph
-*   @Purpose  - This is my implementation of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
-*				undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
-*				This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
+*   @Repo     - https://github.com/jhallad/DataStructures/Graph
+*   @Purpose  - This is my definition of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
+*               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
+*               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
 *
-*   @Details  - This class uses an adjacency list to represent a graph data structure. An adjacency list consists of some container of vertices
-*               (can be an array, list, map, I'm using a vector), and pointers from those vertices to a list of edges that eminate from them. Thus
-*               if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
+*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consista vertex and a list 
+*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
+*               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
 *               v -> a* -> b* -> c* -> d* -> null
 *               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, you just need to
 *               traverse the list of edges on the AdjList that contains vertex v.
 *               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph data structure
 *               will look more like this :
-*
 *               -----------------------------------
 *             1 |   a  -> c* -> d* -> null        |
 *             2 |   b  -> v* -> d* -> e* -> null  |
@@ -72,7 +71,7 @@ Vertex<VertexType> newVertex;
 
 // Set the data of that vertex accordingly
 if(!newVertex.setData(data))
-	return false;
+    return false;
 
 // allocate a new adjacency list on the heap for the new vertex
 AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
@@ -97,7 +96,7 @@ bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 
  // if value returned in the end of the vector, the vertex doesn't exist
  if(theVertex == list.end())
- 	return false;
+    return false;
 
  // else erase the bloody vertex
  list.erase(theVertex);
@@ -112,24 +111,24 @@ bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 template<class VertexType>
 bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
 
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
-	typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
+    typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
 
-	if(vert1 == list.end() || vert2 == list.end())
-		return false;
+    if(vert1 == list.end() || vert2 == list.end())
+        return false;
 
-	AdjList<VertexType> * adj1 = *vert1;
-	AdjList<VertexType> * adj2 = *vert2;
+    AdjList<VertexType> * adj1 = *vert1;
+    AdjList<VertexType> * adj2 = *vert2;
 
-	// add an edge from vertex 1 to vertex 2
-	adj1->addEdge(adj2->getVertex(), weight);
+    // add an edge from vertex 1 to vertex 2
+    adj1->addEdge(adj2->getVertex(), weight);
 
-	// add an edge from vertex 2 to vertex 1
-	adj2->addEdge(adj1->getVertex(), weight);
-	
-	numEdges++;
+    // add an edge from vertex 2 to vertex 1
+    adj2->addEdge(adj1->getVertex(), weight);
+    
+    numEdges++;
 
-	return true;
+    return true;
     
 }
 
@@ -139,25 +138,25 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
 template<class VertexType>
 bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
 
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
-	typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
+    typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
 
-	if(vert1 == list.end() || vert2 == list.end())
-		return false;
+    if(vert1 == list.end() || vert2 == list.end())
+        return false;
 
-	AdjList<VertexType> * adj1 = *vert1;
-	AdjList<VertexType> * adj2 = *vert2;
+    AdjList<VertexType> * adj1 = *vert1;
+    AdjList<VertexType> * adj2 = *vert2;
 
-	// add an edge from vertex 1 to vertex 2
-	adj1->deleteEdge(adj2->getVertex());
+    // add an edge from vertex 1 to vertex 2
+    adj1->deleteEdge(adj2->getVertex());
 
-	// add an edge from vertex 2 to vertex 1
-	adj2->deleteEdge(adj1->getVertex());
+    // add an edge from vertex 2 to vertex 1
+    adj2->deleteEdge(adj1->getVertex());
 
-	numEdges--;
-	
+    numEdges--;
+    
 
-	return true;
+    return true;
     
 }
 
@@ -168,16 +167,16 @@ bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
 template<class VertexType>
 double uGraph<VertexType>::getWeight(VertexType v1, VertexType v2)  {
 
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
-	typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
+    typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
 
-	if(vert1 == list.end() || vert2 == list.end())
-		throw std::logic_error("Edge Not Found");
+    if(vert1 == list.end() || vert2 == list.end())
+        throw std::logic_error("Edge Not Found");
 
-	AdjList<VertexType> * adj1 = *vert1;
-	AdjList<VertexType> * adj2 = *vert2;
+    AdjList<VertexType> * adj1 = *vert1;
+    AdjList<VertexType> * adj2 = *vert2;
 
-	return adj1->getEdge(adj2->getVertex())->getWeight();
+    return adj1->getEdge(adj2->getVertex())->getWeight();
     
 }
 
@@ -186,7 +185,7 @@ double uGraph<VertexType>::getWeight(VertexType v1, VertexType v2)  {
 // @return - The number of vertices currently in the graph.
 template<class VertexType>
 int uGraph<VertexType>::getNumVertices() const {
-	return this->numVertices;
+    return this->numVertices;
     
 }
 
@@ -195,46 +194,49 @@ int uGraph<VertexType>::getNumVertices() const {
 // @return - The number of edges currently in the graph.
 template<class VertexType>
 int uGraph<VertexType>::getNumEdges() const{
-	return this->numEdges;
+    return this->numEdges;
     
 }
 
 
 // @func   - getVerex
 // @args   - #1 data associated with the vertex that you wish to retrieve
-// @return - returns a pointer to the vertex containing the appropriate data, returns nullptr if vertex cannot be found
+// @return - returns the vertex containing the appropriate data, returns nullptr if vertex cannot be found
 template<class VertexType>
-Vertex<VertexType> * uGraph<VertexType>::getVertex(VertexType v) {
+bool uGraph<VertexType>::containsVertex(VertexType v) {
 
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
 
-	if(vert1 == list.end())
-		return nullptr;
-
-	AdjList<VertexType> * adj1 = *vert1;
-
-	return adj1->getVertex();
-
+    return vert1 == list.end();
 }
 
-// @func   - getEdge
+// @func   - getEdgeWeight
 // @args   - #1 data associated with vetex #1, data associated with vertex #2
-// @return - returns a pointer to the edge that connects the two vertices. Returns nullptr if not found
+// @return - returns the weight of the edge, throws error if edge not found
 template<class VertexType>
-Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType v1, VertexType v2) {
+double uGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
 
-	// #TODO - Implement getEdge function, this will scan through the vertices for the two containing the data values passed in, 
-	// it will check if there is an edge between these two vertices. If there is, it will reurn it, else it will return false;
-	typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
-	typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+    typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
 
-	if(vert1 == list.end())
-		return nullptr;
+    if(vert1 == list.end())
+        throw std::logic_error("Edge Not Found in Graph\n");
 
-	AdjList<VertexType> * adj1 = *vert1;
-	AdjList<VertexType> * adj2 = *vert2;
+    AdjList<VertexType> * adj1 = *vert1;
+    AdjList<VertexType> * adj2 = *vert2;
 
-	return adj1->getEdge(adj2->getVertex());
+    return adj1->getEdge(adj2->getVertex())->getWeight();
+}
+
+
+
+// @func   - getAdjVertices
+// @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
+// @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
+template<class VertexType>
+std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(VertexType){
+
+    // #TODO - return list of pairs of adj vertices and the weighting of the edge 
 }
 
 
@@ -245,7 +247,7 @@ Edge<VertexType> * uGraph<VertexType>::getEdge(VertexType v1, VertexType v2) {
 template<class VertexType>
 void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 
-	// #TODO - Perform Depth First Search
+    // #TODO - Perform Depth First Search
     
 }
 
@@ -256,7 +258,7 @@ void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 template<class VertexType>
 void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 
-	// #TODO - Perform Breadth First Search
+    // #TODO - Perform Breadth First Search
     
 }
 
@@ -268,7 +270,7 @@ void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 template<class VertexType>
 std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
 
-	// #TODO - Implement min-cut algorithm for the graph
+    // #TODO - Implement min-cut algorithm for the graph
 }
 
 
@@ -279,7 +281,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
 template<class VertexType>
 std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<VertexType>) {
 
-	// #TODO - Implement A* Search Algorithm
+    // #TODO - Implement A* Search Algorithm
 }
 
 
@@ -295,19 +297,19 @@ std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<
 template<class VertexType>
 typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
 
-	typename std::vector< AdjList<VertexType> * >::iterator  it = list.begin();
+    typename std::vector< AdjList<VertexType> * >::iterator  it = list.begin();
 
-	while(it != list.end())
-	{
-		AdjList<VertexType> * adj1 = *it;
+    while(it != list.end())
+    {
+        AdjList<VertexType> * adj1 = *it;
 
-		// We have found the correct vertex
-		if(adj1->getVertex()->getData() == data)
-			return it;
-		it++;
-	}	
+        // We have found the correct vertex
+        if(adj1->getVertex()->getData() == data)
+            return it;
+        it++;
+    }   
 
-	return list.end();
+    return list.end();
 
  }
 
