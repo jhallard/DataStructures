@@ -153,6 +153,8 @@ bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
 
 	// add an edge from vertex 2 to vertex 1
 	adj2->deleteEdge(adj1->getVertex());
+
+	numEdges--;
 	
 
 	return true;
@@ -259,7 +261,6 @@ void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 }
 
 
-
 // @func   - getMinCut
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
@@ -269,6 +270,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
 
 	// #TODO - Implement min-cut algorithm for the graph
 }
+
 
 // @func   - aStarSearch
 // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach

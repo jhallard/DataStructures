@@ -49,7 +49,7 @@
 #include "../Edge/Edge.h"
 
 
-template <class VertexType>
+template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
 class uGraph : public GraphInterface <VertexType>
 {
 
@@ -80,14 +80,14 @@ public:
     bool deleteVertex(VertexType);
 
     // @func   - insertEdge
-    // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
+    // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
-    bool insertEdge(VertexType v1, VertexType v2, double weight = 1.0);
+    bool insertEdge(VertexType, VertexType, double = 1.0);
 
     // @func   - deleteEdge
-    // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
+    // @args   - #1 The "From" Node, the "To" Node. 
     // @return - Boolean indicating succes 
-    bool deleteEdge(VertexType v1, VertexType v2);
+    bool deleteEdge(VertexType, VertexType);
 
 
     // @func   - getWeight
@@ -142,9 +142,10 @@ public:
 
 
 
-    // ---- TODO ---- //
+    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
     // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.
     // #2 - Override equals operator, check to see if two graphs are equivilent
+    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
 
 
 
@@ -172,6 +173,7 @@ private:
     //           between vertices, the graph will go through and clean up redundant edges, saving the one with the lowest score.
     // #TODO   - Figure out how to implement this
     bool isMultiGraph;
+
 
 
 //////////////////////////////////////////////////////

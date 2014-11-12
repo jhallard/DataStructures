@@ -29,12 +29,12 @@ public:
     virtual bool deleteVertex(VertexType) = 0;
 
     // @func   - insertEdge
-    // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
+    // @args   - #1 The "From" Node, #2 the "To" Node, #3 the weight for this new edge 
     // @return - Boolean indicating succes 
     virtual bool insertEdge(VertexType, VertexType, double = 1.0) = 0;
 
     // @func   - deleteEdge
-    // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
+    // @args   - #1 The "From" Node, #2 the "To" Node.
     // @return - Boolean indicating succes 
     virtual bool deleteEdge(VertexType, VertexType) = 0;
 

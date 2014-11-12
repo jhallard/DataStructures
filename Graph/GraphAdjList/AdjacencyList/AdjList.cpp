@@ -26,11 +26,23 @@
 
 
     // @func - Destructor
-    // @args - Cleans up the edges allocated with new()
+    // @args - None
+    // @info - Cleans up the edges allocated with new() in insertEdge function
     template <class VertexType>
     AdjList<VertexType>::~AdjList() {
 
-        // #TODO - Clean up lost node memory
+        Edge<VertexType> * temp = pEdge;
+
+        if(temp == nullptr)
+            return;
+
+        Edge<VertexType> * temp2 = temp->getNext();
+
+        while(temp2 != nullptr){
+            temp = temp2;
+            temp2 = temp2->getNext();
+            delete(temp);
+        }
     }
 
 

@@ -70,6 +70,7 @@ void stringTest() {
 	graph.insertEdge("lala", "tada", 0.1);
 
 
+
 	if(graph.getNumVertices() == 4)
 		std::cout << "TRUE 2 \n" << std::endl;
 	else
@@ -86,4 +87,26 @@ void stringTest() {
 		std::cout << "TRUE 2 \n" << std::endl;
 	else
 		std::cout << testedge->getWeight() << std::endl;
+
+
+	graph.deleteEdge("abcd", "1234");
+	graph.deleteEdge("abcd", "lala");
+	graph.deleteEdge("abcd", "tada");
+	graph.deleteEdge("1234", "abcd");
+	graph.deleteEdge("1234", "lala");
+	graph.deleteEdge("1234", "tada");
+	graph.deleteEdge("lala", "1234");
+	graph.deleteEdge("lala", "abcd");
+	graph.deleteEdge("lala", "tada");
+
+
+	if(graph.getNumVertices() == 4)
+		std::cout << "TRUE 3 \n" << std::endl;
+	else
+		std::cout << graph.getNumVertices() << std::endl;
+
+	if(graph.getNumEdges() == 0)
+		std::cout << "TRUE 3\n" << std::endl;
+	else
+		std::cout << graph.getNumEdges() << std::endl;
 }
