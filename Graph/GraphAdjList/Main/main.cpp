@@ -14,7 +14,7 @@ int main()
     return 0;
 }
 
-void intTest(){
+void intTest() {
     uGraph<int> graph;
 
     graph.insertVertex(2);
@@ -46,16 +46,17 @@ void intTest(){
     double testedge;
     try
     {
-        testedge = graph.getEdgeWeight(2, 4);
+        testedge = graph.getEdgeWeight(2, 5);
+        if(testedge == 4.0)
+            std::cout << "TRUE \n" << std::endl;
+        else
+            std::cout << testedge << std::endl;
     }
     catch(std::logic_error e) {
         std::cerr << e.what();
     }
     
-    if(testedge == 4.0)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << testedge << std::endl;
+
 }
 
 void stringTest() {

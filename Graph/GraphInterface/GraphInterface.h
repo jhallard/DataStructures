@@ -39,7 +39,6 @@ public:
     // @return - Boolean indicating succes 
     virtual bool deleteEdge(VertexType, VertexType) = 0;
 
-
     // @func   - getWeight
     // @args   - #1 From node, #2 "To" Node
     // @return - Double value that is the weight of the given edge
@@ -67,8 +66,8 @@ public:
     virtual double getEdgeWeight(VertexType, VertexType) = 0;
 
     // @func   - getAdjVertices
-    // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
-    // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
+    // @args   - #1 Data contained in vertex that you wish to recieve a list of adjacent vertices of.
+    // @return - Vector of pairs, first item is an adjacent vertex, second is the weight of the edge between the two vertices.
     virtual std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType) = 0;
 
     // @func   - depthFirst

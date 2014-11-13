@@ -60,29 +60,38 @@ uGraph<VertexType>::uGraph(std::string fn){
     
 }
 
+
+// @func  - Destructor
+// @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
+template<class VertexType>
+uGraph<VertexType>::~uGraph() {
+    for(int i = 0; i < list.size(); i++)
+        delete(list[i]);
+}
+
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
 // @return - Boolean indicating succes 
 template<class VertexType>
 bool uGraph<VertexType>::insertVertex(VertexType data) {
 
-// Start by creating a new vertex
-Vertex<VertexType> newVertex;
+    // Start by creating a new vertex
+    Vertex<VertexType> newVertex;
 
-// Set the data of that vertex accordingly
-if(!newVertex.setData(data))
-    return false;
+    // Set the data of that vertex accordingly
+    if(!newVertex.setData(data))
+        return false;
 
-// allocate a new adjacency list on the heap for the new vertex
-AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
+    // allocate a new adjacency list on the heap for the new vertex
+    AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
-// push the new AdjList onto the vector of AdjLists
-list.push_back(newList);
+    // push the new AdjList onto the vector of AdjLists
+    list.push_back(newList);
 
-// increment number of vertices
-numVertices++;
+    // increment number of vertices
+    numVertices++;
 
-return true;
+    return true;
     
 }
 
@@ -92,16 +101,16 @@ return true;
 template<class VertexType>
 bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 
- typename std::vector< AdjList<VertexType> * >::iterator theVertex = this->findVertex(vert);
+    typename std::vector< AdjList<VertexType> * >::iterator theVertex = this->findVertex(vert);
 
- // if value returned in the end of the vector, the vertex doesn't exist
- if(theVertex == list.end())
+    // if value returned in the end of the vector, the vertex doesn't exist
+    if(theVertex == list.end())
     return false;
 
- // else erase the bloody vertex
- list.erase(theVertex);
+    // else erase the bloody vertex
+    list.erase(theVertex);
 
- return true;
+    return true;
     
 }
 
@@ -144,8 +153,8 @@ bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
     if(vert1 == list.end() || vert2 == list.end())
         return false;
 
-    AdjList<VertexType> * adj1 = *vert1;
-    AdjList<VertexType> * adj2 = *vert2;
+    AdjList<VertexType> * adj1 = *vert1; // vert1/2 are iterators that dereference to pointers
+    AdjList<VertexType> * adj2 = *vert2; // so here we extract a pointer to the appropriate vertex from the iterator
 
     // add an edge from vertex 1 to vertex 2
     adj1->deleteEdge(adj2->getVertex());
@@ -205,22 +214,24 @@ int uGraph<VertexType>::getNumEdges() const{
 template<class VertexType>
 bool uGraph<VertexType>::containsVertex(VertexType v) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v);
+    typename std::vector< AdjList<VertexType> * >::iterator vert = findVertex(v);
 
-    return vert1 == list.end();
+    return (vert != list.end());
 }
 
 // @func   - getEdgeWeight
 // @args   - #1 data associated with vetex #1, data associated with vertex #2
 // @return - returns the weight of the edge, throws error if edge not found
+// @TODO   - Figure out how to implement this without exceptions, although that would
+//           most likely imply putting restrictions on the weighting (e.g. wt >= 0)
 template<class VertexType>
 double uGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
 
     typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
     typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
 
-    if(vert1 == list.end())
-        throw std::logic_error("Edge Not Found in Graph\n");
+    if(vert1 == list.end() || vert2 == list.end())
+        throw std::logic_error("Error - Edge Not Found in Graph\n");
 
     AdjList<VertexType> * adj1 = *vert1;
     AdjList<VertexType> * adj2 = *vert2;
@@ -292,15 +303,14 @@ std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<
 
 // @func   - findVertex
 // @args   - #1 Value contained in the vertex to be found
-// @return - pointer to the vertex to be found, null if not found
+// @return - Iterator that points to the vertex to be found, points to list.end() if vertex is not found
 // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
 typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
 
     typename std::vector< AdjList<VertexType> * >::iterator  it = list.begin();
 
-    while(it != list.end())
-    {
+    while(it != list.end()) {
         AdjList<VertexType> * adj1 = *it;
 
         // We have found the correct vertex
@@ -310,7 +320,6 @@ typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::find
     }   
 
     return list.end();
-
  }
 
 

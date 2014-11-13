@@ -69,6 +69,10 @@ public:
     // @error - Can throw IO error if invalid filename or file structure to build graph 
     uGraph(std::string fn);
 
+    // @func  - Destructor
+    // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
+    ~uGraph();
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
@@ -176,7 +180,7 @@ private:
     // @info   - This boolean value determines if the user is allowed to add multiple edges between the same two vertices. The default value is true.
     //           Can only be accessed indirectly through the get and set functions, if a user tries to set it to false when there are already multiple edges
     //           between vertices, the graph will go through and clean up redundant edges, saving the one with the lowest score.
-    // #TODO   - Figure out how to implement this
+    // #TODO   - Figure out how/if/why to implement this
     bool isMultiGraph;
 
 
