@@ -46,7 +46,7 @@ void intTest() {
     double testedge;
     try
     {
-        testedge = graph.getEdgeWeight(2, 5);
+        testedge = graph.getEdgeWeight(2, 4);
         if(testedge == 4.0)
             std::cout << "TRUE \n" << std::endl;
         else
@@ -90,18 +90,17 @@ void stringTest() {
         std::cout << graph.getNumEdges() << std::endl;
 
     double weight;
-    try
-    {
+    try {
         weight = graph.getEdgeWeight("abcd", "1234");
+
+        if(weight == 4.0)
+            std::cout << "TRUE 2 \n" << std::endl;
+        else
+            std::cout << weight << std::endl;
     }
     catch(std::logic_error e) {
         std::cerr << e.what();
     }
-
-    if(weight == 4.0)
-        std::cout << "TRUE 2 \n" << std::endl;
-    else
-        std::cout << weight << std::endl;
 
 
     graph.deleteEdge("abcd", "1234");

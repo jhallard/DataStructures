@@ -126,16 +126,16 @@ public:
     std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType);
 
     // @func   - depthFirst
-    // @args   - #1 Value contained in node to be searched for
-    // @return - nothing
-    // @info   - Performs a depth first traversal, calling the visit() function on each item
-    void depthFirst(VertexType, void visit(VertexType&));
+    // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+    // @return - Bool indicating if the function could find the starting vertex based on arg#1
+    // @info   - Performs a breadth first traversal, calling the visit() function on each item
+    bool depthFirst(VertexType, void visit(VertexType&));
 
     // @func   - breadthFirst
-    // @args   - #1 Value contained in node to be searched for
-    // @return - nothing
+    // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+    // @return - Bool indicating if the function could find the starting vertex based on arg#1
     // @info   - Performs a breadth first traversal, calling the visit() function on each item
-    void breadthFirst(VertexType, void visit(VertexType&));
+    bool breadthFirst(VertexType, void visit(VertexType&));
 
     // @func   - getMinCut
     // @args   - none

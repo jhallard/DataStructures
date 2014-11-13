@@ -105,10 +105,13 @@ bool uGraph<VertexType>::deleteVertex(VertexType vert) {
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(theVertex == list.end())
-    return false;
+        return false;
 
     // else erase the bloody vertex
     list.erase(theVertex);
+
+    // decrement the number of vertices
+    numVertices--;
 
     return true;
     
@@ -214,9 +217,7 @@ int uGraph<VertexType>::getNumEdges() const{
 template<class VertexType>
 bool uGraph<VertexType>::containsVertex(VertexType v) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert = findVertex(v);
-
-    return (vert != list.end());
+    return (list.end() != findVertex(v));
 }
 
 // @func   - getEdgeWeight
@@ -252,22 +253,22 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 
 
 // @func   - depthFirst
-// @args   - None
-// @return - nothing
+// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+// @return - Bool indicating if the function could find the starting vertex based on arg#1
 // @info   - Performs a depth first traversal, calling the visit() function on each item
 template<class VertexType>
-void uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
+bool uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 
     // #TODO - Perform Depth First Search
     
 }
 
 // @func   - breadthFirst
-// @args   - None
-// @return - nothing
+// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+// @return - Bool indicating if the function could find the starting vertex based on arg#1
 // @info   - Performs a breadth first traversal, calling the visit() function on each item
 template<class VertexType>
-void uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
+bool uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
 
     // #TODO - Perform Breadth First Search
     
