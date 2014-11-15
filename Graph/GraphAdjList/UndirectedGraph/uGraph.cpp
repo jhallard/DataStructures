@@ -283,7 +283,9 @@ bool uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 template<class VertexType>
 bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)){
 
-    // #TODO - Perform Breadth First Search
+    std::queue<Vertex<VertexType> *> q;
+    typename std::unordered_map<VertexType, bool> marked;
+
     typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
 
     if(it == list.end())
@@ -291,7 +293,32 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
     AdjList<VertexType> * rootVert = *it;
 
-    
+    marked.insert(std::pair<VertexType, bool>(rootVert->getVertex()->getData(), true));
+    q.push(rootVert->getVertex());
+
+    while(q.size()) {
+
+        Vertex<VertexType> * tempVert = q.front();q.pop();
+        typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
+
+        if(it == list.end())
+            throw std::logic_error("Error - Edge Not Found in Graph\n");
+
+        AdjList<VertexType> * adj = *it;
+        std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
+
+        for(int i = 0; i < edges.size(); i++) {
+            Vertex<VertexType> * tempVert = edges[i]->getVertex();
+            VertexType tempData = tempVert->getData();
+            typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
+            if(get == marked.end()) {
+                marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
+                visit(tempData);
+                q.push(tempVert);
+            }
+        }
+
+    }
 }
 
 
@@ -324,7 +351,7 @@ std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<
 
 // @func   - findVertex
 // @args   - #1 Value contained in the vertex to be found
-// @return - Iterator that points to the vertex to be found, points to list.end() if vertex is not found
+// @return - Iterator that points to the adjacency list for the vertex to be found, points to list.end() if vertex is not found
 // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
 typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
