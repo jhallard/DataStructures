@@ -75,6 +75,11 @@ public:
     // @info - ffinds and returns the given edge if it exists
     Edge<VertexType> * getEdge(Vertex<VertexType> *);
 
+    // @func   - getAllEdges
+    // @args   - None
+    // @return - Vector of pointers to all the edge objects in the class
+    std::vector<Edge<VertexType> *> getAllEdges();
+
 
 
 private:

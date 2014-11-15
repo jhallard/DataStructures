@@ -246,9 +246,22 @@ double uGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
 // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
 // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
 template<class VertexType>
-std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(VertexType){
+std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(VertexType v1){
 
-    // #TODO - return list of pairs of adj vertices and the weighting of the edge 
+    std::vector< std::pair<VertexType, double> > retVector;
+
+    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+
+    if(vert1 == list.end())
+        return retVector;
+
+    AdjList<VertexType> * adj1 = *vert1;
+    std::vector<Edge<VertexType> *> tempVector = adj1->getAllEdges();
+
+    for(int i = 0; i < tempVector.size(); i++)
+        retVector.push_back(std::pair<VertexType, double>(tempVector[i]->getVertex()->getData(), tempVector[i]->getWeight()));
+
+    return retVector;
 }
 
 
@@ -268,9 +281,16 @@ bool uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
 // @info   - Performs a breadth first traversal, calling the visit() function on each item
 template<class VertexType>
-bool uGraph<VertexType>::breadthFirst(VertexType, void visit(VertexType&)){
+bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)){
 
     // #TODO - Perform Breadth First Search
+    typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
+
+    if(it == list.end())
+        throw std::logic_error("Error - Edge Not Found in Graph\n");
+
+    AdjList<VertexType> * rootVert = *it;
+
     
 }
 

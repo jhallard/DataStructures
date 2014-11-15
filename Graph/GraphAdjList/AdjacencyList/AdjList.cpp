@@ -183,7 +183,7 @@
         // Case #3 - The edge may or may not be somewhere down the chain
         while(temp->getNext() != nullptr) {
 
-            // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
+            // if the edge to return is the next node, return that node
             if(temp->getNext()->getVertex() == vert){
                 return temp->getNext();
             }
@@ -197,3 +197,29 @@
 
     }
 
+
+    // @func   - getAllEdges
+    // @args   - None
+    // @return - Vector of pointers to all the edge objects in the class
+    template <class VertexType>
+    std::vector<Edge<VertexType> *> AdjList<VertexType>::getAllEdges() {
+
+        std::vector<Edge<VertexType> *> retVec;
+        Edge<VertexType> * temp;
+        temp = pEdge;
+
+        // Case #1 - No edges in the list, return false
+        if(temp == nullptr)
+            return retVec;
+
+        // Case #3 - The edge may or may not be somewhere down the chain
+        while(temp != nullptr) {
+
+            retVec.push_back(temp);
+            temp = temp->getNext();
+            
+        }
+
+        return retVec;
+
+    }
