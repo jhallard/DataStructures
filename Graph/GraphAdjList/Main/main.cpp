@@ -3,13 +3,14 @@
 
 void intTest();
 void stringTest();
+void visit(int&);
 
 int main()
 {
 
     intTest();
 
-    stringTest();
+    // stringTest();
 
     return 0;
 }
@@ -21,6 +22,10 @@ void intTest() {
     graph.insertVertex(4);
     graph.insertVertex(6);
     graph.insertVertex(8);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(7);
+    graph.insertVertex(9);
 
     graph.insertEdge(2, 4, 4.0);
     graph.insertEdge(2, 8, 5.0);
@@ -31,30 +36,47 @@ void intTest() {
     graph.insertEdge(8, 4, 7.0);
     graph.insertEdge(8, 2, 4.0);
     graph.insertEdge(8, 6, 0.1);
+    graph.insertEdge(2, 3, 4.0);
+    graph.insertEdge(2, 7, 5.0);
+    graph.insertEdge(2, 5, 1.0);
+    graph.insertEdge(4, 9, 2.0);
+    graph.insertEdge(4, 5, 5.6);
+    graph.insertEdge(4, 3, 2.1);
+    graph.insertEdge(8, 7, 7.0);
+    graph.insertEdge(8, 3, 4.0);
+    graph.insertEdge(8, 5, 0.1);
+
+    void (*fptr)(int&);
+    fptr = visit;
+    graph.breadthFirst(2, fptr);
+
+    std::cout << "\n\n\n";
+
+    graph.breadthFirst(4, fptr);
 
 
-    if(graph.getNumVertices() == 4)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << graph.getNumVertices() << std::endl;
+    // if(graph.getNumVertices() == 4)
+    //     std::cout << "TRUE \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumVertices() << std::endl;
 
-    if(graph.getNumEdges() == 9)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << graph.getNumEdges() << std::endl;
+    // if(graph.getNumEdges() == 9)
+    //     std::cout << "TRUE \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumEdges() << std::endl;
 
-    double testedge;
-    try
-    {
-        testedge = graph.getEdgeWeight(2, 4);
-        if(testedge == 4.0)
-            std::cout << "TRUE \n" << std::endl;
-        else
-            std::cout << testedge << std::endl;
-    }
-    catch(std::logic_error e) {
-        std::cerr << e.what();
-    }
+    // double testedge;
+    // try
+    // {
+    //     testedge = graph.getEdgeWeight(2, 4);
+    //     if(testedge == 4.0)
+    //         std::cout << "TRUE \n" << std::endl;
+    //     else
+    //         std::cout << testedge << std::endl;
+    // }
+    // catch(std::logic_error e) {
+    //     std::cerr << e.what();
+    // }
     
 
 }
@@ -123,4 +145,10 @@ void stringTest() {
         std::cout << "TRUE 3\n" << std::endl;
     else
         std::cout << graph.getNumEdges() << std::endl;
+}
+
+
+void visit(int &x) {
+
+    std:: cout << x << std::endl;
 }

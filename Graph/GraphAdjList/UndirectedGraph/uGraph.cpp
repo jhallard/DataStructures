@@ -302,7 +302,7 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
         typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
 
         if(it == list.end())
-            throw std::logic_error("Error - Edge Not Found in Graph\n");
+            throw std::logic_error("Can't Find Root Data\n");
 
         AdjList<VertexType> * adj = *it;
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
