@@ -88,11 +88,18 @@ public:
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     virtual std::vector<std::vector<VertexType> > getMinCut() = 0;
 
-    // @func   - aStarSearch
+    // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    virtual std::vector<VertexType> aStarSearch(VertexType, std::vector<VertexType>) = 0;
+    virtual std::vector<VertexType> dijkstras(VertexType, std::vector<VertexType>) = 0;
+
+
+    // @func   - aStar
+    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
+    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    virtual std::vector<VertexType> aStar(VertexType, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) = 0;
 
 
 };

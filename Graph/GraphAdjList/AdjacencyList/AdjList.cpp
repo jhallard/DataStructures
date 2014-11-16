@@ -1,3 +1,12 @@
+/**
+*   @Author   - John H Allard Jr.
+*   @File     - AdjList.cpp
+*   @Data     - 11/13/2014
+*   @Purpose  - This file defines the adjascency list class, which consists of a vertex and a pointer to an edge. The purpose of this class
+*               is mostly to simplify the syntax of the code inside of the uGraph class. The uGraph class will simply consist of a vector of this AdjLists,
+*               where each AdjList corresponds to a single vertex in the graph and all of the edges that have contact with the vertex.
+**/
+
 
     #include "AdjList.h"
 
@@ -46,7 +55,9 @@
     }
 
 
-    // @func - setData
+    // @func   - setVertex
+    // @args   - #1 Vertex Object
+    // @return - Bool indicating success or failure
     template <class VertexType>
     bool AdjList<VertexType>::setVertex(Vertex<VertexType> newData){
 
@@ -54,7 +65,9 @@
         return true;
     }
 
-    // @func getData
+    // @func   - getVertex
+    // @args   - None
+    // @return - Vertex data associated with the base of this adj. list
     template <class VertexType>
     Vertex<VertexType> * AdjList<VertexType>::getVertex() {
 

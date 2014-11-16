@@ -1,9 +1,9 @@
 /**
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.h
-*   @Data     - 11/12/2014
+*   @Date     - 11/12/2014
 *   @Repo     - https://github.com/jhallad/DataStructures/Graph
-*   @Purpose  - This is my definition of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
+*   @Purpose  - This is my declaration of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
 *               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
 *               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
 *
@@ -145,17 +145,23 @@ public:
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     std::vector<std::vector<VertexType> > getMinCut();
 
-    // @func   - aStarSearch
+    // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    std::vector<VertexType> dijkstras(VertexType, std::vector<VertexType>);
+
+    // @func   - aStar
+    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
+    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    std::vector<VertexType> aStarSearch(VertexType, std::vector<VertexType>);
+    std::vector<VertexType> aStar(VertexType, std::vector<VertexType>, double hueristic(VertexType&, VertexType&));
 
 
 
     // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-    // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.
-    // #2 - Override equals operator, check to see if two graphs are equivilent
+    // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.    //
+    // #2 - Override equals operator, check to see if two graphs are equivilent                                            //
     // ------------------------------------------------------ #TODO ------------------------------------------------------ //
 
 

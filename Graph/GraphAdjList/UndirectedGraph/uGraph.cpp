@@ -1,11 +1,11 @@
 /**
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.h
-*   @Data     - 11/12/2014
+*   @Date     - 11/12/2014
 *   @Repo     - https://github.com/jhallad/DataStructures/Graph
 *   @Purpose  - This is my definition of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
 *               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
-*               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
+*               This class was implemented as part of my C++ Data Structures personal project. All code is open license and free to use.
 *
 *   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consista vertex and a list 
 *               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
@@ -25,7 +25,7 @@
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
-*               This class inherits from the pure, virtual GraphInterface class (GraphInterface/GraphInterface.h). This interface specifies exactly what functions
+*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies exactly what functions
 *               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
 *               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
 *               me to make amny different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
@@ -52,7 +52,7 @@ uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), isMultiGraph(true) {
 
 // @func  - Constructor#2
 // @args  - #1 String that contains the filename from which to load a graph
-// @error - Can throw IO error if invalid filename or file structure to build graph 
+// @error - Can throw IO error if invalid filename or file structure to build graph is given
 template<class VertexType>
 uGraph<VertexType>::uGraph(std::string fn){
 
@@ -68,6 +68,7 @@ uGraph<VertexType>::~uGraph() {
     for(int i = 0; i < list.size(); i++)
         delete(list[i]);
 }
+
 
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
@@ -95,6 +96,7 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     
 }
 
+
 // @func   - deleteNode
 // @args   - none
 // @return - Boolean indicating succes 
@@ -117,6 +119,7 @@ bool uGraph<VertexType>::deleteVertex(VertexType vert) {
     
 }
 
+
 // @func   - insertEdge
 // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 // @return - Boolean indicating succes 
@@ -126,6 +129,7 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
     typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
     typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
 
+    // if we can't find either of the vertices to connect, return false
     if(vert1 == list.end() || vert2 == list.end())
         return false;
 
@@ -138,11 +142,13 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
     // add an edge from vertex 2 to vertex 1
     adj2->addEdge(adj1->getVertex(), weight);
     
-    numEdges++;
+    numEdges++; // only add 1 to the number of edges even though we added two edges to our data structure
+                // this is because it's an undirected graph, so it needs edges in both directions
 
     return true;
     
 }
+
 
 // @func   - deleteEdge
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
@@ -201,6 +207,7 @@ int uGraph<VertexType>::getNumVertices() const {
     
 }
 
+
 // @func   - getNumEdges
 // @args   - None
 // @return - The number of edges currently in the graph.
@@ -219,6 +226,7 @@ bool uGraph<VertexType>::containsVertex(VertexType v) {
 
     return (list.end() != findVertex(v));
 }
+
 
 // @func   - getEdgeWeight
 // @args   - #1 data associated with vetex #1, data associated with vertex #2
@@ -256,10 +264,10 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
         return retVector;
 
     AdjList<VertexType> * adj1 = *vert1;
-    std::vector<Edge<VertexType> *> tempVector = adj1->getAllEdges();
+    std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
-    for(int i = 0; i < tempVector.size(); i++)
-        retVector.push_back(std::pair<VertexType, double>(tempVector[i]->getVertex()->getData(), tempVector[i]->getWeight()));
+    for(int i = 0; i < edgeList.size(); i++)
+        retVector.push_back(std::pair<VertexType, double>(edgeList[i]->getVertex()->getData(), edgeList[i]->getWeight()));
 
     return retVector;
 }
@@ -270,26 +278,21 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
 // @info   - Performs a depth first traversal, calling the visit() function on each item
 template<class VertexType>
-bool uGraph<VertexType>::depthFirst(VertexType, void visit(VertexType&)){
+bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)){
 
-    // #TODO - Perform Depth First Search
-    
-}
-
-// @func   - breadthFirst
-// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
-// @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a breadth first traversal, calling the visit() function on each item
-template<class VertexType>
-bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)){
-
+    // Our queue object, stores the vertices as they appear to the search
+    // We actually use it as a stack for this problem, by inserting and removing from the 
+    // back of the queue 
     std::queue<Vertex<VertexType> *> q;
+
+    // A map that allows us to 'mark' the vertices when they've been seen.
+    // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
     typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
 
     if(it == list.end())
-        throw std::logic_error("Error - Edge Not Found in Graph\n");
+        return false;
 
     AdjList<VertexType> * rootVert = *it;
 
@@ -298,11 +301,11 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
     while(q.size()) {
 
-        Vertex<VertexType> * tempVert = q.front();q.pop();
+        Vertex<VertexType> * tempVert = q.back();q.pop();
         typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
 
         if(it == list.end())
-            throw std::logic_error("Can't Find Root Data\n");
+            return false;
 
         AdjList<VertexType> * adj = *it;
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
@@ -319,6 +322,70 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
         }
 
     }
+
+    return true;
+    
+}
+
+
+// @func   - breadthFirst
+// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+// @return - Bool indicating if the function could find the starting vertex based on arg#1
+// @info   - Performs a breadth first traversal, calling the visit() function on each item
+template<class VertexType>
+bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)){
+
+    // Our queue object, stores the vertices as they appear to the search
+    std::queue<Vertex<VertexType> *> q;
+
+    // A map that allows us to 'mark' the vertices when they've been seen.
+    // maps a set of unique vertex data to a bool that is true if that data has been seen before
+    typename std::unordered_map<VertexType, bool> marked;
+
+    typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
+
+    if(it == list.end())
+        return false;
+
+    AdjList<VertexType> * rootVert = *it;
+
+    VertexData tempData = rootVert->getVertex()->getData();
+
+    marked.insert(std::pair<VertexType, bool>(tempData, true));
+    q.push(rootVert->getVertex());
+    visit(tempData);
+
+    while(q.size()) {
+
+        Vertex<VertexType> * tempVert = q.front();q.pop();
+        typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
+
+        if(it == list.end())
+            return false;
+
+        AdjList<VertexType> * adj = *it;
+        std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
+
+        // Go through all of the edges associated with the current vertex
+        for(int i = 0; i < edges.size(); i++) {
+            Vertex<VertexType> * tempVert = edges[i]->getVertex();
+            VertexType tempData = tempVert->getData();
+            typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
+
+            // if the current vertex hasn't been seen
+            if(get == marked.end()) {
+                // mark the vertex
+                marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
+                visit(tempData);
+                // enqueue the new vertex
+                q.push(tempVert);
+            }
+
+        }
+
+    }
+
+    return true;
 }
 
 
@@ -332,16 +399,25 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
     // #TODO - Implement min-cut algorithm for the graph
 }
 
-
-// @func   - aStarSearch
+// @func   - dijkstras
 // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
+// @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+// @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+template<class VertexType>
+std::vector<VertexType> uGraph<VertexType>::dijkstras(VertexType, std::vector<VertexType>) {
+
+     // #TODO - Implement Dijkstras Path-finding algorithm
+}
+
+
+// @func   - aStar
+// @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
 // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
 // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
 template<class VertexType>
-std::vector<VertexType> uGraph<VertexType>::aStarSearch(VertexType, std::vector<VertexType>) {
+std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) {
 
-    // #TODO - Implement A* Search Algorithm
-}
+     // #TODO - Implement A* Path-finding algorithm
 
 
 
