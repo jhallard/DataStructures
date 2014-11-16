@@ -36,6 +36,7 @@ bool Edge<VertexType>::setVertex(Vertex<VertexType> * vert) {
         return false;
 
     this->vertex = vert;
+    return true;
 }
 
 // @func   - getNext
@@ -48,9 +49,9 @@ Edge<VertexType> * Edge<VertexType>::getNext() const {
 
 }
 
-// @func   - setNext #1
+// @func   - setNext
 // @args   - #1 Pointer to the next Edge object
-// @return - The vertex object pointed to by this edge. 
+// @return - Pointless boolean indicating success
 template <class VertexType>
 bool Edge<VertexType>::setNext(Edge * next){
 

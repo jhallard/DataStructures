@@ -127,8 +127,8 @@ void stringTest() {
 
     void (*fptr)(std::string&);
     fptr = visit;
-    graph.breadthFirst("abcd", fptr);
 
+    graph.breadthFirst("abcd", fptr);
 
     std::cout << "\n\n\n";
 

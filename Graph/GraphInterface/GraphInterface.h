@@ -5,7 +5,8 @@
 *   @Purpose  - Defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual functions,
 *               which ensures that the all of the graphs I build (un/directed, adjacency lists, adjacency matrices, etc), which will derive 
 *               from this interface, must implement every function listed below. To see graph implementations that use this interface, look inside
-*               of the GraphAdjList or GraphAdjMat directories. 
+*               of the GraphAdjList or GraphAdjMat directories. All code is open license and free to use, just leave some
+*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 **/
 
 #ifndef GraphInterface_h
@@ -39,25 +40,19 @@ public:
     // @return - Boolean indicating succes 
     virtual bool deleteEdge(VertexType, VertexType) = 0;
 
-    // @func   - getWeight
-    // @args   - #1 From node, #2 "To" Node
-    // @return - Double value that is the weight of the given edge
-    // @throws - Exception if the given edge does not exist.
-    virtual double getWeight(VertexType, VertexType)  = 0;
-
-    // @func   - numVertices
+    // @func   - getNumVertices
     // @args   - None
     // @return - The number of vertices currently in the graph.
     virtual int getNumVertices() const = 0;
 
-    // @func   - numEdges
+    // @func   - getNumEdges
     // @args   - None
     // @return - The number of edges currently in the graph.
     virtual int getNumEdges() const = 0;
 
     // @func   - containsVertex
-    // @args   - #1 data associated with the vertex that you wish to check exists
-    // @return - Bool indicating if a vertex containing the given data is found in the graph
+    // @args   - #1 data associated with the vertex that you wish to query for existence 
+    // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     virtual bool containsVertex(VertexType) = 0;
 
     // @func   - getEdgeWeight
@@ -72,14 +67,18 @@ public:
 
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
-    // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the visit() function on each item
+    // @return - Bool indicatingetN if the function could find the starting vertex based on arg#1
+    // @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
+    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
+    //           track of the seen and unseen vertices.
     virtual bool depthFirst(VertexType, void visit(VertexType&)) = 0;
 
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the visit() function on each item
+    // @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
+    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
+    //           track of the seen and unseen vertices.
     virtual bool breadthFirst(VertexType, void visit(VertexType&)) = 0;
 
     // @func   - getMinCut

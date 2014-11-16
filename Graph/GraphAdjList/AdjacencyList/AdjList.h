@@ -5,6 +5,8 @@
 *   @Purpose  - This file declares the adjascency list class, which consists of a vertex and a pointer to an edge. The purpose of this class
 *               is mostly to simplify the syntax of the code inside of the uGraph class. The uGraph class will simply consist of a vector of this AdjLists,
 *               where each AdjList corresponds to a single vertex in the graph and all of the edges that have contact with the vertex.
+*               All code is open license and free to use, just leave some sort of note in your source code giving credit to me and 
+*               a link to my github (github.com/jhallard)
 **/
 
 

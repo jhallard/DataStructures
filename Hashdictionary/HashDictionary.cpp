@@ -204,31 +204,21 @@ void HashDictionary<keyType, itemType>::traverse(void visit(DictionaryNode<keyTy
     DictionaryNode<keyType, itemType> * nodeptr = nullptr;
     nodeptr = dictionary[0];
 
-    int total = 0;
-    double average = 0;
     for(int i = 0; i < this->dictionarySize; i++)
     {
         if(dictionary[i] != nullptr)
         {
             nodeptr = dictionary[i];
-            std::cout << "Slot #" << i; visit(*nodeptr);
             total += (int)nodeptr->getKey();
 
             while(nodeptr->getNext() != nullptr)
             {
                 nodeptr = nodeptr->getNext();
-                std::cout << "Slot #" << i; visit(*nodeptr);
+                visit(*nodeptr);
                 total += (int)nodeptr->getKey();
             }
         }
     }
-
-    average = (double)total/this->getNumberOfItems();
-    double x = (double)dictionarySize;
-    double alpha = (double)(this->getNumberOfItems()/x);
-
-
-    std::cout << "\n\n Average Age = " << average << "\n\n" << "alpha = " << alpha << "\n\n";
 
 }
 

@@ -5,7 +5,8 @@
 *   @Repo     - https://github.com/jhallad/DataStructures/Graph
 *   @Purpose  - This is my declaration of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
 *               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
-*               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use.
+*               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use, just leave some
+*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 *
 *   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consista vertex and a list 
 *               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
@@ -95,13 +96,6 @@ public:
     // @return - Boolean indicating succes 
     bool deleteEdge(VertexType, VertexType);
 
-
-    // @func   - getWeight
-    // @args   - #1 From node, #2 "To" Node
-    // @return - Double value that is the weight of the given edge
-    // @throws - Exception if the given edge does not exist.
-    double getWeight(VertexType, VertexType) ;
-
     // @func   - numVertices
     // @args   - None
     // @return - The number of vertices currently in the graph.
@@ -112,9 +106,9 @@ public:
     // @return - The number of edges currently in the graph.
     int getNumEdges() const;
 
-    // @func   - containsVertex
-    // @args   - #1 data associated with the vertex that you wish to check exists
-    // @return - Bool indicating if a vertex containing the given data is found in the graph
+    // @func   - containsVerex
+    // @args   - #1 data associated with the vertex that you wish to query for existence 
+    // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     bool containsVertex(VertexType);
 
     // @func   - getEdgeWeight
@@ -130,13 +124,17 @@ public:
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the visit() function on each item
+    // @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
+    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
+    //           track of the seen and unseen vertices.
     bool depthFirst(VertexType, void visit(VertexType&));
 
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the visit() function on each item
+    // @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
+    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
+    //           track of the seen and unseen vertices.
     bool breadthFirst(VertexType, void visit(VertexType&));
 
     // @func   - getMinCut
