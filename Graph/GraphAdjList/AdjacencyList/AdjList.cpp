@@ -132,7 +132,7 @@
             }
             // else we iterate to the next node in the chain
             else
-                temp = temp.getNext();
+                temp = temp->getNext();
             
         }
         // else we couldn't find an edge to the given vertex with the given data

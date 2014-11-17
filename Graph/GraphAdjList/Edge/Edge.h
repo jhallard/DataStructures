@@ -11,9 +11,7 @@
 #ifndef  EDGE_H
 #define  EDGE_H
 
-// !!!!
-#define nullptr 0 // <---- REMOVE THIS LINE, FOR SUBLIME DEBUGGING ONLY !!!!!!!!!!!
-// !!!!
+
 #include "../Vertex/Vertex.h"
 
 template <class VertexType>

@@ -84,11 +84,19 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     if(!newVertex.setData(data))
         return false;
 
+    // if true then a vertex with the same data is already in our graph
+    if(lookupMap.find(data) == lookupMap.end())
+        return false;
+
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
+
+    typename std::vector< AdjList<VertexType> * >::iterator it = list.end(); --it; 
+    // insert the new vertex into our map
+    lookupMap.insert(std::pair<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>(data, it));
 
     // increment number of vertices
     numVertices++;
@@ -102,13 +110,32 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
 // @args   - none
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool uGraph<VertexType>::deleteVertex(VertexType vert) {
+bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator theVertex = this->findVertex(vert);
+    typename std::vector< AdjList<VertexType> * >::iterator theVertex = this->findVertex(data);
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(theVertex == list.end())
         return false;
+
+    // get the adj list for the vertex to be deleted
+    AdjList<VertexType> * adj1 = *theVertex;
+
+    std::vector<Edge<VertexType> *> edges = adj1->getAllEdges();
+
+    // Have to go through the entire map and delete all edges pointing to the vertex to be deleted.
+    // The uGraph::deleteEdge function takes two vertices, and deletes both edges between them (undirected graph has 2 edges for eahc real edge)
+    for(int i = 0; i < edges.size(); i++) 
+        this->deleteEdge(tempData, data);
+
+    // finally remove to the node for the current vertex from our map of vertices.
+    typename std::unordered_map<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>::iterator get = lookupMap.find(data);
+
+    // if true then a vertex with the given data does not exist in our map, which is a problem.
+    if(get == lookupMap.end())
+        return false;
+    else 
+        lookupMap.erase(get);
 
     // else erase the bloody vertex
     list.erase(theVertex);
@@ -425,18 +452,13 @@ std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 template<class VertexType>
 typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator  it = list.begin();
+    typename std::unordered_map<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>::const_iterator get = lookupMap.find(data);
 
-    while(it != list.end()) {
-        AdjList<VertexType> * adj1 = *it;
-
-        // We have found the correct vertex
-        if(adj1->getVertex()->getData() == data)
-            return it;
-        it++;
-    }   
-
-    return list.end();
+    // if true then a vertex with the given data does not exist in our map, which is a problem.
+    if(get == lookupMap.end())
+        return list.end();
+    
+    return get->second;
  }
 
 

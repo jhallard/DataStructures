@@ -182,6 +182,14 @@ private:
     //           from it to other vertices in the graph
     std::vector< AdjList<VertexType> * > list;
 
+    // @member - lookupMap
+    // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us
+    //           to have an (amortized) O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly through
+    //           our vector or AdjLists. 
+    //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
+    //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
+    std::unordered_map<VertexType,  typename std::vector< AdjList<VertexType> * >::iterator> lookupMap;
+
     // @member - isMultiGraph
     // @info   - This boolean value determines if the user is allowed to add multiple edges between the same two vertices. The default value is true.
     //           Can only be accessed indirectly through the get and set functions, if a user tries to set it to false when there are already multiple edges
@@ -199,7 +207,7 @@ private:
     // @args   - #1 Value contained in the vertex to be found
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-    typename std::vector< AdjList<VertexType> * >::iterator findVertex(VertexType) ;
+    typename std::vector< AdjList<VertexType> * >::iterator findVertex(VertexType);
 
 };
 

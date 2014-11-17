@@ -51,38 +51,51 @@ void intTest() {
 
     void (*fptr)(int&);
     fptr = visit1;
-    graph.breadthFirst(2, fptr);
+    // graph.breadthFirst(2, fptr);
 
 
-    std::cout << "\n\n\n";
+    // std::cout << "\n\n\n";
 
-    graph.depthFirst(4, fptr);
+    // graph.depthFirst(4, fptr);
 
     // graph.breadthFirst(4, fptr);
 
 
-    // if(graph.getNumVertices() == 4)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumVertices() << std::endl;
+    if(graph.getNumVertices() == 8)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
 
-    // if(graph.getNumEdges() == 9)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumEdges() << std::endl;
+    if(graph.getNumEdges() == 18)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
 
-    // double testedge;
-    // try
-    // {
-    //     testedge = graph.getEdgeWeight(2, 4);
-    //     if(testedge == 4.0)
-    //         std::cout << "TRUE \n" << std::endl;
-    //     else
-    //         std::cout << testedge << std::endl;
-    // }
-    // catch(std::logic_error e) {
-    //     std::cerr << e.what();
-    // }
+
+    graph.deleteVertex(2);
+
+    if(graph.getNumVertices() == 7)
+        std::cout << "TRUE, 7 Vertices \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
+
+    if(graph.getNumEdges() == 15)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
+
+    double testedge;
+    try
+    {
+        testedge = graph.getEdgeWeight(2, 4);
+        if(testedge == 4.0)
+            std::cout << "TRUE \n" << std::endl;
+        else
+            std::cout << testedge << std::endl;
+    }
+    catch(std::logic_error e) {
+        std::cerr << e.what();
+    }
     
 
 }
