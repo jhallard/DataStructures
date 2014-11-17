@@ -1,5 +1,6 @@
 #include "../UndirectedGraph/uGraph.h"
 #include <iostream>
+#include <ctime>
 
 void intTest1();
 void intTest2();
@@ -9,6 +10,9 @@ void visit1(int&);
 
 int main()
 {
+    srand(time(0));
+    srand(time(0));
+    srand(time(0));
 
     intTest2();
 
@@ -118,67 +122,67 @@ void intTest1() {
 
 
 void intTest2() {
+
     uGraph<int> graph;
 
+    int numVertices = 40;
+    int minEdges = 3;
+    int maxEdges = 12;
 
-    graph.insertVertex(1);
-    graph.insertVertex(2);
-    graph.insertVertex(3);
-    graph.insertVertex(4);
-    graph.insertVertex(5);
-    graph.insertVertex(6);
-    graph.insertVertex(7);
-    graph.insertVertex(8);
+    std::vector<int> input_vec;
 
-    graph.insertEdge(1, 2);
-    graph.insertEdge(1, 4);
-    graph.insertEdge(1, 7);
-    graph.insertEdge(2, 3);
-    graph.insertEdge(2, 5);
-    graph.insertEdge(2, 6);
-    graph.insertEdge(2, 4);
-    graph.insertEdge(3, 5);
-    graph.insertEdge(3, 8);
-    graph.insertEdge(4, 6);
-    graph.insertEdge(5, 7);
-    graph.insertEdge(6, 7);
-    graph.insertEdge(7, 8);
+    for(int i = 1; i <= numVertices; i++)
+        input_vec.push_back(i);
+
+    graph.insertVertices(input_vec);
+
+    for(int i = 1; i < numVertices; i++) {
+
+        int loop = rand() % (maxEdges-minEdges) + minEdges;
+
+        for(int j = 0; j < loop; j++) {
+
+            int r = rand() % numVertices + 1; r++;
+            if(r == i)
+                continue;
+
+            graph.insertEdge(i, r);
+        }
+    }
+
+    graph.printGraph();
+
+    getchar();
+
+
 
     void (*fptr)(int&);
     fptr = visit1;
 
-    graph.breadthFirst(1, fptr);
+    for(int i = 1; i <=18; i++) {
+        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        graph.breadthFirst(i, fptr);
+        std::cout << "\n";
+        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        graph.depthFirst(i, fptr);
+        getchar();
+        std::cout << "\n\n\n\n\n";
 
-    std::cout << "\n\n";
+    }
 
-    graph.depthFirst(1, fptr);
+    graph.deleteVertex(2);
+    graph.deleteVertex(8);
 
-    // std::cout << "\n\n";
+    for(int i = 1; i <=18; i++) {
+        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        graph.breadthFirst(i, fptr);
+        std::cout << "\n";
+        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        graph.depthFirst(i, fptr);
+        getchar();
+        std::cout << "\n\n\n\n\n";
 
-    // std::cout << graph.getNumVertices() << " -- " << graph.getNumEdges() << "\n\n";
-
-    // std::cout << "\n\n";
-
-    // for(int i = 1; i <= 8; i++) {
-
-    //     std::vector< std::pair<int, double> > temp = graph.getAdjVertices(i);
-    //     std::cout << "\n" << i << " : " << temp.size() << " --- ";
-    //     for(int i = 0; i < temp.size(); i++)  {
-    //         std::cout << temp[i].first << ", ";
-    //     }
-    // }
-
-    std::cout << "\n\n\n\n";
-
-    graph.deleteVertex(4);
-
-    std::cout << "\n\n";
-
-    graph.breadthFirst(1, fptr);
-
-    std::cout << "\n\n";
-
-    graph.depthFirst(1, fptr);
+    }
 
 
     
@@ -297,5 +301,5 @@ void visit(std::string &x) {
 
 void visit1(int &x) {
 
-    std:: cout << x << std::endl;
+    std:: cout << x << ", ";
 }

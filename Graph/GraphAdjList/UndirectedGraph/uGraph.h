@@ -45,6 +45,7 @@
 #include <stdexcept>
 #include <deque>
 #include <unordered_map>
+#include <iostream>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -86,6 +87,16 @@ public:
     // @return - Boolean indicating success 
     bool deleteVertex(VertexType);
 
+    // @func   - deleteVertices
+    // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
+    // @return - Boolean indicating succes 
+    bool insertVertices(std::vector<VertexType>);
+
+    // @func   - deleteVertices
+    // @args   - #1 Vector of Vertex data corresponding to the vertices to be deleted.
+    // @return - Boolean indicating success 
+    bool deleteVertices(std::vector<VertexType>);
+
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
@@ -120,6 +131,12 @@ public:
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
     std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType);
+
+    // @func   - printGraph
+    // @args   - none
+    // @return - none
+    // @info   - prints the adjecency list representation of the graph.
+    void printGraph();
 
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument

@@ -29,7 +29,7 @@
 *               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies exactly what functions
 *               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
 *               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
-*               me to make amny different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
+*               me to make many different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
 *
 *               Time Complexity :
 *               Below is a break down of the time and space complexity for the various operations performed by this graph.
@@ -104,6 +104,39 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     
 }
 
+// @func   - deleteVertices
+// @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
+// @return - Boolean indicating success, is false if any of the individual insertions fail
+template<class VertexType>
+bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
+
+    bool ret = true;
+
+    for(int i = 0; i < vertices.size(); i++) {
+        if(!this->insertVertex(vertices[i]))
+            ret = false;
+    }
+
+    return ret;
+
+}
+
+// @func   - deleteVertices
+// @args   - #1 Vector of Vertex data corresponding to the vertices to be deleted.
+// @return - Boolean indicating success, is false if any of the individual deletions fail
+template<class VertexType>
+bool uGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
+
+    bool ret = true;
+
+    for(int i = 0; i < vertices.size(); i++) {
+        if(!this->deleteVertex(vertices[i]))
+            ret = false;
+    }
+
+    return ret;
+}
+
 
 // @func   - deleteNode
 // @args   - none
@@ -124,14 +157,18 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
     std::vector<Edge<VertexType> *> edges = adjList->getAllEdges();
 
 
-    // Have to go through the entire map and delete all edges pointing to the vertex to be deleted.
+    // Here we go through all of the edges eminating from the vertex to be deleted, and delete the symmetric edges that
+    // point back to this vertex to be deleted. The is a nuance of our implementation, an undirected graph in this implementation
+    // consists of pairs of edges between abridged vertices with equal weights.
     for(int i = 0; i < edges.size(); i++) {
 
+        // locate the adjacency list of the vertex on the other end of the edge from the vertex to be deleted
         AdjList<VertexType> * temp = findVertex(edges[i]->getVertex()->getData());
 
         if(temp == nullptr)
             continue;
 
+        // delete that vertices edge with the vertex to be deleted
         temp->deleteEdge(data);
         
     }
@@ -293,6 +330,27 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
     }
 
     return retVector;
+}
+
+
+// @func   - printGraph
+// @args   - none
+// @return - none
+// @info   - prints the adjecency list representation of the graph.
+template<class VertexType> void uGraph<VertexType>::printGraph() {
+    
+    for(int i = 0; i < list.size(); i++) {
+        std::cout << "Vertex : " << list[i]->getVertex()->getData() << " -> ";
+
+        std::vector<Edge<VertexType> *> edges = list[i]->getAllEdges(); 
+
+        for(int j = 0; j < edges.size(); j++) {
+            std::cout << edges[j]->getVertex()->getData() << ", ";
+        }
+
+        std::cout << "\n";
+    }
+    std::cout << "\n\n\n";
 }
 
 
