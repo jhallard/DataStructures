@@ -213,6 +213,10 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
     if(adj1 == nullptr || adj2 == nullptr) 
         return false;
     
+    // this part makes sure we don't insert duplicate edges (edges between the same vertices even if they have different weights)
+    // if we aren't specifically defined to be a multigraph
+    if(!this->isMultiGraph && (adj1->getEdge(adj2->getVertex()) != nullptr || adj2->getEdge(adj1->getVertex()) != nullptr))
+        return false;
 
     // add an edge from vertex 1 to vertex 2
     adj1->addEdge(adj2->getVertex(), weight);

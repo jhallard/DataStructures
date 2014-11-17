@@ -143,10 +143,13 @@ void intTest2() {
         for(int j = 0; j < loop; j++) {
 
             int r = rand() % numVertices + 1; r++;
-            if(r == i)
+            if(r == i) {
+                j--;
                 continue;
+            }
 
-            graph.insertEdge(i, r);
+            if(!graph.insertEdge(i, r))
+                j--;
         }
     }
 

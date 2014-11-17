@@ -45,7 +45,7 @@
 #include <stdexcept>
 #include <deque>
 #include <unordered_map>
-#include <iostream>
+#include <iostream>         // needed for printGraph function..
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -135,13 +135,13 @@ public:
     // @func   - printGraph
     // @args   - none
     // @return - none
-    // @info   - prints the adjecency list representation of the graph.
+    // @info   - prints the adjecency list representation of the graph to the console.
     void printGraph();
 
     // @func   - isConnected
     // @args   - None
     // @return - Bool indicating whether or not the graph is connected
-    // @info   - This function searches through the given graph to see if any given vertex can be reached from any other given vertex
+    // @info   - This function uses BFS to search to see if any given vertex can be reached from any other given vertex
     bool isConnected();
 
     // @func   - depthFirst

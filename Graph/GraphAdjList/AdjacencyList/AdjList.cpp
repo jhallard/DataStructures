@@ -92,6 +92,10 @@
         Edge<VertexType> * temp;
         temp = pEdge;
         while(temp->getNext() != nullptr){
+            // make sure we don't have duplicate edges
+            if(temp->getNext()->getVertex()->getData() == vert->getData())
+                return false;
+            
             temp = temp->getNext();
         }
         
