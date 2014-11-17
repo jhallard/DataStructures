@@ -84,7 +84,7 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     if(!newVertex.setData(data))
         return false;
 
-    // if true then a vertex with the same data is already in our graph
+    // if true then a vertex with the same data is already in our graph, so return false
     if(lookupMap.find(data) != lookupMap.end())
         return false;
 
@@ -94,7 +94,7 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
 
-    // insert the new vertex into our map
+    // insert the new vertex into our map for easy future lookup
     lookupMap.insert(std::pair<VertexType, AdjList<VertexType> * >(data, newList));
 
     // increment number of vertices
@@ -107,7 +107,11 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
 
 // @func   - deleteNode
 // @args   - none
-// @return - Boolean indicating succes 
+// @return - Boolean indicating success
+// @info   - Because this is an undirected graph, we not only have to delete the vertex in question and any edges that
+//           eminate from it, but we also have to go to the other vertices and delete any edges that end at the vertex
+//           to be deleted. Thankfully, because of our use of maps and pointers this isn't difficult nor too costly. Running time
+//           should be O(n) where n is the number of edges that leave the vertex to be deleted.
 template<class VertexType>
 bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
@@ -132,10 +136,11 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
         
     }
 
-    // finally remove to the node for the current vertex from our map of vertices.
+    // finally remove the node for the current vertex from our map of vertices.
     typename std::unordered_map<VertexType, AdjList<VertexType> * >::iterator get = lookupMap.find(data);
 
-    // if true then a vertex with the given data does not exist in our map, which is a problem.
+    // if true then a vertex with the given data does not exist in our map, which is a problem, and means our internal structure
+    // is inconsistent, we'll just return false and turn a blind eye.
     if(get == lookupMap.end())
         return false;
     else 
@@ -298,8 +303,7 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
 //           track of the seen and unseen vertices.
 template<class VertexType>
-bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)) 
-{
+bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)) {
 
     // Our deque object, stores the vertices as they appear to the search
     // We actually use it as a stack for this problem, by inserting and removing from the 
@@ -318,12 +322,12 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
     marked.insert(std::pair<VertexType, bool>(rootData, true));
     q.push_back(rootVert->getVertex());
 
-    while(q.size()) 
-    {
+    while(q.size()) {
+
         Vertex<VertexType> * tempVert = q.back();q.pop_back();
         AdjList<VertexType> *  adj = findVertex(tempVert->getData());
 
-        if(adj == nullptr)
+        if(adj == nullptr) 
             return false;
 
         // visit the node that we just popped off the stack
@@ -332,13 +336,13 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
 
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
-        for(int i = 0; i < edges.size(); i++) 
-        {
+        for(int i = 0; i < edges.size(); i++) {
+
             Vertex<VertexType> * tempVert = edges[i]->getVertex();
             VertexType tempData = tempVert->getData();
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
-            if(get == marked.end()) 
-            {
+
+            if(get == marked.end()) {
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 q.push_back(tempVert);
             }
@@ -391,6 +395,7 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
         // Go through all of the edges associated with the current vertex
         for(int i = 0; i < edges.size(); i++) {
+
             Vertex<VertexType> * tempVert = edges[i]->getVertex();
             VertexType tempData = tempVert->getData();
 
@@ -402,7 +407,6 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex
                 q.push_back(tempVert);
-
             }
 
         }
@@ -452,16 +456,14 @@ std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 
 // @func   - findVertex
 // @args   - #1 Value contained in the vertex to be found
-// @return - Iterator that points to the adjacency list for the vertex to be found, points to list.end() if vertex is not found
+// @return - Pointer to the AdjList containing the vertex in queston. nullptr if not found (possibly should throw exception?)
 // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-// @TODO   - Use a hashmap to turn this from an O(v) to a O(1) function. Having this be a linear search in the # of vertices vastly increases
-//           the complexity of most of the searching functions. 
 template<class VertexType>
 AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
 
     typename std::unordered_map<VertexType, AdjList<VertexType> * >::const_iterator get = lookupMap.find(data);
 
-    // if true then a vertex with the given data does not exist in our map, which is a problem.
+    // if true then a vertex with the given data does not exist in our map, so return nullptr.
     if(get == lookupMap.end()) 
         return nullptr;
     
