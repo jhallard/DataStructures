@@ -315,19 +315,20 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
     if(rootVert == nullptr)
         return false;
 
-    VertexType tempData = rootVert->getVertex()->getData();
-    marked.insert(std::pair<VertexType, bool>(tempData, true));
+    marked.insert(std::pair<VertexType, bool>(rootData, true));
     q.push_back(rootVert->getVertex());
-    visit(tempData);
 
     while(q.size()) 
     {
-
         Vertex<VertexType> * tempVert = q.back();q.pop_back();
         AdjList<VertexType> *  adj = findVertex(tempVert->getData());
 
         if(adj == nullptr)
             return false;
+
+        // visit the node that we just popped off the stack
+        VertexType tempData = adj->getVertex()->getData();
+        visit(tempData);
 
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
@@ -339,7 +340,6 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
             if(get == marked.end()) 
             {
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
-                visit(tempData);
                 q.push_back(tempVert);
             }
         }
@@ -375,7 +375,6 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
     marked.insert(std::pair<VertexType, bool>(rootData, true));
     q.push_back(rootVert->getVertex());
-    visit(rootData);
 
     while(q.size()) {
 
@@ -384,6 +383,10 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
         if(adj == nullptr)
             return false;
+
+        VertexType tempData = adj->getVertex()->getData();
+        visit(tempData);
+
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
         // Go through all of the edges associated with the current vertex
@@ -397,9 +400,9 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
             if(get == marked.end()) {
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
-                visit(tempData);
                 // enqueue the new vertex
                 q.push_back(tempVert);
+
             }
 
         }

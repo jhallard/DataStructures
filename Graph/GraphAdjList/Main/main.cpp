@@ -153,21 +153,22 @@ void intTest2() {
 
     graph.depthFirst(1, fptr);
 
-    std::cout << "\n\n";
+    // std::cout << "\n\n";
 
-    std::cout << graph.getNumVertices() << " -- " << graph.getNumEdges() << "\n\n";
+    // std::cout << graph.getNumVertices() << " -- " << graph.getNumEdges() << "\n\n";
 
-    std::cout << "\n\n";
+    // std::cout << "\n\n";
 
-    for(int i = 1; i <= 8; i++) {
+    // for(int i = 1; i <= 8; i++) {
 
-        std::vector< std::pair<int, double> > temp = graph.getAdjVertices(i);
-        std::cout << "\n" << i << " : " << temp.size() << " --- ";
-        for(int i = 0; i < temp.size(); i++)  {
-            std::cout << temp[i].first << ", ";
-        }
-    }
+    //     std::vector< std::pair<int, double> > temp = graph.getAdjVertices(i);
+    //     std::cout << "\n" << i << " : " << temp.size() << " --- ";
+    //     for(int i = 0; i < temp.size(); i++)  {
+    //         std::cout << temp[i].first << ", ";
+    //     }
+    // }
 
+    std::cout << "\n\n\n\n";
 
     graph.deleteVertex(4);
 
