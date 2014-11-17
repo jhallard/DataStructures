@@ -13,7 +13,7 @@ int main()
 
     std::cout << "\n\n\n";
 
-    stringTest();
+    // stringTest();
 
     return 0;
 }
@@ -21,23 +21,21 @@ int main()
 void intTest() {
     uGraph<int> graph;
 
+
     graph.insertVertex(2);
     graph.insertVertex(4);
     graph.insertVertex(6);
     graph.insertVertex(8);
     graph.insertVertex(3);
-    graph.insertVertex(4);
+    graph.insertVertex(5);
     graph.insertVertex(7);
     graph.insertVertex(9);
 
     graph.insertEdge(2, 4, 4.0);
     graph.insertEdge(2, 8, 5.0);
     graph.insertEdge(2, 6, 1.0);
-    graph.insertEdge(4, 2, 2.0);
-    graph.insertEdge(4, 8, 5.6);
     graph.insertEdge(4, 6, 2.1);
     graph.insertEdge(8, 4, 7.0);
-    graph.insertEdge(8, 2, 4.0);
     graph.insertEdge(8, 6, 0.1);
     graph.insertEdge(2, 3, 4.0);
     graph.insertEdge(2, 7, 5.0);
@@ -49,45 +47,60 @@ void intTest() {
     graph.insertEdge(8, 3, 4.0);
     graph.insertEdge(8, 5, 0.1);
 
+
     void (*fptr)(int&);
     fptr = visit1;
-    // graph.breadthFirst(2, fptr);
+    graph.breadthFirst(8, fptr);
 
 
-    // std::cout << "\n\n\n";
+    std::cout << "\n\n\n";
 
-    // graph.depthFirst(4, fptr);
+    graph.depthFirst(8, fptr);
 
     // graph.breadthFirst(4, fptr);
 
 
-    if(graph.getNumVertices() == 8)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << graph.getNumVertices() << std::endl;
+    // if(graph.getNumVertices() == 8)
+    //     std::cout << "TRUE \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumVertices() << std::endl;
 
-    if(graph.getNumEdges() == 18)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << graph.getNumEdges() << std::endl;
+    // if(graph.getNumEdges() == 18)
+    //     std::cout << "TRUE \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumEdges() << std::endl;
 
 
-    graph.deleteVertex(2);
+    if(!graph.deleteVertex(2))
+        std::cout << "delete vertex failed\n";
 
-    if(graph.getNumVertices() == 7)
-        std::cout << "TRUE, 7 Vertices \n" << std::endl;
-    else
-        std::cout << graph.getNumVertices() << std::endl;
+        graph.breadthFirst(8, fptr);
 
-    if(graph.getNumEdges() == 15)
-        std::cout << "TRUE \n" << std::endl;
-    else
-        std::cout << graph.getNumEdges() << std::endl;
+
+    std::cout << "\n\n\n";
+
+    graph.depthFirst(8, fptr);
+
+    // if(graph.getNumVertices() == 7)
+    //     std::cout << "TRUE, 7 Vertices \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumVertices() << std::endl;
+
+    // if(graph.getNumEdges() == 10)
+    //     std::cout << "TRUE \n" << std::endl;
+    // else
+    //     std::cout << graph.getNumEdges() << std::endl;
+
+
+    std::vector< std::pair<int, double> > temp = graph.getAdjVertices(8);
+
+    if(temp.size() == 0)
+        std::cout << "EMPTY\n";
 
     double testedge;
     try
     {
-        testedge = graph.getEdgeWeight(2, 4);
+        testedge = graph.getEdgeWeight(4, 5);
         if(testedge == 4.0)
             std::cout << "TRUE \n" << std::endl;
         else

@@ -119,7 +119,7 @@
 
         // Case #2 - The edge to delete is the first node found
         else if(temp->getVertex()->getData() == data){
-            pEdge = nullptr;
+            pEdge = pEdge->getNext();
             return true;
         }
         // Case #3 - The edge may or may not be somewhere down the chain

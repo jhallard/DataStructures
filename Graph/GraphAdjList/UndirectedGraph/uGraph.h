@@ -45,6 +45,7 @@
 #include <stdexcept>
 #include <queue>
 #include <unordered_map>
+#include <iostream>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -188,7 +189,7 @@ private:
     //           our vector or AdjLists. 
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
-    std::unordered_map<VertexType,  typename std::vector< AdjList<VertexType> * >::iterator> lookupMap;
+    std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
 
     // @member - isMultiGraph
     // @info   - This boolean value determines if the user is allowed to add multiple edges between the same two vertices. The default value is true.
@@ -207,7 +208,7 @@ private:
     // @args   - #1 Value contained in the vertex to be found
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-    typename std::vector< AdjList<VertexType> * >::iterator findVertex(VertexType);
+    AdjList<VertexType> *  findVertex(VertexType);
 
 };
 

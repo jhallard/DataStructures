@@ -85,7 +85,7 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
         return false;
 
     // if true then a vertex with the same data is already in our graph
-    if(lookupMap.find(data) == lookupMap.end())
+    if(lookupMap.find(data) != lookupMap.end())
         return false;
 
     // allocate a new adjacency list on the heap for the new vertex
@@ -94,9 +94,8 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
 
-    typename std::vector< AdjList<VertexType> * >::iterator it = list.end(); --it; 
     // insert the new vertex into our map
-    lookupMap.insert(std::pair<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>(data, it));
+    lookupMap.insert(std::pair<VertexType, AdjList<VertexType> * >(data, newList));
 
     // increment number of vertices
     numVertices++;
@@ -112,24 +111,31 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
 template<class VertexType>
 bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator theVertex = this->findVertex(data);
+    AdjList<VertexType> *  adjList = this->findVertex(data);
 
     // if value returned in the end of the vector, the vertex doesn't exist
-    if(theVertex == list.end())
+    if(adjList == nullptr)
         return false;
 
-    // get the adj list for the vertex to be deleted
-    AdjList<VertexType> * adj1 = *theVertex;
+    std::vector<Edge<VertexType> *> edges = adjList->getAllEdges();
 
-    std::vector<Edge<VertexType> *> edges = adj1->getAllEdges();
 
     // Have to go through the entire map and delete all edges pointing to the vertex to be deleted.
-    // The uGraph::deleteEdge function takes two vertices, and deletes both edges between them (undirected graph has 2 edges for eahc real edge)
-    for(int i = 0; i < edges.size(); i++) 
-        this->deleteEdge(tempData, data);
+    for(int i = 0; i < edges.size(); i++) {
+
+        AdjList<VertexType> * temp = findVertex(edges[i]->getVertex()->getData());
+
+        std::cout << std::endl << edges[i]->getVertex()->getData() << std::endl;
+        if(temp == nullptr)
+            continue;
+
+        if(temp->deleteEdge(data))
+            std::cout << "edge deleted : " << temp->getVertex()->getData() << " - " << data << "\n\n";
+        
+    }
 
     // finally remove to the node for the current vertex from our map of vertices.
-    typename std::unordered_map<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>::iterator get = lookupMap.find(data);
+    typename std::unordered_map<VertexType, AdjList<VertexType> * >::iterator get = lookupMap.find(data);
 
     // if true then a vertex with the given data does not exist in our map, which is a problem.
     if(get == lookupMap.end())
@@ -137,8 +143,14 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
     else 
         lookupMap.erase(get);
 
-    // else erase the bloody vertex
-    list.erase(theVertex);
+    for(typename std::vector<AdjList<VertexType> *>::iterator it = list.begin() ; it != list.end(); ++it) {
+        AdjList<VertexType> * adj1 = *it;
+
+        if(adj1->getVertex()->getData() == data) {
+            list.erase(it);
+            break;
+        }
+    }        
 
     // decrement the number of vertices
     numVertices--;
@@ -154,15 +166,13 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 template<class VertexType>
 bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
-    typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = this->findVertex(v1);
+   AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    // if we can't find either of the vertices to connect, return false
-    if(vert1 == list.end() || vert2 == list.end())
+    // if value returned in the end of the vector, the vertex doesn't exist
+    if(adj1 == nullptr || adj2 == nullptr) 
         return false;
-
-    AdjList<VertexType> * adj1 = *vert1;
-    AdjList<VertexType> * adj2 = *vert2;
+    
 
     // add an edge from vertex 1 to vertex 2
     adj1->addEdge(adj2->getVertex(), weight);
@@ -184,14 +194,12 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
 template<class VertexType>
 bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert1 = this->findVertex(v1);
-    typename std::vector< AdjList<VertexType> * >::iterator vert2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = this->findVertex(v1);
+   AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    if(vert1 == list.end() || vert2 == list.end())
+    // if value returned in the end of the vector, the vertex doesn't exist
+    if(adj1 == nullptr || adj2 == nullptr)
         return false;
-
-    AdjList<VertexType> * adj1 = *vert1; // vert1/2 are iterators that dereference to pointers
-    AdjList<VertexType> * adj2 = *vert2; // so here we extract a pointer to the appropriate vertex from the iterator
 
     // add an edge from vertex 1 to vertex 2
     adj1->deleteEdge(adj2->getVertex());
@@ -233,7 +241,7 @@ int uGraph<VertexType>::getNumEdges() const{
 template<class VertexType>
 bool uGraph<VertexType>::containsVertex(VertexType v) {
 
-    return (list.end() != findVertex(v));
+    return (nullptr != findVertex(v));
 }
 
 
@@ -245,16 +253,19 @@ bool uGraph<VertexType>::containsVertex(VertexType v) {
 template<class VertexType>
 double uGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
-    typename std::vector< AdjList<VertexType> * >::iterator vert2 = findVertex(v2);
+   AdjList<VertexType> *  adj1 = this->findVertex(v1);
+   AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    if(vert1 == list.end() || vert2 == list.end())
-        throw std::logic_error("Error - Edge Not Found in Graph\n");
+    // if value returned in the end of the vector, the vertex doesn't exist
+    if(adj1 == nullptr || adj2 == nullptr)
+        throw std::logic_error("Can't find Vertices in Graph");
 
-    AdjList<VertexType> * adj1 = *vert1;
-    AdjList<VertexType> * adj2 = *vert2;
+    Edge<VertexType> * temp =  adj1->getEdge(adj2->getVertex());
 
-    return adj1->getEdge(adj2->getVertex())->getWeight();
+    if(temp == nullptr)
+        throw std::logic_error("No Edge Exists Between Given Vertices");
+
+    return temp->getWeight();
 }
 
 
@@ -267,12 +278,11 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 
     std::vector< std::pair<VertexType, double> > retVector;
 
-    typename std::vector< AdjList<VertexType> * >::iterator vert1 = findVertex(v1);
+    AdjList<VertexType> *  adj1 = findVertex(v1);
 
-    if(vert1 == list.end())
-        return retVector;
+        if(adj1 == nullptr)
+            return retVector;
 
-    AdjList<VertexType> * adj1 = *vert1;
     std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
     for(int i = 0; i < edgeList.size(); i++)
@@ -301,26 +311,25 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
+    AdjList<VertexType> *  rootVert = findVertex(rootData);
 
-    if(it == list.end())
+    if(rootVert == nullptr)
         return false;
 
-    AdjList<VertexType> * rootVert = *it;
-
-    marked.insert(std::pair<VertexType, bool>(rootVert->getVertex()->getData(), true));
+    VertexType tempData = rootVert->getVertex()->getData();
+    marked.insert(std::pair<VertexType, bool>(tempData, true));
     q.push(rootVert->getVertex());
+    visit(tempData);
 
     while(q.size()) 
     {
 
         Vertex<VertexType> * tempVert = q.back();q.pop();
-        typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
+        AdjList<VertexType> *  adj = findVertex(rootData);
 
-        if(it == list.end())
+        if(adj == nullptr)
             return false;
 
-        AdjList<VertexType> * adj = *it;
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
         for(int i = 0; i < edges.size(); i++) 
@@ -359,12 +368,10 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(rootData);
+    AdjList<VertexType> *  rootVert = findVertex(rootData);
 
-    if(it == list.end())
+    if(rootVert == nullptr)
         return false;
-
-    AdjList<VertexType> * rootVert = *it;
 
     VertexType tempData = rootVert->getVertex()->getData();
 
@@ -375,12 +382,10 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     while(q.size()) {
 
         Vertex<VertexType> * tempVert = q.front();q.pop();
-        typename std::vector< AdjList<VertexType> * >::iterator it = findVertex(tempVert->getData());
+        AdjList<VertexType> *  adj = findVertex(rootData);
 
-        if(it == list.end())
+        if(adj == nullptr)
             return false;
-
-        AdjList<VertexType> * adj = *it;
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
         // Go through all of the edges associated with the current vertex
@@ -450,13 +455,13 @@ std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 // @TODO   - Use a hashmap to turn this from an O(v) to a O(1) function. Having this be a linear search in the # of vertices vastly increases
 //           the complexity of most of the searching functions. 
 template<class VertexType>
-typename std::vector< AdjList<VertexType> * >::iterator uGraph<VertexType>::findVertex(VertexType data) {
+AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
 
-    typename std::unordered_map<VertexType, typename std::vector< AdjList<VertexType> * >::iterator>::const_iterator get = lookupMap.find(data);
+    typename std::unordered_map<VertexType, AdjList<VertexType> * >::const_iterator get = lookupMap.find(data);
 
     // if true then a vertex with the given data does not exist in our map, which is a problem.
-    if(get == lookupMap.end())
-        return list.end();
+    if(get == lookupMap.end()) 
+        return nullptr;
     
     return get->second;
  }
