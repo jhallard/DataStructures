@@ -83,8 +83,6 @@
     bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 
         Edge<VertexType> * newEdge = new Edge<VertexType>(vert, wt);
-        // newEdge->setVertex(vert);
-        // newEdge.setWeight(wt);
 
         if(pEdge == nullptr) {
             pEdge = newEdge;
@@ -98,7 +96,6 @@
         }
         
         return temp->setNext(newEdge);
-    
 
     }
 
@@ -195,7 +192,7 @@
             return temp;
 
         // Case #3 - The edge may or may not be somewhere down the chain
-        while(temp->getNext() != nullptr) {
+        while(temp != nullptr) {
 
             // if the edge to return is the next node, return that node
             if(temp->getNext()->getVertex() == vert){
@@ -226,7 +223,6 @@
         if(temp == nullptr)
             return retVec;
 
-        // Case #3 - The edge may or may not be somewhere down the chain
         while(temp != nullptr) {
 
             retVec.push_back(temp);

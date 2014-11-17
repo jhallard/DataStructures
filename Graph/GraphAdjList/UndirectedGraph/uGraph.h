@@ -43,9 +43,8 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
-#include <queue>
+#include <deque>
 #include <unordered_map>
-#include <iostream>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"

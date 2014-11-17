@@ -125,12 +125,10 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
         AdjList<VertexType> * temp = findVertex(edges[i]->getVertex()->getData());
 
-        std::cout << std::endl << edges[i]->getVertex()->getData() << std::endl;
         if(temp == nullptr)
             continue;
 
-        if(temp->deleteEdge(data))
-            std::cout << "edge deleted : " << temp->getVertex()->getData() << " - " << data << "\n\n";
+        temp->deleteEdge(data);
         
     }
 
@@ -280,13 +278,14 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 
     AdjList<VertexType> *  adj1 = findVertex(v1);
 
-        if(adj1 == nullptr)
-            return retVector;
+    if(adj1 == nullptr)
+        return retVector;
 
     std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
-    for(int i = 0; i < edgeList.size(); i++)
+    for(int i = 0; i < edgeList.size(); i++)  {
         retVector.push_back(std::pair<VertexType, double>(edgeList[i]->getVertex()->getData(), edgeList[i]->getWeight()));
+    }
 
     return retVector;
 }
@@ -302,10 +301,10 @@ template<class VertexType>
 bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)) 
 {
 
-    // Our queue object, stores the vertices as they appear to the search
+    // Our deque object, stores the vertices as they appear to the search
     // We actually use it as a stack for this problem, by inserting and removing from the 
     // back of the queue 
-    std::queue<Vertex<VertexType> *> q;
+    std::deque<Vertex<VertexType> *> q;
 
     // A map that allows us to 'mark' the vertices when they've been seen.
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
@@ -318,14 +317,14 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
 
     VertexType tempData = rootVert->getVertex()->getData();
     marked.insert(std::pair<VertexType, bool>(tempData, true));
-    q.push(rootVert->getVertex());
+    q.push_back(rootVert->getVertex());
     visit(tempData);
 
     while(q.size()) 
     {
 
-        Vertex<VertexType> * tempVert = q.back();q.pop();
-        AdjList<VertexType> *  adj = findVertex(rootData);
+        Vertex<VertexType> * tempVert = q.back();q.pop_back();
+        AdjList<VertexType> *  adj = findVertex(tempVert->getData());
 
         if(adj == nullptr)
             return false;
@@ -341,7 +340,7 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
             {
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 visit(tempData);
-                q.push(tempVert);
+                q.push_back(tempVert);
             }
         }
 
@@ -362,7 +361,7 @@ template<class VertexType>
 bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)) {
 
     // Our queue object, stores the vertices as they appear to the search
-    std::queue<Vertex<VertexType> *> q;
+    std::deque<Vertex<VertexType> *> q;
 
     // A map that allows us to 'mark' the vertices when they've been seen.
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
@@ -373,16 +372,15 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     if(rootVert == nullptr)
         return false;
 
-    VertexType tempData = rootVert->getVertex()->getData();
 
-    marked.insert(std::pair<VertexType, bool>(tempData, true));
-    q.push(rootVert->getVertex());
-    visit(tempData);
+    marked.insert(std::pair<VertexType, bool>(rootData, true));
+    q.push_back(rootVert->getVertex());
+    visit(rootData);
 
     while(q.size()) {
 
-        Vertex<VertexType> * tempVert = q.front();q.pop();
-        AdjList<VertexType> *  adj = findVertex(rootData);
+        Vertex<VertexType> * tempVert = q.front();q.pop_front();
+        AdjList<VertexType> *  adj = findVertex(tempVert->getData());
 
         if(adj == nullptr)
             return false;
@@ -392,6 +390,7 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
         for(int i = 0; i < edges.size(); i++) {
             Vertex<VertexType> * tempVert = edges[i]->getVertex();
             VertexType tempData = tempVert->getData();
+
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             // if the current vertex hasn't been seen
@@ -400,7 +399,7 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 visit(tempData);
                 // enqueue the new vertex
-                q.push(tempVert);
+                q.push_back(tempVert);
             }
 
         }

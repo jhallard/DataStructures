@@ -1,7 +1,8 @@
 #include "../UndirectedGraph/uGraph.h"
 #include <iostream>
 
-void intTest();
+void intTest1();
+void intTest2();
 void stringTest();
 void visit(std::string&);
 void visit1(int&);
@@ -9,7 +10,7 @@ void visit1(int&);
 int main()
 {
 
-    intTest();
+    intTest2();
 
     std::cout << "\n\n\n";
 
@@ -18,7 +19,7 @@ int main()
     return 0;
 }
 
-void intTest() {
+void intTest1() {
     uGraph<int> graph;
 
 
@@ -60,36 +61,30 @@ void intTest() {
     // graph.breadthFirst(4, fptr);
 
 
-    // if(graph.getNumVertices() == 8)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumVertices() << std::endl;
+    if(graph.getNumVertices() == 8)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
 
-    // if(graph.getNumEdges() == 18)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumEdges() << std::endl;
+    if(graph.getNumEdges() == 18)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
 
 
     if(!graph.deleteVertex(2))
         std::cout << "delete vertex failed\n";
 
-        graph.breadthFirst(8, fptr);
 
+    if(graph.getNumVertices() == 7)
+        std::cout << "TRUE, 7 Vertices \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
 
-    std::cout << "\n\n\n";
-
-    graph.depthFirst(8, fptr);
-
-    // if(graph.getNumVertices() == 7)
-    //     std::cout << "TRUE, 7 Vertices \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumVertices() << std::endl;
-
-    // if(graph.getNumEdges() == 10)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumEdges() << std::endl;
+    if(graph.getNumEdges() == 10)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
 
 
     std::vector< std::pair<int, double> > temp = graph.getAdjVertices(8);
@@ -100,18 +95,97 @@ void intTest() {
     double testedge;
     try
     {
-        testedge = graph.getEdgeWeight(4, 5);
-        if(testedge == 4.0)
-            std::cout << "TRUE \n" << std::endl;
+        testedge = graph.getEdgeWeight(4, 9);
+        if(testedge == 2.0)
+            std::cout << "TRUE WEIGHT\n" << std::endl;
         else
             std::cout << testedge << std::endl;
     }
     catch(std::logic_error e) {
         std::cerr << e.what();
     }
+
+    graph.breadthFirst(8, fptr);
+
+    std::cout << "\n\n\n";
+
+    graph.depthFirst(8, fptr);
     
 
 }
+
+
+
+
+void intTest2() {
+    uGraph<int> graph;
+
+
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+    graph.insertVertex(7);
+    graph.insertVertex(8);
+
+    graph.insertEdge(1, 2);
+    graph.insertEdge(1, 4);
+    graph.insertEdge(1, 7);
+    graph.insertEdge(2, 3);
+    graph.insertEdge(2, 5);
+    graph.insertEdge(2, 6);
+    graph.insertEdge(2, 4);
+    graph.insertEdge(3, 5);
+    graph.insertEdge(3, 8);
+    graph.insertEdge(4, 6);
+    graph.insertEdge(5, 7);
+    graph.insertEdge(6, 7);
+    graph.insertEdge(7, 8);
+
+    void (*fptr)(int&);
+    fptr = visit1;
+
+    graph.breadthFirst(1, fptr);
+
+    std::cout << "\n\n";
+
+    graph.depthFirst(1, fptr);
+
+    std::cout << "\n\n";
+
+    std::cout << graph.getNumVertices() << " -- " << graph.getNumEdges() << "\n\n";
+
+    std::cout << "\n\n";
+
+    for(int i = 1; i <= 8; i++) {
+
+        std::vector< std::pair<int, double> > temp = graph.getAdjVertices(i);
+        std::cout << "\n" << i << " : " << temp.size() << " --- ";
+        for(int i = 0; i < temp.size(); i++)  {
+            std::cout << temp[i].first << ", ";
+        }
+    }
+
+
+    graph.deleteVertex(4);
+
+    std::cout << "\n\n";
+
+    graph.breadthFirst(1, fptr);
+
+    std::cout << "\n\n";
+
+    graph.depthFirst(1, fptr);
+
+
+    
+
+}
+
+
+
 
 void stringTest() {
     uGraph<std::string> graph;
@@ -154,11 +228,17 @@ void stringTest() {
     void (*fptr)(std::string&);
     fptr = visit;
 
-    graph.breadthFirst("abcd", fptr);
+    // graph.breadthFirst("abcd", fptr);
 
     std::cout << "\n\n\n";
 
-    graph.depthFirst("qwqw", fptr);
+    graph.breadthFirst("abcd", fptr);
+
+    graph.deleteVertex("lala");
+
+    std::cout << "\n\n\n";
+
+    graph.breadthFirst("abcd", fptr);
 
 
 
