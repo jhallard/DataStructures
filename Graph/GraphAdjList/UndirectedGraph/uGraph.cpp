@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), isMultiGraph(true) {
+uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(true) {
     
 }
 
@@ -354,6 +354,23 @@ template<class VertexType> void uGraph<VertexType>::printGraph() {
 }
 
 
+// @func   - isConnected
+// @args   - None
+// @return - Bool indicating whether or not the graph is connected
+// @info   - This function searches through the given graph to see if any given vertex can be reached from any other given vertex
+template<class VertexType>
+bool uGraph<VertexType>::isConnected() {
+
+    this->connectivityCount = 0;
+
+     auto f = [](VertexType&) -> void { int x = 0; };
+
+     this->breadthFirst(list[0]->getVertex()->getData(), f);
+
+    return connectivityCount == list.size();
+}
+
+
 // @func   - depthFirst
 // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
@@ -387,6 +404,8 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
 
         if(adj == nullptr) 
             return false;
+
+        connectivityCount++;
 
         // visit the node that we just popped off the stack
         VertexType tempData = adj->getVertex()->getData();
@@ -442,6 +461,8 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 
         Vertex<VertexType> * tempVert = q.front();q.pop_front();
         AdjList<VertexType> *  adj = findVertex(tempVert->getData());
+
+        connectivityCount++; // used internally
 
         if(adj == nullptr)
             return false;
@@ -527,6 +548,17 @@ AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
     
     return get->second;
  }
+
+// @func   - isConnectedHelper
+// @args   - #1 Boolean, if true then the count of member is reset, else the count is incremented
+// @return - integer representing the current count of objects.
+// @info   - This function adds one to a counter every time it is called, it is used by the isConnected function to determine
+//           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
+template<class VertexType>
+void uGraph<VertexType>::isConnectedHelper(VertexType&) {
+
+    this->connectivityCount++;
+}
 
 
 

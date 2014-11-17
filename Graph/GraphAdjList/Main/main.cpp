@@ -125,9 +125,9 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 40;
-    int minEdges = 3;
-    int maxEdges = 12;
+    int numVertices = 100;
+    int minEdges = 1;
+    int maxEdges = 4;
 
     std::vector<int> input_vec;
 
@@ -152,6 +152,8 @@ void intTest2() {
 
     graph.printGraph();
 
+    std::cout << "\n\n Connected : " << ((graph.isConnected())? "YES\n" : "NO\n");
+
     getchar();
 
 
@@ -163,7 +165,7 @@ void intTest2() {
         std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
         graph.breadthFirst(i, fptr);
         std::cout << "\n";
-        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
         graph.depthFirst(i, fptr);
         getchar();
         std::cout << "\n\n\n\n\n";
@@ -177,7 +179,7 @@ void intTest2() {
         std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
         graph.breadthFirst(i, fptr);
         std::cout << "\n";
-        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+        std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
         graph.depthFirst(i, fptr);
         getchar();
         std::cout << "\n\n\n\n\n";

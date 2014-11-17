@@ -138,6 +138,12 @@ public:
     // @info   - prints the adjecency list representation of the graph.
     void printGraph();
 
+    // @func   - isConnected
+    // @args   - None
+    // @return - Bool indicating whether or not the graph is connected
+    // @info   - This function searches through the given graph to see if any given vertex can be reached from any other given vertex
+    bool isConnected();
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
@@ -214,6 +220,10 @@ private:
     // #TODO   - Figure out how/if/why to implement this
     bool isMultiGraph;
 
+    // @member - connectivityCount
+    // @info   - Used by the isConnected function to count reachable vertices
+    int connectivityCount;
+
 
 
 //////////////////////////////////////////////////////
@@ -225,6 +235,13 @@ private:
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
     AdjList<VertexType> *  findVertex(VertexType);
+
+    // @func   - isConnectedHelper
+    // @args   - #1 Boolean, if true then the count of member is reset, else the count is incremented
+    // @return - integer representing the current count of objects.
+    // @info   - This function adds one to a counter every time it is called, it is used by the isConnected function to determine
+    //           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
+    void isConnectedHelper(VertexType&);
 
 };
 

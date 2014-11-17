@@ -83,6 +83,12 @@ public:
     //           edge weighting specified by the argument to the function.
     // virtual bool makeGraphDense(double weight = 1.0) = 0;
 
+    // @func   - isConnected
+    // @args   - None
+    // @return - Bool indicating whether or not the graph is connected
+    // @info   - This function searches through the given graph to see if any given vertex can be reached from any other given vertex
+    virtual bool isConnected() = 0;
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicatingetN if the function could find the starting vertex based on arg#1
