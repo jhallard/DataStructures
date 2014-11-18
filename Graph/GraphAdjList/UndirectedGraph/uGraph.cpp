@@ -68,6 +68,8 @@ template<class VertexType>
 uGraph<VertexType>::~uGraph() {
     for(int i = 0; i < list.size(); i++)
         delete(list[i]);
+
+    list.clear();
 }
 
 

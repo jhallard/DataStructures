@@ -94,8 +94,10 @@
         temp = pEdge;
         while(temp->getNext() != nullptr){
             // make sure we don't have duplicate edges
-            if(temp->getNext()->getVertex()->getData() == vert->getData())
+            if(temp->getNext()->getVertex()->getData() == vert->getData()) {
+                delete(newEdge);
                 return false;
+            }
 
             temp = temp->getNext();
         }

@@ -14,8 +14,8 @@ int main()
     srand(time(0));
     srand(time(0));
 
-    intTest1();
-    // intTest2();
+    // intTest());
+    intTest2();
 
     std::cout << "\n\n\n";
 
@@ -56,67 +56,67 @@ void intTest1() {
     graph.insertEdge(8, 5, 0.1);
 
 
-    // void (*fptr)(int&);
-    // fptr = visit1;
-    // graph.breadthFirst(8, fptr);
+    void (*fptr)(int&);
+    fptr = visit1;
+    graph.breadthFirst(8, fptr);
 
 
-    // std::cout << "\n\n\n";
+    std::cout << "\n\n\n";
 
-    // graph.depthFirst(8, fptr);
+    graph.depthFirst(8, fptr);
 
-    // // graph.breadthFirst(4, fptr);
-
-
-    // if(graph.getNumVertices() == 8)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumVertices() << std::endl;
-
-    // if(graph.getNumEdges() == 18)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumEdges() << std::endl;
+    // graph.breadthFirst(4, fptr);
 
 
-    // if(!graph.deleteVertex(2))
-    //     std::cout << "delete vertex failed\n";
+    if(graph.getNumVertices() == 8)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
+
+    if(graph.getNumEdges() == 18)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
 
 
-    // if(graph.getNumVertices() == 7)
-    //     std::cout << "TRUE, 7 Vertices \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumVertices() << std::endl;
-
-    // if(graph.getNumEdges() == 10)
-    //     std::cout << "TRUE \n" << std::endl;
-    // else
-    //     std::cout << graph.getNumEdges() << std::endl;
+    if(!graph.deleteVertex(2))
+        std::cout << "delete vertex failed\n";
 
 
-    // std::vector< std::pair<int, double> > temp = graph.getAdjVertices(8);
+    if(graph.getNumVertices() == 7)
+        std::cout << "TRUE, 7 Vertices \n" << std::endl;
+    else
+        std::cout << graph.getNumVertices() << std::endl;
 
-    // if(temp.size() == 0)
-    //     std::cout << "EMPTY\n";
+    if(graph.getNumEdges() == 10)
+        std::cout << "TRUE \n" << std::endl;
+    else
+        std::cout << graph.getNumEdges() << std::endl;
 
-    // double testedge;
-    // try
-    // {
-    //     testedge = graph.getEdgeWeight(4, 9);
-    //     if(testedge == 2.0)
-    //         std::cout << "TRUE WEIGHT\n" << std::endl;
-    //     else
-    //         std::cout << testedge << std::endl;
-    // }
-    // catch(std::logic_error e) {
-    //     std::cerr << e.what();
-    // }
 
-    // graph.breadthFirst(8, fptr);
+    std::vector< std::pair<int, double> > temp = graph.getAdjVertices(8);
 
-    // std::cout << "\n\n\n";
+    if(temp.size() == 0)
+        std::cout << "EMPTY\n";
 
-    // graph.depthFirst(8, fptr);
+    double testedge;
+    try
+    {
+        testedge = graph.getEdgeWeight(4, 9);
+        if(testedge == 2.0)
+            std::cout << "TRUE WEIGHT\n" << std::endl;
+        else
+            std::cout << testedge << std::endl;
+    }
+    catch(std::logic_error e) {
+        std::cerr << e.what();
+    }
+
+    graph.breadthFirst(8, fptr);
+
+    std::cout << "\n\n\n";
+
+    graph.depthFirst(8, fptr);
     
 
 }
@@ -128,9 +128,9 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 3;//400;
+    int numVertices = 400;
     int minEdges = 2;
-    int maxEdges = 3;//8;
+    int maxEdges = 8;
 
     std::vector<int> input_vec;
 
@@ -167,30 +167,30 @@ void intTest2() {
     void (*fptr)(int&);
     fptr = visit1;
 
-    for(int i = 1; i <=18; i++) {
-        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
-        graph.breadthFirst(i, fptr);
-        std::cout << "\n";
-        std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
-        graph.depthFirst(i, fptr);
-        getchar();
-        std::cout << "\n\n\n\n\n";
+    // for(int i = 1; i <=18; i++) {
+    //     std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+    //     graph.breadthFirst(i, fptr);
+    //     std::cout << "\n";
+    //     std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
+    //     graph.depthFirst(i, fptr);
+    //     getchar();
+    //     std::cout << "\n\n\n\n\n";
 
-    }
+    // }
 
-    graph.deleteVertex(2);
-    graph.deleteVertex(8);
+    // graph.deleteVertex(2);
+    // graph.deleteVertex(8);
 
-    for(int i = 1; i <=18; i++) {
-        std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
-        graph.breadthFirst(i, fptr);
-        std::cout << "\n";
-        std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
-        graph.depthFirst(i, fptr);
-        getchar();
-        std::cout << "\n\n\n\n\n";
+    // for(int i = 1; i <=18; i++) {
+    //     std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
+    //     graph.breadthFirst(i, fptr);
+    //     std::cout << "\n";
+    //     std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
+    //     graph.depthFirst(i, fptr);
+    //     getchar();
+    //     std::cout << "\n\n\n\n\n";
 
-    }
+    // }
    
 
 }
