@@ -33,7 +33,6 @@ HashDictionary<keyType, itemType>::HashDictionary(int size)
 template <class keyType, class itemType>
 HashDictionary<keyType, itemType>::~HashDictionary()
 {
-    //TODO : examine this, we might actually need to go through each chain of pointers and individually delete them all.
     delete [] dictionary;
 }
 
@@ -209,13 +208,11 @@ void HashDictionary<keyType, itemType>::traverse(void visit(DictionaryNode<keyTy
         if(dictionary[i] != nullptr)
         {
             nodeptr = dictionary[i];
-            total += (int)nodeptr->getKey();
 
             while(nodeptr->getNext() != nullptr)
             {
                 nodeptr = nodeptr->getNext();
                 visit(*nodeptr);
-                total += (int)nodeptr->getKey();
             }
         }
     }

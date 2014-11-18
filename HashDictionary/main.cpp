@@ -49,12 +49,10 @@ int main()
         switch(menuop)
         {
             case(PRINT):
-                system("cls");
                 void (*fptr)(DictionaryNode<int, string> &);
                 fptr = visit;
                 dict.traverse(fptr);    
-                system("pause");
-                system("cls");
+                getchar();
             break;
 
             case(RETRIEVE):
@@ -68,8 +66,7 @@ int main()
                 }
                 else
                     cout << "\n\nItem not found in dictionary\n\n";
-                system("pause");
-                system("cls");
+                getchar();
             break;
 
 
@@ -82,8 +79,7 @@ int main()
                 }
                 else
                     cout << "\n\nItem not found in dictionary\n\n";
-                system("pause");
-                system("cls");
+                getchar();
             break;
 
 
@@ -95,8 +91,7 @@ int main()
                 else
                     cout << "\n\n Could not find file\n\n";
 
-                system("pause");
-                system("cls");
+                getchar();
             break;
 
             case(ADD):
@@ -108,8 +103,7 @@ int main()
                 dict.add(age, name);
 
                 cout << "\n\n\n  (" << name << ", " << age << ") has been added.\n\n\n";
-                system("pause");
-                system("cls");
+                getchar();
             break;
 
 
@@ -122,8 +116,7 @@ int main()
                 else
                     cout << "\n\n Could not save file\n\n";
 
-                system("pause");
-                system("cls");
+                getchar();
             break;
         }// end switch
 

@@ -565,7 +565,7 @@ AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
 //           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
 template<class VertexType>
 void uGraph<VertexType>::isConnectedHelper(VertexType&) {
-
+    
     this->connectivityCount++;
 }
 
