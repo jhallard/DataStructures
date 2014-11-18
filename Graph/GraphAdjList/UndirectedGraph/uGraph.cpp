@@ -184,10 +184,13 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
         lookupMap.erase(get);
 
     for(typename std::vector<AdjList<VertexType> *>::iterator it = list.begin() ; it != list.end(); ++it) {
+
         AdjList<VertexType> * adj1 = *it;
 
         if(adj1->getVertex()->getData() == data) {
+            AdjList<VertexType> * toDelete = adj1;
             list.erase(it);
+            delete(toDelete);
             break;
         }
     }        
@@ -367,9 +370,9 @@ bool uGraph<VertexType>::isConnected() {
 
     this->connectivityCount = 0;
 
-     auto f = [](VertexType&) -> void { int x = 0; };
+    auto f = [](VertexType&) -> void { int x = 0; };
 
-     this->breadthFirst(list[0]->getVertex()->getData(), f);
+    this->breadthFirst(list[0]->getVertex()->getData(), f);
 
     return connectivityCount == list.size();
 }

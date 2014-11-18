@@ -49,10 +49,11 @@
         Edge<VertexType> * temp2 = temp->getNext();
 
         while(temp2 != nullptr){
+            delete(temp);
             temp = temp2;
             temp2 = temp2->getNext();
-            delete(temp);
         }
+        delete(temp);
     }
 
 
@@ -95,7 +96,7 @@
             // make sure we don't have duplicate edges
             if(temp->getNext()->getVertex()->getData() == vert->getData())
                 return false;
-            
+
             temp = temp->getNext();
         }
         
@@ -128,7 +129,9 @@
 
             // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
             if(temp->getNext()->getVertex()->getData() == data){
+                Edge<VertexType> * toDelete = temp->getNext();
                 temp->setNext(temp->getNext()->getNext());
+                delete(toDelete);
                 return true;
             }
             // else we iterate to the next node in the chain
@@ -165,7 +168,9 @@
 
             // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
             if(temp->getNext()->getVertex() == vert){
+                Edge<VertexType> * toDelete = temp->getNext();
                 temp->setNext(temp->getNext()->getNext());
+                delete(toDelete);
                 return true;
             }
             // else we iterate to the next node in the chain
