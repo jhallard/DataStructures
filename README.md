@@ -3,13 +3,18 @@ DataStructures
 
 #### Project Overview
 
-Author  - John Allard
-License - None, but feel free to use, distribute, modify, or make fun-of the code as you see fit.
+The purpose of this project is to implement some of the more advanced data structures using the C++ programming language and some C++11 features.
+The data structures created in this project are all fully templated and made to be as general, efficient, and reliable as possible. This is a personal project developed by John Allard, if you are interested in contributing to this project please email me (john@jhallard.com) and we can work something out. All code in this project is currently unlicensed, feel free to use, distribute, or poke fun at any of this code as you wish.
 
-The purpose of this project is to implement some of the more common, yet-complicated, data structures using the C++ programming language and some C++11 features.
-The data structures created in this project are all fully templated and made to be as general, efficient, and reliable as possible. The currently implemented data structures are :
-* Graph - When finished, this will be a grouping of related but different graph data structures. As of right now, only an undirected graph using an adjacency list representation has been implemented, but I will be soon implementing a directed graph data structure that also uses an adj. list. In the future I would also like to make both an undirected and directed graph using an adjacency matrix. 
-Th current graph is completely templated and uses an adjacency list to represent the data structure. This class does not merely represent a graph, it also has built in many of the famous and useful graph algorithms like breadth first search, depth first search, connectivity tests, and more. 
-* HashDictionary - This is a project I began implementing about a year ago for a data structures class, but recently I began improving on the implementation. It is also a few fully templated dictonary that uses chaining to handle collisions. The hash function used is the one provided by the std::hash function.
+The currently implemented data structures are :
+* **uGraph** - A templated undirected graph. Comes with it's own implementation of BFS, DFS, min-cut, dijkstra's, and other popular graph algorithms. 
+* **HashDictionary** - A templated dictionary that uses chaining to resolve collisions. 
 
-The binarySearchTree class is not all my code, it is incomplete code from a book that I filled in, and I'm going to use it as motivation/guidelines for my own future BST implementation.
+##### Graph
+This project will contain a few different implementations of the famous graph data structure. The end goal is to implement both an undirected and directed graph using both an adjacency list and ajdacency matrix representation. This allows a user to choose which representation they want according to the specific needs of the project. As of right now, I have only implemented the undirected graph data structure using an adjacency list. It can be found in `/Graph/GraphAdjList/UndirectedGraph/`.
+
+##### HashDictionary
+I first implemented this for a data structures class around the spring of 2014, but I have recently begun to add changes and make improvements. This data structure represents a dictionary that uses hashing to insert and locate items. To resolve collisions, we use chaining with linked lists.
+
+##### What's next?
+There currently exists a working binary search tree class in this project, but this code is mostly not mine. It is from a data-structures book, but had significant parts missing (purposefully left for the student to fill in), so I took to the task of completing, testing, and improving the code. I plan on starting a new BST implementation from scratch using this previous implementation as a guideline.
