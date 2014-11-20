@@ -220,13 +220,6 @@ private:
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
 
-    // @member - isMultiGraph
-    // @info   - This boolean value determines if the user is allowed to add multiple edges between the same two vertices. The default value is true.
-    //           Can only be accessed indirectly through the get and set functions, if a user tries to set it to false when there are already multiple edges
-    //           between vertices, the graph will go through and clean up redundant edges, saving the one with the lowest score.
-    // #TODO   - Figure out how/if/why to implement this
-    bool isMultiGraph;
-
     // @member - connectivityCount
     // @info   - Used by the isConnected function to count reachable vertices
     int connectivityCount;

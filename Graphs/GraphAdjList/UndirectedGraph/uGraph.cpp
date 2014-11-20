@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(false) {
+uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0) {
     
 }
 
@@ -218,21 +218,13 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
     if(adj1 == nullptr || adj2 == nullptr) 
         return false;
     
-    // this part makes sure we don't insert duplicate edges (edges between the same vertices even if they have different weights)
-    // if we aren't specifically defined to be a multigraph
-    if(!this->isMultiGraph && (adj1->getEdge(adj2->getVertex()) || adj2->getEdge(adj1->getVertex())))
-        return false;
-
     // add an edge from vertex 1 to vertex 2
-    adj1->addEdge(adj2->getVertex(), weight);
+    if(adj1->addEdge(adj2->getVertex(), weight) && adj2->addEdge(adj1->getVertex(), weight)) {
+        numEdges++;
+        return true;
+    }
 
-    // add an edge from vertex 2 to vertex 1
-    adj2->addEdge(adj1->getVertex(), weight);
-    
-    numEdges++; // only add 1 to the number of edges even though we added two edges to our data structure
-                // this is because it's an undirected graph, so it needs edges in both directions
-
-    return true;
+    return false;
     
 }
 

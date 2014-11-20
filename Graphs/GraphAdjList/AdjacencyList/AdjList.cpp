@@ -90,6 +90,9 @@
             return true;
         }
 
+        if(pEdge->getVertex()->getData() == vert->getData())
+            return false;
+        
         Edge<VertexType> * temp;
         temp = pEdge;
         while(temp->getNext() != nullptr){

@@ -217,6 +217,32 @@ TEST(EdgesTest, edge_deletion2) {
 
     ASSERT_EQ(2, graph.getNumEdges());
 }
+
+
+TEST(EdgesTest, large_insertion) { 
+
+	uGraph<int> graph;
+
+ 	int numVertices = 1000;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= numVertices; i++) {
+        input_vec.push_back(i);
+    }
+
+    graph.insertVertices(input_vec);
+    int count = 0;
+    for(int i = 1; i <= numVertices/2; i++) {
+
+    	for(int j = i+1; j <= numVertices; j++) {
+    		graph.insertEdge(i, j);
+    		count++;
+    	}
+    }
+
+    ASSERT_EQ(count, graph.getNumEdges());
+}
  
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
