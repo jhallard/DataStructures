@@ -111,6 +111,13 @@ public:
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     virtual std::vector<std::vector<VertexType> > getMinCut() = 0;
 
+    // @func   - getMinSpanningTree
+    // @args   - none
+    // @return - A graph that represents the minimum spanning tree of the current graph object. 
+    // @info   - This function is declared to return a GraphInterface object, but since GraphInterface is abstract, what will really happen is that any of the
+    //           classes derived from this one will simply return a graph of their own type when implementing this function. (See uGraph for an example).
+    virtual GraphInterface<VertexType> * getMinSpanningTree() = 0;
+
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.

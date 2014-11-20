@@ -166,6 +166,13 @@ public:
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     std::vector<std::vector<VertexType> > getMinCut();
 
+    // @func   - getMinSpanningTree
+    // @args   - none
+    // @return - A graph that represents the minimum spanning tree of the current graph object. 
+    // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
+    //           of the veritces in this graph.
+    uGraph<VertexType> * getMinSpanningTree();
+
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.

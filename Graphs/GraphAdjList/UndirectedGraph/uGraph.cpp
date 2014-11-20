@@ -504,7 +504,6 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     return true;
 }
 
-
 // @func   - getMinCut
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
@@ -513,6 +512,18 @@ template<class VertexType>
 std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
 
     // #TODO - Implement min-cut algorithm for the graph
+}
+
+
+// @func   - getMinSpanningTree
+// @args   - none
+// @return - A graph that represents the minimum spanning tree of the current graph object. 
+// @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
+//           of the veritces in this graph.
+template<class VertexType>
+uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
+    
+    // #TODO - Implement Minimum Spanning Tree Algorithm
 }
 
 // @func   - dijkstras
