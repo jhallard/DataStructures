@@ -218,12 +218,12 @@ TEST(EdgesTest, edge_deletion2) {
     ASSERT_EQ(2, graph.getNumEdges());
 }
 
-
+ 
 TEST(EdgesTest, large_dense_graph) { 
 
 	uGraph<int> graph;
 
- 	int numVertices = 1000;
+ 	int numVertices = 400;
 
     std::vector<int> input_vec;
 
@@ -241,6 +241,49 @@ TEST(EdgesTest, large_dense_graph) {
     }
 
     ASSERT_EQ(count, graph.getNumEdges());
+}
+
+
+TEST(EdgesTest, no_duplicates)  {
+uGraph<int> graph;
+
+    int numVertices = 400;
+    int minEdges = 2;
+    int maxEdges = 20;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= numVertices; i++)
+        input_vec.push_back(i);
+
+    graph.insertVertices(input_vec);
+
+
+    for(int i = 1; i < numVertices; i++) {
+
+        int loop = rand() % (maxEdges-minEdges) + minEdges;
+
+        for(int j = 0; j < loop; j++) {
+
+            int r = rand() % numVertices + 1; r++;
+            if(r == i) {
+                j--;
+                continue;
+            }
+
+            if(!graph.insertEdge(i, r))
+                j--;
+        }
+    }
+
+    for(int i = 0; i < graph.getNumVertices(); i++) {
+    	std::vector< std::pair<int, double> > edges = graph.getAdjVertices(i);
+    	std::unordered_map<int, bool> themap;
+    	for(int j = 0; j < edges.size(); j++) {
+    		ASSERT_FALSE(themap.find(j) != themap.end());
+    		themap.insert(std::pair<int, bool>(j, true));
+    	}
+    }
 }
  
 int main(int argc, char **argv) {
