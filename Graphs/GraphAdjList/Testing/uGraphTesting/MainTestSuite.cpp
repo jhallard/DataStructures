@@ -9,12 +9,13 @@
 *				1.) Vertex Testing    - Tests the insertion, deletion, and lookup of vertices in the graph. 
 *				2.) Edge Testing      - Tests the insertion, deletion, and lookup of edges in the graph. This includes making sure so duplicates for
 *									    non multi-graphs.
-*				3.) Algorithm Testing - Tests the various algorithms that come with this graph.
+*				3.) Algorithm/Speed Testing - Tests the various algorithms that come with this graph.
 **/
 
 
 #include "../../UndirectedGraph/uGraph.h"
 #include <gtest/gtest.h>
+#include <chrono>
 
 
 
@@ -50,6 +51,29 @@ uGraph<int> graph;
     graph.insertVertices(input_vec);
 
     ASSERT_EQ(numVertices, graph.getNumVertices());
+}
+
+TEST(VerticesTest, random_large_insert) {
+	uGraph<int> graph;
+	std::vector<int> vec;
+	std::unordered_map<int, bool> m;
+
+	for(int i = 0; i < 4000; i++) {
+		int temp = rand()%1367532+200;
+		if(m.find(temp) != m.end()) {
+			i--;
+			continue;
+		}
+		m.insert(std::pair<int,bool>(temp, true));
+		vec.push_back(temp);
+		graph.insertVertex(temp);
+	}
+
+	for(int i = 0; i < vec.size(); i++) {
+		ASSERT_EQ(true, graph.deleteVertex(vec[i]));
+	}
+
+	ASSERT_EQ(0, graph.getNumVertices());
 }
 
 TEST(VerticesTest, test_no_duplicates) { 
@@ -173,21 +197,21 @@ TEST(EdgesTest, edge_deletion) {
 	graph.insertVertex(6);
 	ASSERT_EQ(0, graph.getNumEdges());
 
-	graph.insertEdge(1, 2); // ok
-	graph.insertEdge(1, 3); // ok
-	graph.insertEdge(2, 3); // ok
-	graph.insertEdge(3, 4); // ok
-	graph.insertEdge(4, 1); // ok
-	graph.insertEdge(6, 2); // ok
-	ASSERT_FALSE(!graph.deleteEdge(1, 2)); // ok
-	ASSERT_FALSE(!graph.deleteEdge(1, 3)); // ok
-	graph.deleteEdge(2, 3); // ok
-	graph.deleteEdge(3, 4); // ok
-	graph.deleteEdge(4, 1); // ok
-	graph.deleteEdge(6, 2); // ok
+	graph.insertEdge(1, 2); 
+	graph.insertEdge(1, 3); 
+	graph.insertEdge(2, 3); 
+	graph.insertEdge(3, 4); 
+	graph.insertEdge(4, 1); 
+	graph.insertEdge(6, 2); 
+	graph.deleteEdge(1, 2); 
+	graph.deleteEdge(1, 3); 
+	graph.deleteEdge(2, 3); 
+	graph.deleteEdge(3, 4); 
+	graph.deleteEdge(4, 1); 
+	graph.deleteEdge(6, 2); 
 
 
-    // ASSERT_EQ(0, graph.getNumEdges());
+    ASSERT_EQ(0, graph.getNumEdges());
 }
 
 TEST(EdgesTest, edge_deletion2) { 
@@ -285,6 +309,133 @@ uGraph<int> graph;
     	}
     }
 }
+
+
+TEST(EdgesTest, adj_vertices) { 
+	uGraph<int> graph;
+
+	graph.insertVertex(1);
+	graph.insertVertex(2);
+	graph.insertVertex(3);
+	graph.insertVertex(4);
+	graph.insertVertex(5);
+	graph.insertVertex(6);
+	ASSERT_EQ(0, graph.getNumEdges());
+
+	graph.insertEdge(1, 2); // ok
+	graph.insertEdge(1, 3); // ok
+	graph.insertEdge(2, 3); // ok
+	graph.insertEdge(3, 4); // ok
+	graph.insertEdge(4, 1); // ok
+	graph.insertEdge(6, 2); // ok
+	graph.deleteEdge(1, 5); // ok
+
+	std::vector< std::pair<int, double> > edges = graph.getAdjVertices(1);
+
+	ASSERT_EQ(true, (edges[0].first == 2 || edges[0].first == 3 || edges[0].first == 4));
+	ASSERT_EQ(true, (edges[1].first == 2 || edges[1].first == 3 || edges[1].first == 4));
+	ASSERT_EQ(true, (edges[2].first == 2 || edges[2].first == 3 || edges[2].first == 4));
+
+}
+
+
+TEST(EdgesTest, vertex_and_edge_deletion) { 
+	uGraph<int> graph;
+
+	graph.insertVertex(1);
+	graph.insertVertex(2);
+	graph.insertVertex(3);
+	graph.insertVertex(4);
+	graph.insertVertex(5);
+	graph.insertVertex(6);
+	ASSERT_EQ(0, graph.getNumEdges());
+
+	graph.insertEdge(1, 2); // ok
+	graph.insertEdge(1, 3); // ok
+	graph.insertEdge(1, 4); // ok
+	graph.insertEdge(1, 5); // ok
+	graph.insertEdge(1, 6); // ok
+	graph.insertEdge(2, 3); // ok
+	graph.insertEdge(2, 4); // ok
+	graph.insertEdge(2, 5); // ok
+	graph.insertEdge(2, 6); // ok
+	graph.insertEdge(3, 4); // ok
+	graph.insertEdge(3, 5); // ok
+	graph.insertEdge(3, 6); // ok
+
+	ASSERT_EQ(6, graph.getNumVertices());
+	ASSERT_EQ(12, graph.getNumEdges());
+
+	graph.deleteVertex(2);
+
+	ASSERT_EQ(5, graph.getNumVertices());
+	ASSERT_EQ(7, graph.getNumEdges());
+
+}
+
+
+
+
+/////////////////////////////////////////////////
+//////////////// 	SPEED TESTS /////////////////
+/////////////////////////////////////////////////
+
+TEST(SpeedTests, large_bfs_dfs_test) { 
+
+	uGraph<int> graph;
+
+    int numVertices = 8000;
+    int minEdges = 40;
+    int maxEdges = 200;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= numVertices; i++)
+        input_vec.push_back(i);
+
+    graph.insertVertices(input_vec);
+
+
+    for(int i = 1; i < numVertices; i++) {
+
+        int loop = rand() % (maxEdges-minEdges) + minEdges;
+
+        for(int j = 0; j < loop; j++) {
+
+            int r = rand() % numVertices + 1; r++;
+            if(r == i) {
+                j--;
+                continue;
+            }
+
+            if(!graph.insertEdge(i, r))
+                j--;
+        }
+    }
+
+    auto f = [](int&) -> void { return; };
+
+
+    auto start = std::chrono::high_resolution_clock::now();
+    graph.breadthFirst(2, f);
+	auto elapsed = std::chrono::high_resolution_clock::now() - start;	
+	long long m = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count()/1000;
+
+	ASSERT_EQ(true, m < 500 );
+
+	start = std::chrono::high_resolution_clock::now();
+    graph.depthFirst(2, f);
+	elapsed = std::chrono::high_resolution_clock::now() - start;	
+	m = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count()/1000;
+
+
+	ASSERT_EQ(true, m < 500);
+
+
+}
+
+
+
  
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

@@ -158,6 +158,8 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
     std::vector<Edge<VertexType> *> edges = adjList->getAllEdges();
 
+    int numEdgesToDelete = edges.size();
+
 
     // Here we go through all of the edges eminating from the vertex to be deleted, and delete the symmetric edges that
     // point back to this vertex to be deleted. The is a nuance of our implementation, an undirected graph in this implementation
@@ -172,6 +174,7 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
         // delete that vertices edge with the vertex to be deleted
         temp->deleteEdge(data);
+
         
     }
 
@@ -199,6 +202,9 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 
     // decrement the number of vertices
     numVertices--;
+
+    // decrement the number of edges by the number of edges that were attached to the vertex we just destroyed.
+    numEdges -= numEdgesToDelete;
 
     return true;
     
