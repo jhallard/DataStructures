@@ -1,4 +1,6 @@
 *
+CMakeFiles
+CMakeCache.txt
 !.gitignore
 !.cpp
 !.h
