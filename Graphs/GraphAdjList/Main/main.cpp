@@ -11,8 +11,7 @@ void visit1(int&);
 int main()
 {
     srand(time(0));
-    srand(time(0));
-    srand(time(0));
+    rand();
 
     // intTest());
     intTest2();
@@ -128,9 +127,9 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 400;
-    int minEdges = 2;
-    int maxEdges = 8;
+    int numVertices = 55;
+    int minEdges = 5;
+    int maxEdges = 16;
 
     std::vector<int> input_vec;
 
@@ -143,7 +142,8 @@ void intTest2() {
     for(int i = 1; i < numVertices; i++) {
 
         int loop = rand() % (maxEdges-minEdges) + minEdges;
-
+        double weight = (double)(rand() % 100 + 2)/100;
+        std::cout << weight << std::endl;
         for(int j = 0; j < loop; j++) {
 
             int r = rand() % numVertices + 1; r++;
@@ -152,21 +152,23 @@ void intTest2() {
                 continue;
             }
 
-            if(!graph.insertEdge(i, r))
+            if(!graph.insertEdge(i, r, weight))
                 j--;
         }
     }
 
-    graph.printGraph();
+    uGraph<int> * newGraph = graph.getMinSpanningTree();
 
-    std::cout << "\n\n Connected : " << ((graph.isConnected())? "YES\n" : "NO\n");
+    newGraph->printGraph();
 
-    getchar();
+    // std::cout << "\n\n Connected : " << ((graph.isConnected())? "YES\n" : "NO\n");
+
+    // getchar();
 
 
 
-    void (*fptr)(int&);
-    fptr = visit1;
+    // void (*fptr)(int&);
+    // fptr = visit1;
 
     // for(int i = 1; i <=18; i++) {
     //     std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";

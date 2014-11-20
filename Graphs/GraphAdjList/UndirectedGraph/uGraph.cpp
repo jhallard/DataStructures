@@ -519,6 +519,53 @@ template<class VertexType>
 uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
 
     // #TODO - Implement Minimum Spanning Tree Algorithm
+    uGraph<VertexType> * newGraph = new uGraph();
+
+    std::unordered_map<VertexType, int> set;
+    std::unordered_map<VertexType, bool> mst_set;
+    int imax = std::numeric_limits<int>::max();
+
+    for(int i = 0; i < list.size(); i++) {
+        VertexType tempData = list[i]->getVertex()->getData();
+        set.insert(std::pair<VertexType, int>(tempData, imax));
+        newGraph->insertVertex(tempData);
+    }
+
+    set.at(list[0]->getVertex()->getData()) = 0;
+    VertexType lastData = list[0]->getVertex()->getData();
+
+    while(mst_set.size() != list.size()) {
+        int temp = imax;
+        int index = 0;
+
+        // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
+        for(int i = 0; i < list.size(); i++) {
+            if(mst_set.find(list[i]->getVertex()->getData()) == mst_set.end()) {
+                if(set.at(list[i]->getVertex()->getData()) <= temp) {
+                    temp = set.at(list[i]->getVertex()->getData());
+                    index = i;
+                }
+            }
+        }
+
+        // Take the vertex with the smallest weight and put it in our graph
+        mst_set.insert(std::pair<VertexType, bool>(list[index]->getVertex()->getData(), true));
+        newGraph->insertEdge(lastData, list[index]->getVertex()->getData(), set.at(list[index]->getVertex()->getData()));
+        lastData =  list[index]->getVertex()->getData();
+
+        // Get all of that vertices neighbors
+        std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
+
+        // Update the weighting of the edges
+        for(int i = 0; i < edges.size(); i++) {
+            if(edges[i]->getWeight() < set.at(edges[i]->getVertex()->getData())) 
+                set.at(edges[i]->getVertex()->getData()) = edges[i]->getWeight();
+            
+        }
+
+    }
+
+    return newGraph;
 }
 
 // @func   - dijkstras

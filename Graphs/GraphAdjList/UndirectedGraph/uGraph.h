@@ -46,6 +46,7 @@
 #include <deque>
 #include <unordered_map>
 #include <iostream>         // needed for printGraph function..
+#include <limits>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
