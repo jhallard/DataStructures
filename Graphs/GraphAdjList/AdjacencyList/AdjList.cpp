@@ -90,9 +90,11 @@
             return true;
         }
 
-        if(pEdge->getVertex()->getData() == vert->getData())
+        if(pEdge->getVertex()->getData() == vert->getData()) {
+            delete(newEdge);
             return false;
-        
+        }
+
         Edge<VertexType> * temp;
         temp = pEdge;
         while(temp->getNext() != nullptr){

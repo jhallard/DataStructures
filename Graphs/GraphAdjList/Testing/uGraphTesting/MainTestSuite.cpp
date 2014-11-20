@@ -219,7 +219,7 @@ TEST(EdgesTest, edge_deletion2) {
 }
 
 
-TEST(EdgesTest, large_insertion) { 
+TEST(EdgesTest, large_dense_graph) { 
 
 	uGraph<int> graph;
 
@@ -234,7 +234,6 @@ TEST(EdgesTest, large_insertion) {
     graph.insertVertices(input_vec);
     int count = 0;
     for(int i = 1; i <= numVertices/2; i++) {
-
     	for(int j = i+1; j <= numVertices; j++) {
     		graph.insertEdge(i, j);
     		count++;

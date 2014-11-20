@@ -15,11 +15,11 @@ int main()
     srand(time(0));
 
     // intTest());
-    // intTest2();
+    intTest2();
 
     std::cout << "\n\n\n";
 
-    stringTest();
+    // stringTest();
 
     return 0;
 }
