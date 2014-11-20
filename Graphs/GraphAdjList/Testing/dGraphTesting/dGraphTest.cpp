@@ -234,9 +234,9 @@ TEST(EdgesTest, edge_deletion2) {
 	graph.deleteEdge(1, 2); // ok
 	graph.deleteEdge(1, 3); // ok
 	graph.deleteEdge(2, 3); // ok
-	ASSERT_FALSE(graph.deleteEdge(2, 3)); // ok
+	ASSERT_FALSE(graph.deleteEdge(2, 3)); // This edge shouldn't exist anymore
 	graph.deleteEdge(4, 1); // ok
-	ASSERT_FALSE(graph.deleteEdge(4, 2)); // ok
+	ASSERT_FALSE(graph.deleteEdge(4, 2)); // This edge shouldn't exist anymore
 
 
     ASSERT_EQ(2, graph.getNumEdges());
@@ -300,9 +300,12 @@ uGraph<int> graph;
         }
     }
 
+    // Go through every adjacency list and make sure no two edges point to the same vertex.
     for(int i = 0; i < graph.getNumVertices(); i++) {
+
     	std::vector< std::pair<int, double> > edges = graph.getAdjVertices(i);
     	std::unordered_map<int, bool> themap;
+
     	for(int j = 0; j < edges.size(); j++) {
     		ASSERT_FALSE(themap.find(j) != themap.end());
     		themap.insert(std::pair<int, bool>(j, true));
@@ -332,6 +335,7 @@ TEST(EdgesTest, adj_vertices) {
 
 	std::vector< std::pair<int, double> > edges = graph.getAdjVertices(1);
 
+	// Make sure the correct 3 edges are in this adj list
 	ASSERT_EQ(true, (edges[0].first == 2 || edges[0].first == 3 || edges[0].first == 4));
 	ASSERT_EQ(true, (edges[1].first == 2 || edges[1].first == 3 || edges[1].first == 4));
 	ASSERT_EQ(true, (edges[2].first == 2 || edges[2].first == 3 || edges[2].first == 4));
@@ -350,26 +354,54 @@ TEST(EdgesTest, vertex_and_edge_deletion) {
 	graph.insertVertex(6);
 	ASSERT_EQ(0, graph.getNumEdges());
 
-	graph.insertEdge(1, 2); // ok
-	graph.insertEdge(1, 3); // ok
-	graph.insertEdge(1, 4); // ok
-	graph.insertEdge(1, 5); // ok
-	graph.insertEdge(1, 6); // ok
-	graph.insertEdge(2, 3); // ok
-	graph.insertEdge(2, 4); // ok
-	graph.insertEdge(2, 5); // ok
-	graph.insertEdge(2, 6); // ok
-	graph.insertEdge(3, 4); // ok
-	graph.insertEdge(3, 5); // ok
-	graph.insertEdge(3, 6); // ok
+	graph.insertEdge(1, 2);
+	graph.insertEdge(1, 3);
+	graph.insertEdge(1, 4);
+	graph.insertEdge(1, 5);
+	graph.insertEdge(1, 6);
+	graph.insertEdge(2, 3);
+	graph.insertEdge(2, 4);
+	graph.insertEdge(2, 5);
+	graph.insertEdge(2, 6);
+	graph.insertEdge(3, 4);
+	graph.insertEdge(3, 5);
+	graph.insertEdge(3, 6);
+	graph.insertEdge(4, 5);
+	graph.insertEdge(4, 6);
+	graph.insertEdge(5, 6);
 
 	ASSERT_EQ(6, graph.getNumVertices());
-	ASSERT_EQ(12, graph.getNumEdges());
+	ASSERT_EQ(15, graph.getNumEdges());
 
 	graph.deleteVertex(2);
 
 	ASSERT_EQ(5, graph.getNumVertices());
-	ASSERT_EQ(7, graph.getNumEdges());
+	ASSERT_EQ(10, graph.getNumEdges());
+
+	graph.deleteVertex(1);
+
+	ASSERT_EQ(4, graph.getNumVertices());
+	ASSERT_EQ(6, graph.getNumEdges());
+
+	graph.deleteVertex(3);
+
+	ASSERT_EQ(3, graph.getNumVertices());
+	ASSERT_EQ(3, graph.getNumEdges());
+
+	graph.deleteVertex(4);
+
+	ASSERT_EQ(2, graph.getNumVertices());
+	ASSERT_EQ(1, graph.getNumEdges());
+
+	graph.deleteVertex(5);
+
+	ASSERT_EQ(1, graph.getNumVertices());
+	ASSERT_EQ(0, graph.getNumEdges());
+
+	graph.deleteVertex(6);
+
+	ASSERT_EQ(0, graph.getNumVertices());
+	ASSERT_EQ(0, graph.getNumEdges());
 
 }
 
@@ -419,14 +451,14 @@ TEST(SpeedTests, large_bfs_dfs_test) {
     auto start = std::chrono::high_resolution_clock::now();
     graph.breadthFirst(2, f);
 	auto elapsed = std::chrono::high_resolution_clock::now() - start;	
-	long long m = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count()/1000;
+	long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
 	ASSERT_EQ(true, m < 500 );
 
 	start = std::chrono::high_resolution_clock::now();
     graph.depthFirst(2, f);
 	elapsed = std::chrono::high_resolution_clock::now() - start;	
-	m = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count()/1000;
+	m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
 
 	ASSERT_EQ(true, m < 500);

@@ -7,8 +7,8 @@ find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
  
 # Link runTests with what we want to test and the GTest and pthread library
-add_executable(Testing/uGraphTesting/MainTestSuite Testing/uGraphTesting/MainTestSuite.cpp)
+add_executable(Testing/uGraphTesting/uGraphTest Testing/uGraphTesting/uGraphTest.cpp)
 
-target_link_libraries(Testing/uGraphTesting/MainTestSuite ${GTEST_LIBRARIES} pthread)
+target_link_libraries(Testing/uGraphTesting/uGraphTest ${GTEST_LIBRARIES} pthread)
 
 add_executable(Main/main Main/main.cpp)

@@ -112,17 +112,17 @@ Main/main/fast:
 .PHONY : Main/main/fast
 
 #=============================================================================
-# Target rules for targets named Testing/uGraphTesting/MainTestSuite
+# Target rules for targets named Testing/uGraphTesting/uGraphTest
 
 # Build rule for target.
-Testing/uGraphTesting/MainTestSuite: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Testing/uGraphTesting/MainTestSuite
-.PHONY : Testing/uGraphTesting/MainTestSuite
+Testing/uGraphTesting/uGraphTest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Testing/uGraphTesting/uGraphTest
+.PHONY : Testing/uGraphTesting/uGraphTest
 
 # fast build rule for target.
-Testing/uGraphTesting/MainTestSuite/fast:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/build.make CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/build
-.PHONY : Testing/uGraphTesting/MainTestSuite/fast
+Testing/uGraphTesting/uGraphTest/fast:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build
+.PHONY : Testing/uGraphTesting/uGraphTest/fast
 
 Main/main.o: Main/main.cpp.o
 .PHONY : Main/main.o
@@ -148,29 +148,29 @@ Main/main.cpp.s:
 	$(MAKE) -f CMakeFiles/Main/main.dir/build.make CMakeFiles/Main/main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
 
-Testing/uGraphTesting/MainTestSuite.o: Testing/uGraphTesting/MainTestSuite.cpp.o
-.PHONY : Testing/uGraphTesting/MainTestSuite.o
+Testing/uGraphTesting/uGraphTest.o: Testing/uGraphTesting/uGraphTest.cpp.o
+.PHONY : Testing/uGraphTesting/uGraphTest.o
 
 # target to build an object file
-Testing/uGraphTesting/MainTestSuite.cpp.o:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/build.make CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/Testing/uGraphTesting/MainTestSuite.cpp.o
-.PHONY : Testing/uGraphTesting/MainTestSuite.cpp.o
+Testing/uGraphTesting/uGraphTest.cpp.o:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.o
+.PHONY : Testing/uGraphTesting/uGraphTest.cpp.o
 
-Testing/uGraphTesting/MainTestSuite.i: Testing/uGraphTesting/MainTestSuite.cpp.i
-.PHONY : Testing/uGraphTesting/MainTestSuite.i
+Testing/uGraphTesting/uGraphTest.i: Testing/uGraphTesting/uGraphTest.cpp.i
+.PHONY : Testing/uGraphTesting/uGraphTest.i
 
 # target to preprocess a source file
-Testing/uGraphTesting/MainTestSuite.cpp.i:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/build.make CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/Testing/uGraphTesting/MainTestSuite.cpp.i
-.PHONY : Testing/uGraphTesting/MainTestSuite.cpp.i
+Testing/uGraphTesting/uGraphTest.cpp.i:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.i
+.PHONY : Testing/uGraphTesting/uGraphTest.cpp.i
 
-Testing/uGraphTesting/MainTestSuite.s: Testing/uGraphTesting/MainTestSuite.cpp.s
-.PHONY : Testing/uGraphTesting/MainTestSuite.s
+Testing/uGraphTesting/uGraphTest.s: Testing/uGraphTesting/uGraphTest.cpp.s
+.PHONY : Testing/uGraphTesting/uGraphTest.s
 
 # target to generate assembly for a file
-Testing/uGraphTesting/MainTestSuite.cpp.s:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/build.make CMakeFiles/Testing/uGraphTesting/MainTestSuite.dir/Testing/uGraphTesting/MainTestSuite.cpp.s
-.PHONY : Testing/uGraphTesting/MainTestSuite.cpp.s
+Testing/uGraphTesting/uGraphTest.cpp.s:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.s
+.PHONY : Testing/uGraphTesting/uGraphTest.cpp.s
 
 # Help Target
 help:
@@ -179,15 +179,15 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... Main/main"
-	@echo "... Testing/uGraphTesting/MainTestSuite"
+	@echo "... Testing/uGraphTesting/uGraphTest"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
-	@echo "... Testing/uGraphTesting/MainTestSuite.o"
-	@echo "... Testing/uGraphTesting/MainTestSuite.i"
-	@echo "... Testing/uGraphTesting/MainTestSuite.s"
+	@echo "... Testing/uGraphTesting/uGraphTest.o"
+	@echo "... Testing/uGraphTesting/uGraphTest.i"
+	@echo "... Testing/uGraphTesting/uGraphTest.s"
 .PHONY : help
 
 

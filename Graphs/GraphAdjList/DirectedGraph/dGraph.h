@@ -1,10 +1,10 @@
 /**
 *   @Author   - John H Allard Jr.
-*   @File     - uGraph.h
+*   @File     - dGraph.h
 *   @Date     - 11/12/2014
-*   @Repo     - https://github.com/jhallad/DataStructures/Graphs/UndirectedGraph
-*   @Purpose  - This is my declaration of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
-*               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
+*   @Repo     - https://github.com/jhallad/DataStructures/Graphs/DirectedGraph
+*   @Purpose  - This is my declaration of the dGraph (directed Graph) class. This class represents a templated, 
+*               directed graph, upon which a user can perform operation like searches, path finding, and other things. 
 *               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use, just leave some
 *               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 *
@@ -54,7 +54,7 @@
 
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
-class uGraph : public GraphInterface <VertexType>
+class dGraph : public GraphInterface <VertexType>
 {
 
 
@@ -66,16 +66,16 @@ public:
     // @func - Constructor#1
     // @args - None
     // @info - Initializes everything to empty
-    uGraph();
+    dGraph();
 
     // @func  - Constructor#2
     // @args  - #1 String that contains the filename from which to load a graph
     // @error - Can throw IO error if invalid filename or file structure to build graph 
-    uGraph(std::string fn);
+    dGraph(std::string fn);
 
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
-    ~uGraph();
+    ~dGraph();
 
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
@@ -123,7 +123,7 @@ public:
     bool containsVertex(VertexType);
 
     // @func   - getEdgeWeight
-    // @args   - #1 data associated with vetex #1, data associated with vertex #2
+    // @args   - #1 data associated with "from" vertex, data associated with "to" vertex
     // @return - returns the weight of the edge, throws error if edge not found
     double getEdgeWeight(VertexType, VertexType);
 
@@ -169,9 +169,9 @@ public:
     // @func   - getMinSpanningTree
     // @args   - none
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
-    // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
+    // @info   - This function will return another dGraph object that has the edges reduces to those that exist in the minimum spanning tree
     //           of the veritces in this graph.
-    uGraph<VertexType> * getMinSpanningTree();
+    dGraph<VertexType> * getMinSpanningTree();
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
@@ -245,5 +245,5 @@ private:
 
 };
 
-#include "uGraph.cpp"
+#include "dGraph.cpp"
 #endif
