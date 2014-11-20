@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(true) {
+uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(false) {
     
 }
 
@@ -220,7 +220,7 @@ bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
     
     // this part makes sure we don't insert duplicate edges (edges between the same vertices even if they have different weights)
     // if we aren't specifically defined to be a multigraph
-    if(!this->isMultiGraph && (adj1->getEdge(adj2->getVertex()) != nullptr || adj2->getEdge(adj1->getVertex()) != nullptr))
+    if(!this->isMultiGraph && (adj1->getEdge(adj2->getVertex()) || adj2->getEdge(adj1->getVertex())))
         return false;
 
     // add an edge from vertex 1 to vertex 2
@@ -250,15 +250,12 @@ bool uGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
 
-    // add an edge from vertex 1 to vertex 2
-    adj1->deleteEdge(adj2->getVertex());
-
-    // add an edge from vertex 2 to vertex 1
-    adj2->deleteEdge(adj1->getVertex());
-
-    numEdges--;
+    // delete an edge from vertex 1 to vertex 2
+    if(!adj1->deleteEdge(adj2->getVertex()) || !adj2->deleteEdge(adj1->getVertex()) ) {
+        return false;
+    }
     
-
+    numEdges--;
     return true;
     
 }
@@ -522,7 +519,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
 //           of the veritces in this graph.
 template<class VertexType>
 uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
-    
+
     // #TODO - Implement Minimum Spanning Tree Algorithm
 }
 

@@ -123,7 +123,8 @@
 
         // Case #2 - The edge to delete is the first node found
         else if(temp->getVertex()->getData() == data){
-            pEdge = pEdge->getNext();
+            pEdge = temp->getNext();
+            delete(temp);
             return true;
         }
         // Case #3 - The edge may or may not be somewhere down the chain
@@ -161,23 +162,23 @@
             return false;
 
         // Case #2 - The edge to delete is the first node found
-        else if(temp->getVertex() == vert){
-            pEdge = nullptr;
+        else if(temp->getVertex()->getData() == vert->getData()){
+            pEdge = temp->getNext();
+            delete(temp);
             return true;
         }
         // Case #3 - The edge may or may not be somewhere down the chain
         while(temp->getNext() != nullptr) {
 
             // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
-            if(temp->getNext()->getVertex() == vert){
+            if(temp->getNext()->getVertex()->getData() == vert->getData()){
                 Edge<VertexType> * toDelete = temp->getNext();
                 temp->setNext(temp->getNext()->getNext());
                 delete(toDelete);
                 return true;
             }
-            // else we iterate to the next node in the chain
-            else
-                temp = temp->getNext();
+            
+            temp = temp->getNext();
             
         }
         // else we couldn't find an edge to the given vertex with the given data
@@ -199,15 +200,12 @@
         if(temp == nullptr)
             return nullptr;
 
-        if(temp->getVertex() == vert)
-            return temp;
-
         // Case #3 - The edge may or may not be somewhere down the chain
         while(temp != nullptr) {
 
             // if the edge to return is the next node, return that node
-            if(temp->getNext()->getVertex() == vert){
-                return temp->getNext();
+            if(temp->getVertex()->getData() == vert->getData()){
+                return temp;
             }
             // else we iterate to the next node in the chain
             else
