@@ -1,1 +1,0 @@
-/usr/bin/c++    -std=c++11    CMakeFiles/MainTestSuite.dir/MainTestSuite.cpp.o  -o MainTestSuite -rdynamic -Wl,-Bstatic -lgtest -Wl,-Bdynamic -lpthread 

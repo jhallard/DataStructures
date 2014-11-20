@@ -1,8 +1,2 @@
-*
 CMakeFiles
 CMakeCache.txt
-!.gitignore
-!.cpp
-!.h
-Makefile
-!CMakeLists.txt
