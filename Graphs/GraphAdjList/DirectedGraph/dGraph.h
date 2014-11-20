@@ -36,8 +36,8 @@
 *               #TODO - List Big-O's for all of the important functions in this class.
 **/
 
-#ifndef U_GRAPH_A_LIST_H
-#define U_GRAPH_A_LIST_H
+#ifndef D_GRAPH_A_LIST_H
+#define D_GRAPH_A_LIST_H
 
 #include <stdexcept>
 #include <vector>
