@@ -261,4 +261,20 @@
     // @args   - None
     // @return - The number of edges connected to this particular vertex
     template <class VertexType>
-    unsigned int AdjList<VertexType>::getNumEdges();
+    unsigned int AdjList<VertexType>::getNumEdges() {
+        uint ret = 0;
+        Edge<VertexType> * temp;
+        temp = pEdge;
+
+        // Case #1 - No edges in the list, return false
+        if(temp == nullptr)
+            return ret;
+
+        while(temp != nullptr) {
+            ret++;
+            temp = temp->getNext();
+            
+        }
+
+        return ret;
+    }

@@ -242,12 +242,6 @@ private:
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
     AdjList<VertexType> *  findVertex(VertexType);
 
-    // @func   - isConnectedHelper
-    // @args   - #1 Boolean, if true then the count of member is reset, else the count is incremented
-    // @return - integer representing the current count of objects.
-    // @info   - This function adds one to a counter every time it is called, it is used by the isConnected function to determine
-    //           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
-    void isConnectedHelper(VertexType&);
 
 };
 

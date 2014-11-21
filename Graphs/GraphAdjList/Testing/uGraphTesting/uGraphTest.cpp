@@ -406,7 +406,133 @@ TEST(EdgesTest, vertex_and_edge_deletion) {
 }
 
 
+////////////////////////////////////////////////////
+///////////////// ALGORITHM TESTS //////////////////
+////////////////////////////////////////////////////
 
+TEST(MinCutTests, simple_test) {
+
+	uGraph<int> graph;
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+
+    graph.insertEdge(1, 2, 0.1);
+    graph.insertEdge(1, 3, 0.1);
+    graph.insertEdge(1, 4, 0.1);
+    graph.insertEdge(1, 5, 0.1);
+    graph.insertEdge(1, 6, 0.1);
+    graph.insertEdge(2, 3, 0.4);
+    graph.insertEdge(2, 4, 0.4);
+    graph.insertEdge(2, 5, 0.4);
+    graph.insertEdge(2, 6, 0.4);
+    graph.insertEdge(3, 4, 2.1);
+    graph.insertEdge(3, 5, 3.1);
+    graph.insertEdge(3, 6, 1.1);
+    graph.insertEdge(4, 5, 3.1);
+    graph.insertEdge(4, 6, 3.1);
+    graph.insertEdge(5, 6, 0.15);
+
+
+
+    uGraph<int> * newGraph = graph.minimumSpanningTree();
+
+    ASSERT_EQ(newGraph->getNumVertices(), 6);
+    ASSERT_EQ(newGraph->getNumEdges(), 5);
+    ASSERT_EQ(true, newGraph->isConnected());
+    ASSERT_EQ(5, newGraph->getAdjVertices(1).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(2).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(3).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(4).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(5).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(6).size());
+
+    // newGraph->printGraph();
+
+    delete(newGraph);
+}
+
+
+
+TEST(MinCutTests, larger_test) {
+
+
+	uGraph<int> graph;
+
+ 	int numVertices = 400;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= numVertices; i++) {
+        input_vec.push_back(i);
+    }
+
+    graph.insertVertices(input_vec);
+    int count = 0;
+    for(int i = 1; i <= numVertices/2; i++) {
+    	for(int j = i+1; j <= numVertices; j++) {
+    		graph.insertEdge(i, j);
+    		count++;
+    	}
+    }
+
+
+
+    uGraph<int> * newGraph = graph.minimumSpanningTree();
+
+    ASSERT_EQ(newGraph->getNumVertices(), numVertices);
+    ASSERT_EQ(newGraph->getNumEdges(), numVertices-1);
+    ASSERT_EQ(true, newGraph->isConnected());
+
+    // newGraph->printGraph();
+
+    delete(newGraph);
+}
+
+
+
+TEST(MinCutTests, non_connected_error) {
+
+	uGraph<int> graph;
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+    graph.insertVertex(7);
+
+    graph.insertEdge(1, 2, 0.1);
+    graph.insertEdge(1, 3, 0.1);
+    graph.insertEdge(1, 4, 0.1);
+    graph.insertEdge(1, 5, 0.1);
+    // graph.insertEdge(1, 6, 0.1);
+    graph.insertEdge(2, 3, 0.4);
+    graph.insertEdge(2, 4, 0.4);
+    graph.insertEdge(2, 5, 0.4);
+    // graph.insertEdge(2, 6, 0.4);
+    graph.insertEdge(3, 4, 2.1);
+    graph.insertEdge(3, 5, 3.1);
+    // graph.insertEdge(3, 6, 1.1);
+    graph.insertEdge(4, 5, 3.1);
+    // graph.insertEdge(4, 6, 3.1);
+    // graph.insertEdge(5, 6, 0.15);
+
+    bool shouldBeFalse = true;
+    try {
+    uGraph<int> * newGraph = graph.minimumSpanningTree();
+    delete(newGraph);
+    } catch(std::logic_error e) {
+    	// std::cout << e.what();
+    	shouldBeFalse = false;
+    }
+
+    ASSERT_FALSE(shouldBeFalse);
+
+}
 
 /////////////////////////////////////////////////
 //////////////// 	SPEED TESTS /////////////////
@@ -416,7 +542,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 
 	uGraph<int> graph;
 
-    int numVertices = 8000;
+    int numVertices = 1000;
     int minEdges = 40;
     int maxEdges = 200;
 
@@ -453,7 +579,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 	auto elapsed = std::chrono::high_resolution_clock::now() - start;	
 	long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
-	ASSERT_EQ(true, m < 500 );
+	ASSERT_EQ(true, m < 200 );
 
 	start = std::chrono::high_resolution_clock::now();
     graph.depthFirst(2, f);
@@ -461,7 +587,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 	m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
 
-	ASSERT_EQ(true, m < 500);
+	ASSERT_EQ(true, m < 200);
 
 
 }

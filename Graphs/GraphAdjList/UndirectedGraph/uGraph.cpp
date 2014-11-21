@@ -17,12 +17,12 @@
 *               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph data structure
 *               will look more like this :
 *               -----------------------------------
-*             1 |   a  -> c* -> d* -> null        |
-*             2 |   b  -> v* -> d* -> e* -> null  |
-*             3 |   c  -> a* -> v* -> e* -> null  |
-*             4 |   d  -> a* -> b* -> null        | 
-*             5 |   e  -> b* -> c* -> v* -> null  |
-*             6 |   v  -> b* -> c* -> null        |
+*    vertex 1 : |   a  -> c* -> d* -> null        |
+*    vertex 2 : |   b  -> v* -> d* -> e* -> null  |
+*    vertex 3 : |   c  -> a* -> v* -> e* -> null  |
+*    vertex 4 : |   d  -> a* -> b* -> null        | 
+*    vertex 5 : |   e  -> b* -> c* -> v* -> null  |
+*    vertex 6 : |   v  -> b* -> c* -> null        |
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
@@ -39,9 +39,9 @@
 #include "uGraph.h"
 
 
-//////////////////////////////////////////////////////
-//////////        PUBLIC FUNCTIONS     ///////////////
-//////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////         PUBLIC FUNCTIONS        //////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 // @func - Constructor#1
 // @args - None
@@ -518,7 +518,8 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 // @args   - none
 // @return - A graph that represents the minimum spanning tree of the current graph object. 
 // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
-//           of the veritces in this graph. Will throw an exception is the graph is not connected. 
+//           of the veritces in this graph. Will throw an exception is the graph is not connected. Prims Algorithm is used to find the minimum spanning
+//           tree, and the source vertex is the first vertex that was stored into the graph (this->list[0])
 template<class VertexType>
 uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
@@ -540,15 +541,15 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
     set.at(list[0]->getVertex()->getData()).second = 0;
 
-    // VertexType lastData = list[0]->getVertex()->getData();
-
     while(mst_set.size() != list.size()) {
         int temp = imax; // lowest weight found
         int index = 0;
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
+
             if(mst_set.find(list[i]->getVertex()->getData()) == mst_set.end()) {
+
                 if(set.at(list[i]->getVertex()->getData()).second <= temp) {
                     temp = set.at(list[i]->getVertex()->getData()).second;
                     index = i;
@@ -558,9 +559,7 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
         // Take the vertex with the smallest weight and put it in our graph
         mst_set.insert(std::pair<VertexType, bool>(list[index]->getVertex()->getData(), true));
-        newGraph->insertEdge(set.at(list[index]->getVertex()->getData()).first,   // "from vertex"
-                             list[index]->getVertex()->getData(),                 // "to vertex"
-                             set.at(list[index]->getVertex()->getData()).second); // weight
+        newGraph->insertEdge(set.at(list[index]->getVertex()->getData()).first, list[index]->getVertex()->getData(), temp);                                                 
 
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
@@ -601,9 +600,9 @@ std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 }
 
 
-//////////////////////////////////////////////////////
-/////////        PRIVATE FUNCTIONS    ////////////////
-//////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////         PRIVATE FUNCTIONS        //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
 
 // @func   - findVertex
 // @args   - #1 Value contained in the vertex to be found
@@ -621,16 +620,7 @@ AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
     return get->second;
  }
 
-// @func   - isConnectedHelper
-// @args   - #1 Boolean, if true then the count of member is reset, else the count is incremented
-// @return - integer representing the current count of objects.
-// @info   - This function adds one to a counter every time it is called, it is used by the isConnected function to determine
-//           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
-template<class VertexType>
-void uGraph<VertexType>::isConnectedHelper(VertexType&) {
-    
-    this->connectivityCount++;
-}
+
 
 
 
