@@ -160,18 +160,18 @@ public:
     //           track of the seen and unseen vertices.
     bool breadthFirst(VertexType, void visit(VertexType&));
 
-    // @func   - getMinCut
+    // @func   - minimumCut
     // @args   - none
     // @return - 2 column vector of vertices, each column representing one half of the cut. 
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
-    std::vector<std::vector<VertexType> > getMinCut();
+    std::vector<std::vector<VertexType> > minimumCut();
 
-    // @func   - getMinSpanningTree
+    // @func   - minimumSpanningTree
     // @args   - none
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function will return another dGraph object that has the edges reduces to those that exist in the minimum spanning tree
     //           of the veritces in this graph.
-    dGraph<VertexType> * getMinSpanningTree();
+    dGraph<VertexType> * minimumSpanningTree();
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach

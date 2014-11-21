@@ -499,24 +499,24 @@ bool dGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     return true;
 }
 
-// @func   - getMinCut
+// @func   - minimumCut
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
 // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
 template<class VertexType>
-std::vector<std::vector<VertexType> > dGraph<VertexType>::getMinCut() {
+std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 
     // #TODO - Implement min-cut algorithm for the graph
 }
 
 
-// @func   - getMinSpanningTree
+// @func   - minimumSpanningTree
 // @args   - none
 // @return - A graph that represents the minimum spanning tree of the current graph object. 
 // @info   - This function will return another dGraph object that has the edges reduces to those that exist in the minimum spanning tree
 //           of the veritces in this graph.
 template<class VertexType>
-dGraph<VertexType> * dGraph<VertexType>::getMinSpanningTree() {
+dGraph<VertexType> * dGraph<VertexType>::minimumSpanningTree() {
 
     // #TODO - Implement Minimum Spanning Tree Algorithm
 }

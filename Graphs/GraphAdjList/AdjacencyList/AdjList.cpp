@@ -15,7 +15,7 @@
     // @args - None
     // @info - Initializes everything to empty
     template <class VertexType>
-    AdjList<VertexType>::AdjList() : vertex(), pEdge(nullptr){
+    AdjList<VertexType>::AdjList() : vertex(), pEdge(nullptr), numEdges(0){
     }
 
     // @func - Constructor#2
@@ -107,7 +107,11 @@
             temp = temp->getNext();
         }
         
-        return temp->setNext(newEdge);
+        if(temp->setNext(newEdge)) {
+            numEdges++;
+            return true;
+        }
+        return false;
 
     }
 
@@ -129,6 +133,7 @@
         // Case #2 - The edge to delete is the first node found
         else if(temp->getVertex()->getData() == data){
             pEdge = temp->getNext();
+            numEdges--;
             delete(temp);
             return true;
         }
@@ -140,6 +145,7 @@
                 Edge<VertexType> * toDelete = temp->getNext();
                 temp->setNext(temp->getNext()->getNext());
                 delete(toDelete);
+                numEdges--;
                 return true;
             }
             // else we iterate to the next node in the chain
@@ -169,6 +175,7 @@
         // Case #2 - The edge to delete is the first node found
         else if(temp->getVertex()->getData() == vert->getData()){
             pEdge = temp->getNext();
+            numEdges--;
             delete(temp);
             return true;
         }
@@ -180,6 +187,7 @@
                 Edge<VertexType> * toDelete = temp->getNext();
                 temp->setNext(temp->getNext()->getNext());
                 delete(toDelete);
+                numEdges--;
                 return true;
             }
             
@@ -247,3 +255,10 @@
         return retVec;
 
     }
+
+
+    // @func   - getNumEdges
+    // @args   - None
+    // @return - The number of edges connected to this particular vertex
+    template <class VertexType>
+    unsigned int AdjList<VertexType>::getNumEdges();

@@ -105,18 +105,18 @@ public:
     //           track of the seen and unseen vertices.
     virtual bool breadthFirst(VertexType, void visit(VertexType&)) = 0;
 
-    // @func   - getMinCut
+    // @func   - minimuminCut
     // @args   - none
     // @return - 2 column vector of vertices, each column representing one half of the cut. 
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
-    virtual std::vector<std::vector<VertexType> > getMinCut() = 0;
+    virtual std::vector<std::vector<VertexType> > minimumCut() = 0;
 
-    // @func   - getMinSpanningTree
+    // @func   - minimuminSpanningTree
     // @args   - none
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function is declared to return a GraphInterface object, but since GraphInterface is abstract, what will really happen is that any of the
     //           classes derived from this one will simply return a graph of their own type when implementing this function. (See uGraph for an example).
-    virtual GraphInterface<VertexType> * getMinSpanningTree() = 0;
+    virtual GraphInterface<VertexType> * minimumSpanningTree() = 0;
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach

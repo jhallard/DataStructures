@@ -88,6 +88,11 @@ public:
     // @return - Boolean indicating success 
     bool deleteVertex(VertexType);
 
+    // @func   - updateVertex
+    // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex
+    // @return - Boolean indicating success, returns false if it can't find the vertex to update.
+    bool updateVertex(VertexType, VertexType);
+
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
     // @return - Boolean indicating succes 
@@ -161,18 +166,18 @@ public:
     //           track of the seen and unseen vertices.
     bool breadthFirst(VertexType, void visit(VertexType&));
 
-    // @func   - getMinCut
+    // @func   - minimuminCut
     // @args   - none
     // @return - 2 column vector of vertices, each column representing one half of the cut. 
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
-    std::vector<std::vector<VertexType> > getMinCut();
+    std::vector<std::vector<VertexType> > minimumCut();
 
-    // @func   - getMinSpanningTree
+    // @func   - minimuminSpanningTree
     // @args   - none
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
-    //           of the veritces in this graph.
-    uGraph<VertexType> * getMinSpanningTree();
+    //           of the veritces in this graph. Will throw an exception is the graph is not connected. 
+    uGraph<VertexType> * minimumSpanningTree();
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach

@@ -82,6 +82,11 @@ public:
     // @return - Vector of pointers to all the edge objects in the class
     std::vector<Edge<VertexType> *> getAllEdges();
 
+    // @func   - getNumEdges
+    // @args   - None
+    // @return - The number of edges connected to this particular vertex
+    unsigned int getNumEdges();
+
 
 
 private:
@@ -89,6 +94,8 @@ private:
     Vertex<VertexType> vertex;
 
     Edge<VertexType> * pEdge;
+
+    unsigned int numEdges;
 
 
 };

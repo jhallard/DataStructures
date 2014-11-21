@@ -217,6 +217,10 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
 template<class VertexType>
 bool uGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
 
+    // This assumes we don't want edges between the same vertex
+    if(v1 == v2)
+        return false;
+
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
@@ -499,50 +503,54 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
     return true;
 }
 
-// @func   - getMinCut
+// @func   - minimumCut
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
 // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
 template<class VertexType>
-std::vector<std::vector<VertexType> > uGraph<VertexType>::getMinCut() {
+std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
     // #TODO - Implement min-cut algorithm for the graph
 }
 
 
-// @func   - getMinSpanningTree
+// @func   - minimumSpanningTree
 // @args   - none
 // @return - A graph that represents the minimum spanning tree of the current graph object. 
 // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
-//           of the veritces in this graph.
+//           of the veritces in this graph. Will throw an exception is the graph is not connected. 
 template<class VertexType>
-uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
+uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
-    // #TODO - Implement Minimum Spanning Tree Algorithm
+    // A non connected graph cannot be spanned, without this we risk an infinite loop
+    if(!this->isConnected())
+        throw std::logic_error("Graph is not Connected\n");
+
     uGraph<VertexType> * newGraph = new uGraph();
 
-    std::unordered_map<VertexType, int> set;
+    std::unordered_map<VertexType, std::pair<VertexType, int> > set; // maps a vertex to a weight and the vertex that connects to it
     std::unordered_map<VertexType, bool> mst_set;
     int imax = std::numeric_limits<int>::max();
 
     for(int i = 0; i < list.size(); i++) {
         VertexType tempData = list[i]->getVertex()->getData();
-        set.insert(std::pair<VertexType, int>(tempData, imax));
+        set.insert(std::pair<VertexType, std::pair<VertexType, int> >(tempData, std::pair<VertexType, int>(tempData, imax)));
         newGraph->insertVertex(tempData);
     }
 
-    set.at(list[0]->getVertex()->getData()) = 0;
-    VertexType lastData = list[0]->getVertex()->getData();
+    set.at(list[0]->getVertex()->getData()).second = 0;
+
+    // VertexType lastData = list[0]->getVertex()->getData();
 
     while(mst_set.size() != list.size()) {
-        int temp = imax;
+        int temp = imax; // lowest weight found
         int index = 0;
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
             if(mst_set.find(list[i]->getVertex()->getData()) == mst_set.end()) {
-                if(set.at(list[i]->getVertex()->getData()) <= temp) {
-                    temp = set.at(list[i]->getVertex()->getData());
+                if(set.at(list[i]->getVertex()->getData()).second <= temp) {
+                    temp = set.at(list[i]->getVertex()->getData()).second;
                     index = i;
                 }
             }
@@ -550,16 +558,17 @@ uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
 
         // Take the vertex with the smallest weight and put it in our graph
         mst_set.insert(std::pair<VertexType, bool>(list[index]->getVertex()->getData(), true));
-        newGraph->insertEdge(lastData, list[index]->getVertex()->getData(), set.at(list[index]->getVertex()->getData()));
-        lastData =  list[index]->getVertex()->getData();
+        newGraph->insertEdge(set.at(list[index]->getVertex()->getData()).first,   // "from vertex"
+                             list[index]->getVertex()->getData(),                 // "to vertex"
+                             set.at(list[index]->getVertex()->getData()).second); // weight
 
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
 
         // Update the weighting of the edges
         for(int i = 0; i < edges.size(); i++) {
-            if(edges[i]->getWeight() < set.at(edges[i]->getVertex()->getData())) 
-                set.at(edges[i]->getVertex()->getData()) = edges[i]->getWeight();
+            if(edges[i]->getWeight() < set.at(edges[i]->getVertex()->getData()).second) 
+                set.at(edges[i]->getVertex()->getData()) = std::pair<VertexType, int>(list[index]->getVertex()->getData(), edges[i]->getWeight());
             
         }
 
@@ -567,6 +576,7 @@ uGraph<VertexType> * uGraph<VertexType>::getMinSpanningTree() {
 
     return newGraph;
 }
+
 
 // @func   - dijkstras
 // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach

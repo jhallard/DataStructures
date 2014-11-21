@@ -127,7 +127,7 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 55;
+    int numVertices = 100;
     int minEdges = 5;
     int maxEdges = 16;
 
@@ -142,8 +142,8 @@ void intTest2() {
     for(int i = 1; i < numVertices; i++) {
 
         int loop = rand() % (maxEdges-minEdges) + minEdges;
-        double weight = (double)(rand() % 100 + 2)/100;
-        std::cout << weight << std::endl;
+        double weight = (double)(rand() % 477 + 20)/100;
+        // std::cout << weight << std::endl;
         for(int j = 0; j < loop; j++) {
 
             int r = rand() % numVertices + 1; r++;
@@ -157,44 +157,40 @@ void intTest2() {
         }
     }
 
-    uGraph<int> * newGraph = graph.getMinSpanningTree();
+    // graph.insertVertex(1);
+    // graph.insertVertex(2);
+    // graph.insertVertex(3);
+    // graph.insertVertex(4);
+    // graph.insertVertex(5);
+    // graph.insertVertex(6);
+
+    // graph.insertEdge(1, 2, 0.1);
+    // graph.insertEdge(1, 3, 0.1);
+    // graph.insertEdge(1, 4, 0.1);
+    // graph.insertEdge(1, 5, 0.1);
+    // graph.insertEdge(1, 6, 0.1);
+    // graph.insertEdge(2, 3, 0.4);
+    // graph.insertEdge(2, 4, 0.4);
+    // graph.insertEdge(2, 5, 0.4);
+    // graph.insertEdge(2, 6, 0.4);
+    // graph.insertEdge(3, 4, 2.1);
+    // graph.insertEdge(3, 5, 3.1);
+    // graph.insertEdge(3, 6, 1.1);
+    // graph.insertEdge(4, 5, 3.1);
+    // graph.insertEdge(4, 6, 3.1);
+    // graph.insertEdge(5, 6, 0.15);
+
+
+
+    graph.printGraph();
+
+    getchar();
+    uGraph<int> * newGraph = graph.minimumSpanningTree();
 
     newGraph->printGraph();
 
-    // std::cout << "\n\n Connected : " << ((graph.isConnected())? "YES\n" : "NO\n");
+    delete(newGraph);
 
-    // getchar();
-
-
-
-    // void (*fptr)(int&);
-    // fptr = visit1;
-
-    // for(int i = 1; i <=18; i++) {
-    //     std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
-    //     graph.breadthFirst(i, fptr);
-    //     std::cout << "\n";
-    //     std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
-    //     graph.depthFirst(i, fptr);
-    //     getchar();
-    //     std::cout << "\n\n\n\n\n";
-
-    // }
-
-    // graph.deleteVertex(2);
-    // graph.deleteVertex(8);
-
-    // for(int i = 1; i <=18; i++) {
-    //     std::cout << "Breadth First Search, Starting Vertex : " << i << "\n\n";
-    //     graph.breadthFirst(i, fptr);
-    //     std::cout << "\n";
-    //     std::cout << "Depth First Search, Starting Vertex : " << i << "\n\n";
-    //     graph.depthFirst(i, fptr);
-    //     getchar();
-    //     std::cout << "\n\n\n\n\n";
-
-    // }
-   
 
 }
 
