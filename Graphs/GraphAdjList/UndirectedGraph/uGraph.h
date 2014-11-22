@@ -150,6 +150,16 @@ public:
     // @info   - This function uses BFS to search to see if any given vertex can be reached from any other given vertex
     bool isConnected();
 
+    // @func   - setIsMultiGraph
+    // @args   - boolean to be stored in isMultiGraph
+    // @return - Bool indicating success
+    bool setIsMultiGraph(bool);
+
+    // @func   - getIsMultiGraph
+    // @args   - None
+    // @return - Bool value of isMultiGraph
+    bool getIsMultiGraph();
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
@@ -221,10 +231,15 @@ private:
     // @member - lookupMap
     // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us
     //           to have an (amortized) O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly through
-    //           our vector or AdjLists. 
+    //           our vector of AdjLists. 
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
+
+    // @member - isMultiGraph
+    // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
+    //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
+    bool isMultiGraph;
 
     // @member - connectivityCount
     // @info   - Used by the isConnected function to count reachable vertices

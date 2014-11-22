@@ -93,6 +93,8 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
+    newlist->setIsMultiGraph(this->isMultiGraph);
+
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
 
@@ -114,8 +116,8 @@ bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 
     bool ret = true;
 
-    for(int i = 0; i < vertices.size(); i++) {
-        if(!this->insertVertex(vertices[i]))
+    for(auto i :vertices) {
+        if(!this->insertVertex(i))
             ret = false;
     }
 
@@ -131,8 +133,8 @@ bool uGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 
     bool ret = true;
 
-    for(int i = 0; i < vertices.size(); i++) {
-        if(!this->deleteVertex(vertices[i]))
+    for(auto i :vertices) {
+        if(!this->deleteVertex(i))
             ret = false;
     }
 
@@ -164,10 +166,10 @@ bool uGraph<VertexType>::deleteVertex(VertexType data) {
     // Here we go through all of the edges eminating from the vertex to be deleted, and delete the symmetric edges that
     // point back to this vertex to be deleted. The is a nuance of our implementation, an undirected graph in this implementation
     // consists of pairs of edges between abridged vertices with equal weights.
-    for(int i = 0; i < edges.size(); i++) {
+    for(auto edge : edges) {
 
         // locate the adjacency list of the vertex on the other end of the edge from the vertex to be deleted
-        AdjList<VertexType> * temp = findVertex(edges[i]->getVertex()->getData());
+        AdjList<VertexType> * temp = findVertex(edge->getVertex()->getData());
 
         if(temp == nullptr)
             continue;
@@ -333,8 +335,8 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 
     std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
-    for(int i = 0; i < edgeList.size(); i++)  {
-        retVector.push_back(std::pair<VertexType, double>(edgeList[i]->getVertex()->getData(), edgeList[i]->getWeight()));
+    for(auto edge : edgeList)  {
+        retVector.push_back(std::pair<VertexType, double>(edge->getVertex()->getData(), edge->getWeight()));
     }
 
     return retVector;
@@ -347,13 +349,13 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 // @info   - prints the adjecency list representation of the graph.
 template<class VertexType> void uGraph<VertexType>::printGraph() {
     
-    for(int i = 0; i < list.size(); i++) {
-        std::cout << "Vertex : " << list[i]->getVertex()->getData() << " -> ";
+    for(auto vertex : list) {
+        std::cout << "Vertex : " << vertex->getVertex()->getData() << " -> ";
 
-        std::vector<Edge<VertexType> *> edges = list[i]->getAllEdges(); 
+        std::vector<Edge<VertexType> *> edges = vertex->getAllEdges(); 
 
-        for(int j = 0; j < edges.size(); j++) {
-            std::cout << edges[j]->getVertex()->getData() << ", ";
+        for(auto edge : edges) {
+            std::cout << edge->getVertex()->getData() << ", ";
         }
 
         std::cout << "\n";
@@ -378,6 +380,29 @@ bool uGraph<VertexType>::isConnected() {
     return connectivityCount == list.size();
 }
 
+
+// @func   - setIsMultiGraph
+// @args   - boolean to be stored in isMultiGraph
+// @return - Bool indicating success
+template<class VertexType>
+bool uGraph<VertexType>::setIsMultiGraph(bool val) {
+
+    this->isMultiGraph = val;
+
+    for(auto i : list) {
+        i->setisMultiGraph(val);
+    }
+
+    return true;
+}
+
+// @func   - getIsMultiGraph
+// @args   - None
+// @return - Bool value of isMultiGraph
+template<class VertexType>
+bool uGraph<VertexType>::getIsMultiGraph() {
+    return isMultiGraph;
+}
 
 // @func   - depthFirst
 // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
@@ -510,7 +535,15 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 template<class VertexType>
 std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
-    // #TODO - Implement min-cut algorithm for the graph
+    // #TODO  - Implement min-cut algorithm for the graph
+    // @Notes - While thinking about how to implement this algorithm, I think I have run into a possible problem. Our AdjList class does not
+    //          allow for multiple edges between the same vertices, and the contraction stage of this algorithm demands that we *are* able to
+    //          have mult. edges between the same vertices, so we are going to have to find a work around.
+    //          Suggestions :
+    //          1.) Add a variable, isMultiGraph to the AdjList class that will allow duplicate edges if it is true. This raises another problem
+    //          though, that being that our deleteEdge function becomes undefined if there are duplicate edges, so we would have to figure out a protocol
+    //          for this scenario.
+
 }
 
 
@@ -611,7 +644,7 @@ std::vector<VertexType> uGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 template<class VertexType>
 AdjList<VertexType> * uGraph<VertexType>::findVertex(VertexType data) {
 
-    typename std::unordered_map<VertexType, AdjList<VertexType> * >::const_iterator get = lookupMap.find(data);
+    auto get = lookupMap.find(data);
 
     // if true then a vertex with the given data does not exist in our map, so return nullptr.
     if(get == lookupMap.end()) 

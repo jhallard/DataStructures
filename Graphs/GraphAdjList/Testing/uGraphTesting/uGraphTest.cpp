@@ -15,6 +15,7 @@
 
 #include "../../UndirectedGraph/uGraph.h"
 #include <gtest/gtest.h>
+#include <sstream>
 #include <chrono>
 
 
@@ -53,7 +54,9 @@ uGraph<int> graph;
     ASSERT_EQ(numVertices, graph.getNumVertices());
 }
 
-TEST(VerticesTest, random_large_insert) {
+
+
+TEST(VerticesTest, large_insert_delete) {
 	uGraph<int> graph;
 	std::vector<int> vec;
 	std::unordered_map<int, bool> m;
@@ -75,6 +78,7 @@ TEST(VerticesTest, random_large_insert) {
 
 	ASSERT_EQ(0, graph.getNumVertices());
 }
+
 
 TEST(VerticesTest, test_no_duplicates) { 
 uGraph<int> graph;
@@ -455,6 +459,46 @@ TEST(MinCutTests, simple_test) {
     delete(newGraph);
 }
 
+TEST(MinCutTests, simple_test2) {
+
+	uGraph<int> graph;
+	graph.insertVertex(0);
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+
+    graph.insertEdge(0, 2, 1);
+    graph.insertEdge(0, 3, 6);
+    graph.insertEdge(0, 1, 3);
+    graph.insertEdge(1, 2, 5);
+    graph.insertEdge(1, 4, 3);
+    graph.insertEdge(2, 3, 5);
+    graph.insertEdge(2, 4, 6);
+    graph.insertEdge(2, 5, 4);
+    graph.insertEdge(4, 5, 6);
+    graph.insertEdge(3, 5, 2);
+
+
+
+    uGraph<int> * newGraph = graph.minimumSpanningTree();
+
+    ASSERT_EQ(newGraph->getNumVertices(), 6);
+    ASSERT_EQ(newGraph->getNumEdges(), 5);
+    ASSERT_EQ(true, newGraph->isConnected());
+    ASSERT_EQ(2, newGraph->getAdjVertices(1).size());
+    ASSERT_EQ(2, newGraph->getAdjVertices(2).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(3).size());
+    ASSERT_EQ(1, newGraph->getAdjVertices(4).size());
+    ASSERT_EQ(2, newGraph->getAdjVertices(5).size());
+    ASSERT_EQ(2, newGraph->getAdjVertices(0).size());
+
+    // newGraph->printGraph();
+
+    delete(newGraph);
+}
+
 
 
 TEST(MinCutTests, larger_test) {
@@ -509,24 +553,19 @@ TEST(MinCutTests, non_connected_error) {
     graph.insertEdge(1, 3, 0.1);
     graph.insertEdge(1, 4, 0.1);
     graph.insertEdge(1, 5, 0.1);
-    // graph.insertEdge(1, 6, 0.1);
     graph.insertEdge(2, 3, 0.4);
     graph.insertEdge(2, 4, 0.4);
     graph.insertEdge(2, 5, 0.4);
-    // graph.insertEdge(2, 6, 0.4);
     graph.insertEdge(3, 4, 2.1);
     graph.insertEdge(3, 5, 3.1);
-    // graph.insertEdge(3, 6, 1.1);
     graph.insertEdge(4, 5, 3.1);
-    // graph.insertEdge(4, 6, 3.1);
-    // graph.insertEdge(5, 6, 0.15);
 
     bool shouldBeFalse = true;
     try {
-    uGraph<int> * newGraph = graph.minimumSpanningTree();
-    delete(newGraph);
-    } catch(std::logic_error e) {
-    	// std::cout << e.what();
+    	uGraph<int> * newGraph = graph.minimumSpanningTree();
+    	delete(newGraph);
+    } 
+    catch(std::logic_error e) {
     	shouldBeFalse = false;
     }
 
@@ -542,7 +581,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 
 	uGraph<int> graph;
 
-    int numVertices = 1000;
+    int numVertices = 2000;
     int minEdges = 40;
     int maxEdges = 200;
 
@@ -573,22 +612,30 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 
     auto f = [](int&) -> void { return; };
 
+    int tries = (numVertices < 500)? 20 : 5;
 
-    auto start = std::chrono::high_resolution_clock::now();
-    graph.breadthFirst(2, f);
-	auto elapsed = std::chrono::high_resolution_clock::now() - start;	
-	long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+    for(int i = 1; i <= tries; i++) {
 
-	ASSERT_EQ(true, m < 200 );
+    	int r = rand()%(numVertices-1)+1;
 
-	start = std::chrono::high_resolution_clock::now();
-    graph.depthFirst(2, f);
-	elapsed = std::chrono::high_resolution_clock::now() - start;	
-	m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+	    auto start = std::chrono::high_resolution_clock::now();
+	    graph.breadthFirst(r, f);
+		auto elapsed = std::chrono::high_resolution_clock::now() - start;	
+		long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+
+		std::stringstream ss;
+		// std::cout << "\n BFS TEST : " << i <<  " : " << m  << "\n" << std::endl;
+		ASSERT_EQ(true, m < 200 );
+
+		start = std::chrono::high_resolution_clock::now();
+	    graph.depthFirst(r, f);
+		elapsed = std::chrono::high_resolution_clock::now() - start;	
+		m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
 
-	ASSERT_EQ(true, m < 200);
-
+		// std::cout << "\n DFS TEST : " << i <<  " : " << m  << "\n" << std::endl;
+		ASSERT_EQ(true, m < 200);
+	}		
 
 }
 

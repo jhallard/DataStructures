@@ -127,9 +127,9 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 100;
-    int minEdges = 5;
-    int maxEdges = 16;
+    int numVertices = 1000;
+    int minEdges = 20;
+    int maxEdges = 250;
 
     std::vector<int> input_vec;
 
@@ -141,7 +141,7 @@ void intTest2() {
 
     for(int i = 1; i < numVertices; i++) {
 
-        int loop = rand() % (maxEdges-minEdges) + minEdges;
+        int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
         double weight = (double)(rand() % 477 + 20)/100;
         // std::cout << weight << std::endl;
         for(int j = 0; j < loop; j++) {
@@ -185,11 +185,16 @@ void intTest2() {
     graph.printGraph();
 
     getchar();
-    uGraph<int> * newGraph = graph.minimumSpanningTree();
 
-    newGraph->printGraph();
-
-    delete(newGraph);
+    try
+    {
+        uGraph<int> * newGraph = graph.minimumSpanningTree();
+        newGraph->printGraph();
+        delete(newGraph);
+    }
+    catch(std::logic_error e) {
+        std::cout <<"\n " << e.what() << "\n";
+    }
 
 
 }

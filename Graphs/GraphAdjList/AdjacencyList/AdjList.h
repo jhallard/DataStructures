@@ -87,15 +87,33 @@ public:
     // @return - The number of edges connected to this particular vertex
     unsigned int getNumEdges();
 
+    // @func   - setIsMultiGraph
+    // @args   - boolean to be stored in isMultiGraph
+    // @return - Bool indicating success
+    bool setIsMultiGraph(bool);
+
+    // @func   - getIsMultiGraph
+    // @args   - None
+    // @return - Bool value of isMultiGraph
+    bool getIsMultiGraph();
+
+
 
 
 private:
+
+    // @func   - removeSelfLoops()
+    // @args   - none
+    // @return - bool indicating if any were found
+    bool removeSelfLoops();
 
     Vertex<VertexType> vertex;
 
     Edge<VertexType> * pEdge;
 
     unsigned int numEdges;
+
+    bool isMultiGraph;
 
 
 };
