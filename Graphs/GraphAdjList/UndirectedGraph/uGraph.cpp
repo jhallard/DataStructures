@@ -61,6 +61,21 @@ uGraph<VertexType>::uGraph(std::string fn){
     
 }
 
+// @func  - Copy Constructor
+// @args  - uGraph object that you wish to make this a copy of
+template<class VertexType>
+uGraph<VertexType>::uGraph(const uGraph<VertexType> & toCopy) {
+
+    for(auto i : toCopy.getAllVertices()) {
+        std::vector<std::pair<VertexType, double> > edges = toCopy.getAdjVertices(i);
+        this->insertVertex(i);
+
+        for(auto j : edges) {
+            this->insertEdge(i, j.first, j.second);
+        }
+    }
+}
+
 
 // @func  - Destructor
 // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
@@ -120,6 +135,19 @@ bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
         if(!this->insertVertex(i))
             ret = false;
     }
+
+    return ret;
+
+}
+
+// @func   - getAllVertices
+// @args   - none
+// @return - Vector of the data contained inside all vertices. 
+template<class VertexType>
+std::vector<VertexType> uGraph<VertexType>::getAllVertices() {
+    std::vector<VertexType> ret;
+    for(auto i : list)
+        ret.push_back(i->getVertex()->getData());
 
     return ret;
 

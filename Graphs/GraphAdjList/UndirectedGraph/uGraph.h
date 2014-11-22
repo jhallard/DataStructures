@@ -74,6 +74,10 @@ public:
     // @error - Can throw IO error if invalid filename or file structure to build graph 
     uGraph(std::string fn);
 
+    // @func  - Copy Constructor
+    // @args  - uGraph object that you wish to make this a copy of
+    uGraph(const uGraph<VertexType> &);
+
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
     ~uGraph();
@@ -87,6 +91,11 @@ public:
     // @args   - none
     // @return - Boolean indicating success 
     bool deleteVertex(VertexType);
+
+    // @func   - getAllVertices
+    // @args   - none
+    // @return - Vector of the data contained inside all vertices. 
+    std::vector<VertexType> getAllVertices();
 
     // @func   - updateVertex
     // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex

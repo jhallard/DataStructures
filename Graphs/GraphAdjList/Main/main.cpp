@@ -157,6 +157,12 @@ void intTest2() {
         }
     }
 
+    graph.printGraph();
+
+    getchar();
+
+    graph.minimumCut();
+
     // graph.insertVertex(1);
     // graph.insertVertex(2);
     // graph.insertVertex(3);
@@ -181,12 +187,6 @@ void intTest2() {
     // graph.insertEdge(5, 6, 0.15);
 
 
-
-    graph.printGraph();
-
-    getchar();
-
-    graph.minimumCut();
 
     // try
     // {
