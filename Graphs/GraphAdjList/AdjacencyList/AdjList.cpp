@@ -287,8 +287,8 @@ unsigned int AdjList<VertexType>::getNumEdges() {
 template<class VertexType>
 bool AdjList<VertexType>::setIsMultiGraph(bool val) {
 
-this->isMultiGraph = val;
-return true;
+    this->isMultiGraph = val;
+    return true;
 }
 
 // @func   - getIsMultiGraph
@@ -296,7 +296,7 @@ return true;
 // @return - Bool value of isMultiGraph
 template<class VertexType>
 bool AdjList<VertexType>::getIsMultiGraph() {
-return isMultiGraph;
+    return isMultiGraph;
 }
 
 

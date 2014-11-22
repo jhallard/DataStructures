@@ -127,9 +127,9 @@ void intTest2() {
 
     uGraph<int> graph;
 
-    int numVertices = 1000;
-    int minEdges = 20;
-    int maxEdges = 250;
+    int numVertices = 100;
+    int minEdges = 5;
+    int maxEdges = 50;
 
     std::vector<int> input_vec;
 
@@ -186,15 +186,17 @@ void intTest2() {
 
     getchar();
 
-    try
-    {
-        uGraph<int> * newGraph = graph.minimumSpanningTree();
-        newGraph->printGraph();
-        delete(newGraph);
-    }
-    catch(std::logic_error e) {
-        std::cout <<"\n " << e.what() << "\n";
-    }
+    graph.minimumCut();
+
+    // try
+    // {
+    //     uGraph<int> * newGraph = graph.minimumSpanningTree();
+    //     newGraph->printGraph();
+    //     delete(newGraph);
+    // }
+    // catch(std::logic_error e) {
+    //     std::cout <<"\n " << e.what() << "\n";
+    // }
 
 
 }

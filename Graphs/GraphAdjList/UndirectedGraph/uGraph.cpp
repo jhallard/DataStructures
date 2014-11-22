@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0) {
+uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(false) {
     
 }
 
@@ -93,7 +93,7 @@ bool uGraph<VertexType>::insertVertex(VertexType data) {
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
-    newlist->setIsMultiGraph(this->isMultiGraph);
+    newList->setIsMultiGraph(this->isMultiGraph);
 
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
@@ -404,6 +404,7 @@ bool uGraph<VertexType>::getIsMultiGraph() {
     return isMultiGraph;
 }
 
+
 // @func   - depthFirst
 // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
@@ -535,15 +536,115 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 template<class VertexType>
 std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
-    // #TODO  - Implement min-cut algorithm for the graph
-    // @Notes - While thinking about how to implement this algorithm, I think I have run into a possible problem. Our AdjList class does not
-    //          allow for multiple edges between the same vertices, and the contraction stage of this algorithm demands that we *are* able to
-    //          have mult. edges between the same vertices, so we are going to have to find a work around.
-    //          Suggestions :
-    //          1.) Add a variable, isMultiGraph to the AdjList class that will allow duplicate edges if it is true. This raises another problem
-    //          though, that being that our deleteEdge function becomes undefined if there are duplicate edges, so we would have to figure out a protocol
-    //          for this scenario.
+    srand(time(0));
+    int lowest = 999999999;
+    std::vector<std::vector<VertexType> > ret;
+    std::vector< AdjList<VertexType> * > finalList;
 
+    for(int i = 0; i < 3; i++) {
+
+        std::unordered_map<VertexType, std::vector<VertexType> > collapsed;
+
+        std::vector< AdjList<VertexType> * > newList = list;
+
+        for(auto i : list) {
+
+            collapsed.insert(std::pair<VertexType, std::vector<VertexType> >(i->getVertex()->getData(), std::vector<VertexType>()));
+            AdjList<VertexType> * newAdj = new AdjList<VertexType>();
+            newAdj->setVertex(i->getVertex()->getData());
+            newAdj->setIsMultiGraph(true);
+
+            newList.push_back(newAdj);
+
+            std::vector<Edge<VertexType> *> edges = i->getAllEdges();
+
+            for(auto j : edges) {
+                newList.back()->addEdge(j->getVertex(), j->getWeight()); 
+            }
+        }
+
+
+        while(newList.size() > 2) {
+
+            // std::cout << "beg";
+            int randVertex = rand()*rand()*rand()%newList.size();
+
+            auto adj1 = newList[randVertex];
+
+            std::vector<Edge<VertexType> *> edges = adj1->getAllEdges();
+
+            if(!edges.size()) 
+                continue;
+
+            int randEdge = rand()*rand()*rand()%edges.size();
+
+            AdjList<VertexType> * adj2 = nullptr;
+            
+
+            typename std::vector<AdjList<VertexType> *>::iterator vertToDelete;
+            for(typename std::vector<AdjList<VertexType> *>::iterator it = newList.begin() ; it != newList.end(); ++it) {
+
+                AdjList<VertexType> * tempAdj = *it;
+
+                if(tempAdj->getVertex()->getData() ==  edges[randEdge]->getVertex()->getData()) {
+                    adj2 = tempAdj;
+                    vertToDelete = it;
+                    break;
+                }
+            }   
+
+            if(adj2 == nullptr) {
+                adj1->deleteEdge(edges[randEdge]->getVertex());
+                continue;
+            }
+            // 
+            // std::cout << "mid";
+            // std::cout << adj1->getVertex()->getData() << " :: " << adj2->getVertex()->getData() << "\n";
+
+            std::vector<Edge<VertexType> *> edges2 = adj2->getAllEdges();
+
+            // std::cout << "mid2";
+            for(auto i : edges2) {
+                AdjList<VertexType> * tempAdj;
+                for(auto j : newList) {
+                    if(j->getVertex()->getData() == i->getVertex()->getData()) {
+                        tempAdj = j;
+                        break;
+                    }
+                }
+                adj1->addEdge(tempAdj->getVertex(), i->getWeight());
+            }
+
+            // std::cout << "mid3";
+
+            if(collapsed.find(adj1->getVertex()->getData()) != collapsed.end()) {
+                // std::cout << "t1";
+                collapsed.at(adj1->getVertex()->getData()).push_back(adj2->getVertex()->getData());
+                // std::cout << "t2";
+                auto delVert = collapsed.find(adj2->getVertex()->getData());
+                // std::cout << "t3";
+                if(delVert != collapsed.end()) {
+                    collapsed.erase(delVert);
+                    // std::cout << "t4";
+                }
+            } 
+
+            newList.erase(vertToDelete);
+            // std::cout << "end\n";
+        }
+
+        if(lowest > newList[0]->getAllEdges().size()) {
+            lowest = newList[0]->getAllEdges().size();
+            finalList = newList;
+        }
+    }
+    uGraph<VertexType> * retGraph = new uGraph<VertexType>();
+
+    std::cout << "Vertex 1 " << finalList[0]->getVertex()->getData() << "\n\n\n";
+    std::cout << "Vertex 2 " << finalList[1]->getVertex()->getData() << "\n";
+    std::cout << "Edges " <<finalList[0]->getAllEdges().size() << "\n";
+
+    return ret;
 }
 
 
