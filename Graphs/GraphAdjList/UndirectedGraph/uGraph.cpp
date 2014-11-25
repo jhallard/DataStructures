@@ -569,11 +569,12 @@ bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
 // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
+// @TODO   - Currently in beta-stage, needs to be tested and debugged. Is semi-working through.
 template<class VertexType>
 std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
     srand(time(0));
-    int lowest = 999999999;
+    int lowest = std::numeric_limits<int>::max();
     std::vector<std::vector<VertexType> > ret;
     std::vector< AdjList<VertexType> * > finalList;
 
@@ -765,11 +766,12 @@ std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexT
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    auto f = [](std::pair<double, VertexType> a, std::pair<double, VertexType> b) -> bool { return  a.first - b.first < -0.000001; };
+    auto f = [](std::pair<double, VertexType> a, std::pair<double, VertexType> b) -> bool { return  a.first < b.first; };
 
     double max_weight = std::numeric_limits<double>::infinity();
     std::unordered_map<VertexType, double> dist;
     std::unordered_map<VertexType, VertexType> prev;
+    std::unordered_map<VertexType, bool> scanned;
 
     // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
     // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
@@ -780,7 +782,7 @@ std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexT
 
     for(auto vertex : list) {
         dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-        prev.insert(std::pair<VertexType, VertexType>(vertex->getVertex()->getData(), vertex->getVertex()->getData()));
+        // prev.insert(std::pair<VertexType, VertexType>(vertex->getVertex()->getData(), vertex->getVertex()->getData()));
     }
 
     dist.at(source) = 0;
@@ -796,20 +798,26 @@ std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexT
         auto edges = current_vert->getAllEdges();
 
         for(auto edge : edges) {
+
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
+
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(temp_weight < dist.at(temp_data)) {
+            if(scanned.find(temp_data) == scanned.end() && temp_weight < dist.at(temp_data)) {
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
-                prev.at(temp_data) = current_vert->getVertex()->getData();
+                if(prev.find(temp_data) == prev.end())
+                    prev.insert(std::pair<VertexType, VertexType>(temp_data, current_vert->getVertex()->getData()));
+                else
+                    prev.at(temp_data) = current_vert->getVertex()->getData();
                 queue.insert(std::make_pair(dist.at(temp_data), temp_data));
-                // std::cout << "hello" << "\n";
             }
             // for(auto vertex : list)
             //     std::cout << dist.at(vertex->getVertex()->getData()) << " -> " << prev.at(vertex->getVertex()->getData()) << "\n";
         }
+
+        scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
     }
 
     return prev;
@@ -820,6 +828,7 @@ std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexT
 // @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
 template<class VertexType>
 std::vector<VertexType> uGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
+
     std::unordered_map<VertexType, VertexType> prev;
     std::vector<VertexType> path;
 
@@ -828,35 +837,45 @@ std::vector<VertexType> uGraph<VertexType>::dijkstrasComputePath(VertexType src,
         return path;
     }
 
-    try {
-        prev = this->dijkstras(src);
-    }
-    catch(std::logic_error e) {
-        std::cerr << e.what();
-        return path;
-    }
+    if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
+        throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
+
+    prev = this->dijkstras(src);
+
+
 
     VertexType prev_vert = dest;
     path.push_back(dest);
     int count = 0;
-    while(prev_vert != src && count <= list.size()) {
+    while(prev_vert != src && count < list.size()) {
+        if(prev.find(prev_vert) == prev.end()) {
+            std::cout < "1\n";
+            // for(auto i : list)
+            //     std::cout << prev.at(i->getVertex()->getData()) << " ";
+            return std::vector<VertexType>();
+        }
         prev_vert = prev.at(prev_vert);
         path.push_back(prev_vert); 
         count++;
     }
 
-    // if this is true then we went through all edges and couldn't find a path between the nodes, so return an empty path vector
-    if(path[path.size()-1] != dest)
+    //if this is true then we went through all edges and couldn't find a path between the nodes, so return an empty path vector
+    if(path.back() != src) {
+        for(auto i : list)
+           std::cout << prev.at(i->getVertex()->getData()) << " ";
         return std::vector<VertexType>();
-    // path.push_back(src);
-
-    for(int i = 0; i < path.size()/2; i++) {
-        VertexType temp = path[i];
-        path[i] = path[path.size()-i-1];
-        path[path.size()-i-1] =  temp;
     }
 
-    return path;
+    std::vector<VertexType> temp; temp.reserve(list.size());
+
+    while(path.size()) {
+        temp.push_back(path.back());
+        path.pop_back();
+    }
+
+
+
+    return temp;
 }
 
 // @func   - aStar
