@@ -123,12 +123,13 @@ public:
     // @args   - #1 Data contained in starting vertex for search
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    virtual std::unordered_map<VertexType, VertexType> dijkstras(VertexType) = 0;
+    virtual std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dijkstras(VertexType) = 0;
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex
-    // @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
-    virtual std::vector<VertexType> dijkstrasComputePath(VertexType, VertexType) = 0;
+    // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
+    //           #2 the net weight along that path betweent he two vertices.
+    virtual std::pair<std::vector<VertexType>, double>dijkstrasComputePath(VertexType, VertexType) = 0;
 
 
     // @func   - aStar

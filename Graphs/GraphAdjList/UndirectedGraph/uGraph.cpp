@@ -756,34 +756,34 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
 // @func   - dijkstras
 // @args   - #1 Data contained in starting vertex for search
-// @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
+// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. The second
+//           map takes a vertex and gives the total weight that it takes to get there from the source vertex.
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
 template<class VertexType>
-std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexType source) {
+typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(VertexType source) {
 
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    auto f = [](std::pair<double, VertexType> a, std::pair<double, VertexType> b) -> bool { return  a.first < b.first; };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
+
+    // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
+    // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
+    std::set<std::pair<double, VertexType>, bool (*)(const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) > queue (f);
 
     double max_weight = std::numeric_limits<double>::infinity();
     std::unordered_map<VertexType, double> dist;
     std::unordered_map<VertexType, VertexType> prev;
     std::unordered_map<VertexType, bool> scanned;
 
-    // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
-    // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
-    std::set<std::pair<double, VertexType>, bool (*)(std::pair<double, VertexType> a, std::pair<double, VertexType> b) > queue (f);
 
     dist.reserve(this->getNumVertices());
     prev.reserve(this->getNumVertices());
 
-    for(auto vertex : list) {
+    for(auto vertex : list) // Initialize the distances to infinity for all vertices
         dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-        // prev.insert(std::pair<VertexType, VertexType>(vertex->getVertex()->getData(), vertex->getVertex()->getData()));
-    }
 
     dist.at(source) = 0;
     queue.insert(std::pair<double, VertexType>(0, source));
@@ -813,57 +813,59 @@ std::unordered_map<VertexType, VertexType> uGraph<VertexType>::dijkstras(VertexT
                     prev.at(temp_data) = current_vert->getVertex()->getData();
                 queue.insert(std::make_pair(dist.at(temp_data), temp_data));
             }
-            // for(auto vertex : list)
-            //     std::cout << dist.at(vertex->getVertex()->getData()) << " -> " << prev.at(vertex->getVertex()->getData()) << "\n";
+
         }
 
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
     }
 
-    return prev;
+    // a pair of maps, this returns both the path between the nodes and the net weight along that path
+    typename uGraph<VertexType>::dist_prev_pair ret;
+
+    ret.first = prev;
+    ret.second = dist;
+
+     return ret;
 }
 
 // @func   - dijkstrasComputePath
 // @args   - #1 Source Vertex, #2 Dest Vertex
-// @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
+// @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
+//           #2 the net weight along that path betweent he two vertices.
 template<class VertexType>
-std::vector<VertexType> uGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
+std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
 
     std::unordered_map<VertexType, VertexType> prev;
+    std::unordered_map<VertexType, double> dist;
     std::vector<VertexType> path;
+    std::pair<std::vector<VertexType>, double> ret;
 
     if(src == dest) {
         path.push_back(dest);
-        return path;
+        ret.first = path;
+        ret.second = 0.0;
+        return ret;
     }
 
     if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
         throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
 
-    prev = this->dijkstras(src);
-
+    typename uGraph<VertexType>::dist_prev_pair the_pair = this->dijkstras(src);
+    prev = the_pair.first;
+    dist = the_pair.second;
 
 
     VertexType prev_vert = dest;
     path.push_back(dest);
     int count = 0;
     while(prev_vert != src && count < list.size()) {
+
         if(prev.find(prev_vert) == prev.end()) {
-            std::cout < "1\n";
-            // for(auto i : list)
-            //     std::cout << prev.at(i->getVertex()->getData()) << " ";
-            return std::vector<VertexType>();
+            return std::pair<std::vector<VertexType>, double>();
         }
         prev_vert = prev.at(prev_vert);
         path.push_back(prev_vert); 
         count++;
-    }
-
-    //if this is true then we went through all edges and couldn't find a path between the nodes, so return an empty path vector
-    if(path.back() != src) {
-        for(auto i : list)
-           std::cout << prev.at(i->getVertex()->getData()) << " ";
-        return std::vector<VertexType>();
     }
 
     std::vector<VertexType> temp; temp.reserve(list.size());
@@ -873,9 +875,10 @@ std::vector<VertexType> uGraph<VertexType>::dijkstrasComputePath(VertexType src,
         path.pop_back();
     }
 
+    ret.first = temp;
+    ret.second = dist.at(dest);
 
-
-    return temp;
+    return ret;
 }
 
 // @func   - aStar

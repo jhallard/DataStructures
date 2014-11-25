@@ -64,6 +64,7 @@ class uGraph : public GraphInterface <VertexType>
 ////////         PUBLIC INTERFACE       //////////////
 //////////////////////////////////////////////////////
 public:
+    typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
 
     // @func - Constructor#1
     // @args - None
@@ -203,12 +204,13 @@ public:
     // @args   - #1 Data contained in starting vertex for search
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    std::unordered_map<VertexType, VertexType> dijkstras(VertexType);
+    dist_prev_pair dijkstras(VertexType);
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex
-    // @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
-    std::vector<VertexType> dijkstrasComputePath(VertexType, VertexType);
+    // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
+    //           #2 the net weight along that path betweent he two vertices.
+    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(VertexType, VertexType);
 
 
     // @func   - aStar
@@ -230,7 +232,7 @@ public:
 ////////           PRIVATE DATA      /////////////////
 //////////////////////////////////////////////////////
 private:
-
+    
     // @member - numVertices
     // @info   - Number of vertices currently in the graph
     int numVertices;

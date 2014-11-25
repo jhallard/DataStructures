@@ -614,21 +614,23 @@ TEST(Dijkstras, simple_test) {
     for(int k = 1; k < numVertices; k++) {
     	
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-    	std::vector<int> temp = graph.dijkstrasComputePath(r, y);
+    	std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
+    	auto temp = the_pair.first;
+    	auto dis = the_pair.second;
 
-    	if(!temp.size()) {
-    		std::cout << "Vertices " << r << ", " << y << " Are Not Connected\n";
-    		graph.printGraph();
-    		k--;
-    	}
-    	else {
-    		for(auto i : temp)
-    			std::cout << i << ", ";
-    		std::cout << "\n";
-    	}
-    	// ASSERT_EQ(true, temp.size() > 0);
-    	// ASSERT_EQ(r, temp[0]);
-    	// ASSERT_EQ(k, temp[temp.size()-1]);
+    	// if(!temp.size()) {
+    	// 	std::cout << "Vertices " << r << ", " << y << " Are Not Connected\n";
+    	// 	graph.printGraph();
+    	// 	k--;
+    	// }
+    	// else {
+    	// 	for(auto i : temp)
+    	// 		std::cout << i << ", ";
+    	// 	std::cout << " : " << dis << "\n";
+    	// }
+    	ASSERT_EQ(true, temp.size() > 0);
+    	ASSERT_EQ(r, temp[0]);
+    	ASSERT_EQ(y, temp[temp.size()-1]);
     }
 
 }
