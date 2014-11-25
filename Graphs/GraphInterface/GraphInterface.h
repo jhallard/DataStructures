@@ -12,6 +12,7 @@
 #ifndef GraphInterface_h
 #define GraphInterface_h
 
+#include <unordered_map>
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
 
@@ -119,10 +120,15 @@ public:
     virtual GraphInterface<VertexType> * minimumSpanningTree() = 0;
 
     // @func   - dijkstras
-    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
+    // @args   - #1 Data contained in starting vertex for search
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    virtual std::vector<VertexType> dijkstras(VertexType, std::vector<VertexType>) = 0;
+    virtual std::unordered_map<VertexType, VertexType> dijkstras(VertexType) = 0;
+
+    // @func   - dijkstrasComputePath
+    // @args   - #1 Source Vertex, #2 Dest Vertex
+    // @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
+    virtual std::vector<VertexType> dijkstrasComputePath(VertexType, VertexType) = 0;
 
 
     // @func   - aStar

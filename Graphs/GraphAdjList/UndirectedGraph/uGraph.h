@@ -45,6 +45,7 @@
 #include <stdexcept>
 #include <deque>
 #include <unordered_map>
+#include <set>
 #include <iostream>         // needed for printGraph function..
 #include <limits>
 
@@ -199,10 +200,16 @@ public:
     uGraph<VertexType> * minimumSpanningTree();
 
     // @func   - dijkstras
-    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
+    // @args   - #1 Data contained in starting vertex for search
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    std::vector<VertexType> dijkstras(VertexType, std::vector<VertexType>);
+    std::unordered_map<VertexType, VertexType> dijkstras(VertexType);
+
+    // @func   - dijkstrasComputePath
+    // @args   - #1 Source Vertex, #2 Dest Vertex
+    // @return - Vector of vertices that lead from the source vertex to the destination vertex along the shortest path
+    std::vector<VertexType> dijkstrasComputePath(VertexType, VertexType);
+
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node

@@ -573,6 +573,62 @@ TEST(MinCutTests, non_connected_error) {
 
 }
 
+TEST(Dijkstras, simple_test) {
+    uGraph<int> graph;
+
+    srand(time(0));
+    int numVertices = 1000;
+    int minEdges = 5;
+    int maxEdges = 17;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= numVertices; i++)
+        input_vec.push_back(i);
+
+    graph.insertVertices(input_vec);
+
+
+    while(!graph.isConnected()) {
+	    for(int i = 1; i < numVertices; i++) {
+
+	        int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
+	        double weight = (double)(rand() % 477 + 20)/100;
+	        // std::cout << weight << std::endl;
+	        for(int j = 0; j < loop; j++) {
+
+	            int r = rand() % numVertices + 1; r++;
+	            if(r == i) {
+	                j--;
+	                continue;
+	            }
+
+	            if(!graph.insertEdge(i, r, weight))
+	                j--;
+	        }
+	    }
+	}	
+
+    for(int k = 1; k < 500; k++) {
+    	
+    	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
+    	std::vector<int> temp = graph.dijkstrasComputePath(r, k);
+
+    	if(!temp.size())
+    		std::cout << "Vertices " << r << ", " << k << " Are Not Connected";
+    	ASSERT_EQ(true, temp.size() > 0);
+    	ASSERT_EQ(r, temp[0]);
+    	ASSERT_EQ(k, temp[temp.size()-1]);
+
+	    // for(auto j : temp) {
+	    // 	std::cout << j << " -> ";
+	    // }
+	    // std::cout << std::endl;
+	    // getchar();
+    }
+
+    // ASSERT_EQ(true, true);
+}
 /////////////////////////////////////////////////
 //////////////// 	SPEED TESTS /////////////////
 /////////////////////////////////////////////////
