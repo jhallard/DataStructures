@@ -5,17 +5,17 @@
 *   @Repo     - https://github.com/jhallad/DataStructures/Graph
 *   @Purpose  - This is my definition of the uGraph (undirected Graph) class. This class represents a templated, 
 *               undirected graph, upon which a user can perform operations like searches, path finding, minimium-cut, etc. 
-*               This class was implemented as part of my C++ Data Structures personal project. All code is open license and free to use, just leave some
-*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*               This class was implemented as part of my C++ Data Structures personal project. All code is open license and free to use,
+*                just leave some sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 *
 *   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consists of a vertex and a list 
 *               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
 *               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
 *               v -> a* -> b* -> c* -> d* -> e* -> null
-*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, you just need to
-*               traverse the list of edges on the AdjList that contains vertex v.
-*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph data structure
-*               will look more like this :
+*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, 
+*               you just need to traverse the list of edges on the AdjList that contains vertex v.
+*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph
+*                data structure will look more like this :
 *               -----------------------------------
 *    vertex 1 : |   a  -> c* -> d* -> null        |
 *    vertex 2 : |   b  -> v* -> d* -> e* -> null  |
@@ -26,10 +26,11 @@
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
-*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies exactly what functions
-*               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
-*               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
-*               me to make many different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
+*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies 
+*               exactly what functions both the undirected and directed graph classes that I make must publically implement. This is done 
+*               to help ensure that the all user interaction with the graph in well planned out, consistent, and doesn't derive itself in any way 
+*               from the implementation details of the graph. This should allow me to make many different representations of graphs 
+*               (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
 *
 *               Time Complexity :
 *               Below is a break down of the time and space complexity for the various operations performed by this graph.
@@ -407,7 +408,7 @@ bool uGraph<VertexType>::isConnected() {
 
     this->connectivityCount = 0;
 
-    auto f = [](VertexType&) -> void { int x = 0; };
+    auto f = [](VertexType&) -> void { int x = 0; }; // dummy function that needs to be passed in to BFS
 
     this->breadthFirst(list[0]->getVertex()->getData(), f);
 
@@ -442,9 +443,9 @@ bool uGraph<VertexType>::getIsMultiGraph() {
 // @func   - depthFirst
 // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
-//           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
-//           track of the seen and unseen vertices.
+// @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data 
+//           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use a 
+//           std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
 bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)) {
 
@@ -504,9 +505,9 @@ bool uGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
 // @func   - breadthFirst
 // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
-//           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
-//           track of the seen and unseen vertices.
+// @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data
+//           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an
+//           std::unordered_map to keeptrack of the seen and unseen vertices.
 template<class VertexType>
 bool uGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)) {
 
@@ -692,9 +693,9 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 // @func   - minimumSpanningTree
 // @args   - none
 // @return - A graph that represents the minimum spanning tree of the current graph object. 
-// @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
-//           of the veritces in this graph. Will throw an exception is the graph is not connected. Prims Algorithm is used to find the minimum spanning
-//           tree, and the source vertex is the first vertex that was stored into the graph (this->list[0])
+// @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum 
+//           spanning tree of the veritces in this graph. Will throw an exception is the graph is not connected. Prims alg. 
+//           is used to find the min. spanning tree, and the source vertex is the first vertex that was stored into the graph.
 template<class VertexType>
 uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
@@ -732,6 +733,8 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
             }
         }
 
+
+
         // Take the vertex with the smallest weight and mark it as connected to our min tree
         mst_set.insert(std::pair<VertexType, bool>(list[index]->getVertex()->getData(), true));
 
@@ -756,8 +759,8 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
 // @func   - dijkstras
 // @args   - #1 Data contained in starting vertex for search
-// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. The second
-//           map takes a vertex and gives the total weight that it takes to get there from the source vertex.
+// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+//           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
 template<class VertexType>
 typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(VertexType source) {
@@ -780,9 +783,9 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
-
     dist.reserve(this->getNumVertices());
     prev.reserve(this->getNumVertices());
+
 
     for(auto vertex : list) { // Initialize the distances to infinity for all vertices
         if(vertex->getVertex()->getData() != source)
@@ -835,7 +838,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
 //           #2 the net weight along that path betweent he two vertices.
 // @info   - This function exists to allow the user to retrieve a vector containing the edges to travel along to complete the shortest path
 //           between two given vertices, Dijkstras algorithm returns the shortest path to *every* other vertex and the output must be decoded 
-//           to find the path between the source and any other specific vertex. This function serves as an interface to Dijkstras algorithm for the user.
+//           to find the path between the source and any other specific vertex.
 template<class VertexType>
 std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
 
@@ -886,7 +889,7 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
 }
 
 // @func   - aStar
-// @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
+// @args   - #1 Data contained in starting vertex for search,  #2 Pointer to a hueristic function on a given node
 // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
 // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
 template<class VertexType>
