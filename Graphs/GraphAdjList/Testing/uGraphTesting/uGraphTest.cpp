@@ -577,9 +577,9 @@ TEST(Dijkstras, simple_test) {
     uGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 400;
-    int minEdges = 13;
-    int maxEdges = 15;
+    int numVertices = 4000;
+    int minEdges = 23;
+    int maxEdges = 125;
 
     std::vector<int> input_vec;
 
@@ -611,23 +611,15 @@ TEST(Dijkstras, simple_test) {
 	    }
 	}	
 
-    for(int k = 1; k < numVertices; k++) {
+    for(int k = 1; k < numVertices/10; k++) {
     	
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
     	std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
     	auto temp = the_pair.first;
     	auto dis = the_pair.second;
 
-    	// if(!temp.size()) {
-    	// 	std::cout << "Vertices " << r << ", " << y << " Are Not Connected\n";
-    	// 	graph.printGraph();
-    	// 	k--;
-    	// }
-    	// else {
-    	// 	for(auto i : temp)
-    	// 		std::cout << i << ", ";
-    	// 	std::cout << " : " << dis << "\n";
-    	// }
+    	// std::cout << "# Edges : " << graph.getNumEdges() << "\n";
+
     	ASSERT_EQ(true, temp.size() > 0);
     	ASSERT_EQ(r, temp[0]);
     	ASSERT_EQ(y, temp[temp.size()-1]);

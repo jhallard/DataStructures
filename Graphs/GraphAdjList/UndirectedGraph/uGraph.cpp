@@ -774,19 +774,23 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
     std::set<std::pair<double, VertexType>, bool (*)(const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) > queue (f);
 
     double max_weight = std::numeric_limits<double>::infinity();
-    std::unordered_map<VertexType, double> dist;
-    std::unordered_map<VertexType, VertexType> prev;
-    std::unordered_map<VertexType, bool> scanned;
+
+    typename uGraph<VertexType>::dist_prev_pair ret; // a pair of maps, this returns both the path between the nodes and the net weight along each path
+    std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
+    std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
+    std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
 
     dist.reserve(this->getNumVertices());
     prev.reserve(this->getNumVertices());
 
-    for(auto vertex : list) // Initialize the distances to infinity for all vertices
-        dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-
-    dist.at(source) = 0;
-    queue.insert(std::pair<double, VertexType>(0, source));
+    for(auto vertex : list) { // Initialize the distances to infinity for all vertices
+        if(vertex->getVertex()->getData() != source)
+            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
+        else
+            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), 0));
+        queue.insert(std::pair<double, VertexType>(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
+    }
 
     while(!queue.empty()) {
 
@@ -819,9 +823,6 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
     }
 
-    // a pair of maps, this returns both the path between the nodes and the net weight along that path
-    typename uGraph<VertexType>::dist_prev_pair ret;
-
     ret.first = prev;
     ret.second = dist;
 
@@ -832,6 +833,9 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
 // @args   - #1 Source Vertex, #2 Dest Vertex
 // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
 //           #2 the net weight along that path betweent he two vertices.
+// @info   - This function exists to allow the user to retrieve a vector containing the edges to travel along to complete the shortest path
+//           between two given vertices, Dijkstras algorithm returns the shortest path to *every* other vertex and the output must be decoded 
+//           to find the path between the source and any other specific vertex. This function serves as an interface to Dijkstras algorithm for the user.
 template<class VertexType>
 std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
 
@@ -840,15 +844,15 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
     std::vector<VertexType> path;
     std::pair<std::vector<VertexType>, double> ret;
 
+    if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
+        throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
+
     if(src == dest) {
         path.push_back(dest);
         ret.first = path;
         ret.second = 0.0;
         return ret;
     }
-
-    if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
-        throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
 
     typename uGraph<VertexType>::dist_prev_pair the_pair = this->dijkstras(src);
     prev = the_pair.first;
