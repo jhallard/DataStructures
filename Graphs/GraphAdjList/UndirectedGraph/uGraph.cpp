@@ -579,6 +579,11 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
     std::vector<std::vector<VertexType> > ret;
     std::vector< AdjList<VertexType> * > finalList;
 
+    // the following are used to choose an edge to contract randomly
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    
+
     for(int i = 0; i < 3; i++) {
 
         std::unordered_map<VertexType, std::vector<VertexType> > collapsed;
@@ -601,11 +606,11 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
             }
         }
 
-
+        // While we haven't reduced the graph to 2 vertices
         while(newList.size() > 2) {
 
-            // std::cout << "beg";
-            int randVertex = rand()*rand()*rand()%newList.size();
+            std::uniform_int_distribution<> dist_Vert(0, newList.size()-1);
+            int randVertex = dist_Vert(gen);
 
             auto adj1 = newList[randVertex];
 
@@ -614,7 +619,8 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
             if(!edges.size()) 
                 continue;
 
-            int randEdge = rand()*rand()*rand()%edges.size();
+            std::uniform_int_distribution<> dist_Edges(0, edges.size()-1);
+            int randEdge = dist_Edges(gen);
 
             AdjList<VertexType> * adj2 = nullptr;
             
@@ -779,6 +785,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
     double max_weight = std::numeric_limits<double>::infinity();
 
     typename uGraph<VertexType>::dist_prev_pair ret; // a pair of maps, this returns both the path between the nodes and the net weight along each path
+                                                     // to the user-accessible interface function 
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
@@ -801,6 +808,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
         double current_dist = queue.begin()->first;
         AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
         queue.erase(queue.begin());
+        scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
 
         auto edges = current_vert->getAllEdges();
 
@@ -811,7 +819,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
 
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(scanned.find(temp_data) == scanned.end() && temp_weight < dist.at(temp_data)) {
+            if(scanned.find(temp_data) == scanned.end() && temp_weight <= dist.at(temp_data)) {
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
                 if(prev.find(temp_data) == prev.end())
@@ -822,8 +830,6 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(Vertex
             }
 
         }
-
-        scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
     }
 
     ret.first = prev;

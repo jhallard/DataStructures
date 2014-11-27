@@ -24,7 +24,7 @@ Graphs are one of the most powerful and all-encompasing data structures known to
 #### Dictionaries
 * HashDictionary - `Dictionaries/HashDictionary/` : This data structure represents a dictionary that uses hashing to insert and locate items. To resolve collisions, we use chaining with linked lists. I first implemented this for a data structures class around the spring of 2014, but I have recently begun to add changes and make improvements.
 
-###### Directory Structure :
+#### Directory Structure :
 * `/Graphs/` 
     *  `GraphAdjList/`
         * `UndirectedGraph/` - A templated, undirected graph that uses a vector of adjacency lists to represent the graph internally.

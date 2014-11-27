@@ -48,6 +48,7 @@
 #include <set>
 #include <iostream>         // needed for printGraph function..
 #include <limits>
+#include <random>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -222,8 +223,8 @@ public:
 
 
     // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-    // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.    //
-    // #2 - Override equals operator, check to see if two graphs are equivilent                                            //
+    // #1 - Override equals comparison operator, check to see if two graphs are equivilent                                 //
+    // #2 - Override equals assignment operator, sets one graph equal to the other                                         //
     // ------------------------------------------------------ #TODO ------------------------------------------------------ //
 
 

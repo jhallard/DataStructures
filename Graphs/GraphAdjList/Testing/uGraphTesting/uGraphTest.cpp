@@ -611,6 +611,7 @@ TEST(Dijkstras, simple_test) {
 	    }
 	}	
 
+    bool testval = true;
     for(int k = 1; k < numVertices/10; k++) {
     	
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
@@ -619,11 +620,19 @@ TEST(Dijkstras, simple_test) {
     	auto dis = the_pair.second;
 
     	// std::cout << "# Edges : " << graph.getNumEdges() << "\n";
-
-    	ASSERT_EQ(true, temp.size() > 0);
-    	ASSERT_EQ(r, temp[0]);
-    	ASSERT_EQ(y, temp[temp.size()-1]);
+        if(!temp.size()) {
+            std::cout << "Path Not Found : " << r << " -> " << y << "\n";
+            std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+            testval = false;
+        }
+        else {
+        	ASSERT_EQ(true, temp.size() > 0);
+        	ASSERT_EQ(r, temp[0]);
+        	ASSERT_EQ(y, temp[temp.size()-1]);
+        }
     }
+
+    ASSERT_EQ(true, testval);
 
 }
 
