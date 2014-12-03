@@ -36,6 +36,11 @@
 *               #TODO - List Big-O's for all of the important functions in this class.
 **/
 
+//****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
+//****          #1 - Override equals comparison operator, check to see if two graphs are equivilent                                      ****//
+//****          #2 - Override equals assignment operator, sets one graph equal to the other                                              ****//
+//****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
+
 #ifndef U_GRAPH_A_LIST_H
 #define U_GRAPH_A_LIST_H
 
@@ -65,7 +70,6 @@ class uGraph : public GraphInterface <VertexType>
 ////////         PUBLIC INTERFACE       //////////////
 //////////////////////////////////////////////////////
 public:
-    typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
 
     // @func - Constructor#1
     // @args - None
@@ -203,9 +207,11 @@ public:
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search
-    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    dist_prev_pair dijkstras(VertexType);
+    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+    //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
+    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
+    //           the source vertex is not contained in the map.
+    typename uGraph<VertexType>::dist_prev_pair dijkstras(VertexType);
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex
@@ -222,17 +228,15 @@ public:
 
 
 
-    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-    // #1 - Override equals comparison operator, check to see if two graphs are equivilent                                 //
-    // #2 - Override equals assignment operator, sets one graph equal to the other                                         //
-    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-
-
-
 //////////////////////////////////////////////////////
 ////////           PRIVATE DATA      /////////////////
 //////////////////////////////////////////////////////
 private:
+    // @typedef - (too long to retype)
+    // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained inside these two maps
+    //            is both the shortest path from the source vertex to any other node in the graph, and the net weight along that path. These two maps are 
+    //            decoded inside the helper function to return a single shortest path between two vertices, so the user doesn't have to decode it themselves.
+    typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
     
     // @member - numVertices
     // @info   - Number of vertices currently in the graph

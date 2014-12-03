@@ -110,8 +110,12 @@ private:
     //           arise in the graph (they are created and destroyed inside a function).
     bool removeSelfLoops();
 
+    // @member  - vertex
+    // @info    - The vertex object for this adj list.
     Vertex<VertexType> vertex;
 
+    // @member  - pEdge
+    // @info    - Head node pointer for the linked list of edges that eminate from the vertex member
     Edge<VertexType> * pEdge;
 
     unsigned int numEdges;

@@ -713,7 +713,7 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
     std::unordered_map<VertexType, std::pair<VertexType, double> > set; // maps a vertex to a weight and the vertex that connects to it
     std::unordered_map<VertexType, bool> mst_set;
-    int imax = std::numeric_limits<int>::max();
+    double imax = std::numeric_limits<double>::infinity();
 
     for(int i = 0; i < list.size(); i++) {
         VertexType tempData = list[i]->getVertex()->getData();
@@ -724,7 +724,7 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
     set.at(list[0]->getVertex()->getData()).second = 0;
 
     while(mst_set.size() != list.size()) {
-        int temp = imax; // lowest weight found
+        double temp = imax; // lowest weight found
         int index = 0;   // index of the vertex with the lowest wieght found
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
@@ -767,7 +767,8 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 // @args   - #1 Data contained in starting vertex for search
 // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
 //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
-// @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+// @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
+//           the source vertex is not contained in the map.
 template<class VertexType>
 typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(VertexType source) {
 
