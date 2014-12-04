@@ -112,6 +112,19 @@ Main/main/fast:
 .PHONY : Main/main/fast
 
 #=============================================================================
+# Target rules for targets named Testing/dGraphTesting/dGraphTest
+
+# Build rule for target.
+Testing/dGraphTesting/dGraphTest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Testing/dGraphTesting/dGraphTest
+.PHONY : Testing/dGraphTesting/dGraphTest
+
+# fast build rule for target.
+Testing/dGraphTesting/dGraphTest/fast:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build
+.PHONY : Testing/dGraphTesting/dGraphTest/fast
+
+#=============================================================================
 # Target rules for targets named Testing/uGraphTesting/uGraphTest
 
 # Build rule for target.
@@ -148,6 +161,30 @@ Main/main.cpp.s:
 	$(MAKE) -f CMakeFiles/Main/main.dir/build.make CMakeFiles/Main/main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
 
+Testing/dGraphTesting/dGraphTest.o: Testing/dGraphTesting/dGraphTest.cpp.o
+.PHONY : Testing/dGraphTesting/dGraphTest.o
+
+# target to build an object file
+Testing/dGraphTesting/dGraphTest.cpp.o:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.o
+.PHONY : Testing/dGraphTesting/dGraphTest.cpp.o
+
+Testing/dGraphTesting/dGraphTest.i: Testing/dGraphTesting/dGraphTest.cpp.i
+.PHONY : Testing/dGraphTesting/dGraphTest.i
+
+# target to preprocess a source file
+Testing/dGraphTesting/dGraphTest.cpp.i:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.i
+.PHONY : Testing/dGraphTesting/dGraphTest.cpp.i
+
+Testing/dGraphTesting/dGraphTest.s: Testing/dGraphTesting/dGraphTest.cpp.s
+.PHONY : Testing/dGraphTesting/dGraphTest.s
+
+# target to generate assembly for a file
+Testing/dGraphTesting/dGraphTest.cpp.s:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.s
+.PHONY : Testing/dGraphTesting/dGraphTest.cpp.s
+
 Testing/uGraphTesting/uGraphTest.o: Testing/uGraphTesting/uGraphTest.cpp.o
 .PHONY : Testing/uGraphTesting/uGraphTest.o
 
@@ -179,12 +216,16 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... Main/main"
+	@echo "... Testing/dGraphTesting/dGraphTest"
 	@echo "... Testing/uGraphTesting/uGraphTest"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
+	@echo "... Testing/dGraphTesting/dGraphTest.o"
+	@echo "... Testing/dGraphTesting/dGraphTest.i"
+	@echo "... Testing/dGraphTesting/dGraphTest.s"
 	@echo "... Testing/uGraphTesting/uGraphTest.o"
 	@echo "... Testing/uGraphTesting/uGraphTest.i"
 	@echo "... Testing/uGraphTesting/uGraphTest.s"

@@ -2,7 +2,7 @@
 *   @Author   - John H Allard Jr.
 *   @File     - uGraph.h
 *   @Date     - 11/12/2014
-*   @Repo     - https://github.com/jhallad/DataStructures/Graphs/UndirectedGraph
+*   @Repo     - https://github.com/jhallard/DataStructures/Graphs
 *   @Purpose  - This is my declaration of the uGraph (undirected Graph) class defined in uGraph.h. This class represents a templated, 
 *               undirected graph, upon which a user can perform operation like searches, path finding, and other things. 
 *               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use, just leave some

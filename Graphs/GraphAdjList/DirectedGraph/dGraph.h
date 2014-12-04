@@ -2,7 +2,7 @@
 *   @Author   - John H Allard Jr.
 *   @File     - dGraph.h
 *   @Date     - 11/12/2014
-*   @Repo     - https://github.com/jhallad/DataStructures/Graphs/DirectedGraph
+*   @Repo     - https://github.com/jhallard/DataStructures/Graphs
 *   @Purpose  - This is my declaration of the dGraph (directed Graph) class. This class represents a templated, 
 *               directed graph, upon which a user can perform operation like searches, path finding, and other things. 
 *               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use, just leave some
@@ -45,7 +45,10 @@
 #include <stdexcept>
 #include <deque>
 #include <unordered_map>
+#include <set>
 #include <iostream>         // needed for printGraph function..
+#include <limits>
+#include <random>
 
 #include "../../GraphInterface/GraphInterface.h"
 #include "../AdjacencyList/AdjList.h"
@@ -73,6 +76,10 @@ public:
     // @error - Can throw IO error if invalid filename or file structure to build graph 
     dGraph(std::string fn);
 
+    // @func  - Copy Constructor
+    // @args  - dGraph object that you wish to make this a copy of
+    dGraph(const dGraph<VertexType> &);
+
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
     ~dGraph();
@@ -86,6 +93,16 @@ public:
     // @args   - none
     // @return - Boolean indicating success 
     bool deleteVertex(VertexType);
+
+    // @func   - getAllVertices
+    // @args   - none
+    // @return - Vector of the data contained inside all vertices. 
+    std::vector<VertexType> getAllVertices();
+
+    // @func   - updateVertex
+    // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex
+    // @return - Boolean indicating success, returns false if it can't find the vertex to update.
+    bool updateVertex(VertexType, VertexType);
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
@@ -123,7 +140,7 @@ public:
     bool containsVertex(VertexType);
 
     // @func   - getEdgeWeight
-    // @args   - #1 data associated with "from" vertex, data associated with "to" vertex
+    // @args   - #1 data associated with vetex #1, data associated with vertex #2
     // @return - returns the weight of the edge, throws error if edge not found
     double getEdgeWeight(VertexType, VertexType);
 
@@ -144,6 +161,16 @@ public:
     // @info   - This function uses BFS to search to see if any given vertex can be reached from any other given vertex
     bool isConnected();
 
+    // @func   - setIsMultiGraph
+    // @args   - boolean to be stored in isMultiGraph
+    // @return - Bool indicating success
+    bool setIsMultiGraph(bool);
+
+    // @func   - getIsMultiGraph
+    // @args   - None
+    // @return - Bool value of isMultiGraph
+    bool getIsMultiGraph();
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
@@ -160,24 +187,33 @@ public:
     //           track of the seen and unseen vertices.
     bool breadthFirst(VertexType, void visit(VertexType&));
 
-    // @func   - minimumCut
+    // @func   - minimuminCut
     // @args   - none
     // @return - 2 column vector of vertices, each column representing one half of the cut. 
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     std::vector<std::vector<VertexType> > minimumCut();
 
-    // @func   - minimumSpanningTree
+    // @func   - minimuminSpanningTree
     // @args   - none
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function will return another dGraph object that has the edges reduces to those that exist in the minimum spanning tree
-    //           of the veritces in this graph.
+    //           of the veritces in this graph. Will throw an exception is the graph is not connected. 
     dGraph<VertexType> * minimumSpanningTree();
 
     // @func   - dijkstras
-    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach
-    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    std::vector<VertexType> dijkstras(VertexType, std::vector<VertexType>);
+    // @args   - #1 Data contained in starting vertex for search
+    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+    //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
+    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
+    //           the source vertex is not contained in the map.
+    typename dGraph<VertexType>::dist_prev_pair dijkstras(VertexType);
+
+    // @func   - dijkstrasComputePath
+    // @args   - #1 Source Vertex, #2 Dest Vertex
+    // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
+    //           #2 the net weight along that path betweent he two vertices.
+    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(VertexType, VertexType);
+
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
@@ -187,18 +223,16 @@ public:
 
 
 
-    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-    // #1 - Add Copy Constructor, this class uses pointers and dynamic memory so we will need our own copy constructor.    //
-    // #2 - Override equals operator, check to see if two graphs are equivilent                                            //
-    // ------------------------------------------------------ #TODO ------------------------------------------------------ //
-
-
-
 //////////////////////////////////////////////////////
 ////////           PRIVATE DATA      /////////////////
 //////////////////////////////////////////////////////
 private:
-
+    // @typedef - (too long to retype)
+    // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained inside these two maps
+    //            is both the shortest path from the source vertex to any other node in the graph, and the net weight along that path. These two maps are 
+    //            decoded inside the helper function to return a single shortest path between two vertices, so the user doesn't have to decode it themselves.
+    typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
+    
     // @member - numVertices
     // @info   - Number of vertices currently in the graph
     int numVertices;
@@ -215,10 +249,15 @@ private:
     // @member - lookupMap
     // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us
     //           to have an (amortized) O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly through
-    //           our vector or AdjLists. 
+    //           our vector of AdjLists. 
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
+
+    // @member - isMultiGraph
+    // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
+    //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
+    bool isMultiGraph;
 
     // @member - connectivityCount
     // @info   - Used by the isConnected function to count reachable vertices
@@ -236,12 +275,6 @@ private:
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
     AdjList<VertexType> *  findVertex(VertexType);
 
-    // @func   - isConnectedHelper
-    // @args   - #1 Boolean, if true then the count of member is reset, else the count is incremented
-    // @return - integer representing the current count of objects.
-    // @info   - This function adds one to a counter every time it is called, it is used by the isConnected function to determine
-    //           if the number of vertices reached in a BFS is the same as the number of vertices in the graph.
-    void isConnectedHelper(VertexType&);
 
 };
 
