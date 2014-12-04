@@ -13,8 +13,8 @@ int main()
     srand(time(0));
     rand();
 
-    // intTest());
-    intTest2();
+    intTest1();
+    // intTest2();
 
     std::cout << "\n\n\n";
 
