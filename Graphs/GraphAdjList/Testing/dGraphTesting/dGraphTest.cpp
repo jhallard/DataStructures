@@ -446,7 +446,7 @@ TEST(MinCutTests, simple_test) {
     dGraph<int> * newGraph = graph.minimumSpanningTree();
 
     ASSERT_EQ(6, newGraph->getNumVertices());
-    ASSERT_EQ(15, newGraph->getNumEdges());
+    ASSERT_EQ(5, newGraph->getNumEdges());
     // ASSERT_EQ(true, newGraph->isConnected());
     // ASSERT_EQ(5, newGraph->getAdjVertices(1).size());
     // ASSERT_EQ(1, newGraph->getAdjVertices(2).size());

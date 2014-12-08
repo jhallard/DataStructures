@@ -20,7 +20,7 @@ class Edge
 public:
     // @func - Constructor
     // @args - #1 Vertex that the edge points to, #2 the weighting of the edge
-    Edge(Vertex<VertexType> *, double = 1.0);
+    Edge(Vertex<VertexType> *, double =  std::numeric_limits<double>::infinity());
 
     // @func   - getVertex
     // @args   - None

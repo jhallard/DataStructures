@@ -122,7 +122,7 @@ public:
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
-    bool insertEdge(VertexType, VertexType, double = 1.0);
+    bool insertEdge(VertexType, VertexType, double =  std::numeric_limits<double>::infinity());
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, the "To" Node. 

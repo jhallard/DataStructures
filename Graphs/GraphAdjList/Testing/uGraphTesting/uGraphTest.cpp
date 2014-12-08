@@ -518,7 +518,8 @@ TEST(MinCutTests, larger_test) {
     int count = 0;
     for(int i = 1; i <= numVertices/2; i++) {
     	for(int j = i+1; j <= numVertices; j++) {
-    		graph.insertEdge(i, j);
+    		if(!graph.insertEdge(i, j))
+                std::cout << "Fail!\n;";
     		count++;
     	}
     }

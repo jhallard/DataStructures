@@ -752,7 +752,7 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
 
         // Update the weighting of the vertices that are neighbors of the last vertex
         for(auto edge : edges) {
-            if(edge->getWeight() < set.at(edge->getVertex()->getData()).second) 
+            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second) 
                 set.at(edge->getVertex()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
             
         }
