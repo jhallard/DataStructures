@@ -206,6 +206,10 @@ bool dGraph<VertexType>::deleteVertex(VertexType data) {
 template<class VertexType>
 bool dGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
 
+    // This assumes we don't want edges between the same vertex
+    if(v1 == v2)
+        return false;
+
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
