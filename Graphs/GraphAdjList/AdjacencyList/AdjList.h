@@ -65,12 +65,15 @@ public:
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
     bool deleteEdge(const VertexType &);
 
-
     // @func - deleteEdge
     // @args - #1 Pointer to the vertex to be deleted.
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
     bool deleteEdge(Vertex<VertexType> *);
 
+    // @func - deleteAllEdges
+    // @args - None
+    // @info - deletes all edges ajascent to the this vertex
+    bool deleteAllEdges();
 
     // @func - getEdge
     // @args - #1 Pointer to the edge object

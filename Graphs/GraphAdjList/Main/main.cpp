@@ -260,6 +260,10 @@ void dGraphTest() {
     graph.insertVertex(6);
     graph.insertVertex(7);
     graph.insertVertex(8);
+    graph.insertVertex(9);
+    graph.insertVertex(10);
+    graph.insertVertex(11);
+    graph.insertVertex(12);
 
     graph.insertEdge(1, 2, 4.05);
     graph.insertEdge(1, 3, 4.10);
@@ -281,22 +285,27 @@ void dGraphTest() {
 
     graph.printGraph();
 
-    // graph.printGraph();
-    void (*fptr)(int&);
-    fptr = visit1;
+    if(!graph.makeGraphDense())
+        std::cout << "Dense function failed\n";
 
-    graph.breadthFirst(4, fptr);
+    graph.printGraph();
 
-    std::cout << "\n\n\n";
+    // // graph.printGraph();
+    // void (*fptr)(int&);
+    // fptr = visit1;
 
-    graph.depthFirst(4, fptr);
+    // graph.breadthFirst(4, fptr);
 
-    std::cout << "\n\n\n";
+    // std::cout << "\n\n\n";
 
-    std::pair<std::vector<int>, double> ret = graph.dijkstrasComputePath(7, 8);
+    // graph.depthFirst(4, fptr);
 
-    for(auto i : ret.first)
-        std::cout << i << ", ";
+    // std::cout << "\n\n\n";
+
+    // std::pair<std::vector<int>, double> ret = graph.dijkstrasComputePath(7, 8);
+
+    // for(auto i : ret.first)
+    //     std::cout << i << ", ";
 
 
 }

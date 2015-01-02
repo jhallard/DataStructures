@@ -12,6 +12,7 @@
 #define GraphInterface_h
 
 #include <unordered_map>
+#include <limits>
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
 
@@ -49,7 +50,7 @@ public:
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 the weight for this new edge 
     // @return - Boolean indicating succes 
-    virtual bool insertEdge(const VertexType &, const VertexType &, double = 1.0) = 0;
+    virtual bool insertEdge(const VertexType &, const VertexType &, double = std::numeric_limits<double>::infinity()) = 0;
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, #2 the "To" Node.
@@ -84,9 +85,9 @@ public:
     virtual double getEdgeWeight(const VertexType &, const VertexType &) = 0;
 
     // @func   - getEdgeWeight
-    // @args   - #1 data associated with vetex #1, data associated with vertex #2
+    // @args   - #1 data associated with vetex #1, data associated with vertex #2, #3 weight to set
     // @return - returns the weight of the edge, throws error if edge not found
-    virtual bool setEdgeWeight(const VertexType &, const VertexType &) = 0;
+    virtual bool setEdgeWeight(const VertexType &, const VertexType &, double) = 0;
 
     // @func   - getAdjVertices
     // @args   - #1 Data contained in vertex that you wish to recieve a list of adjacent vertices of.
@@ -98,7 +99,7 @@ public:
     // @return - Bool indicating success
     // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
     //           edge weighting specified by the argument to the function.
-    // virtual bool makeGraphDense(double weight = 1.0) = 0;
+    virtual bool makeGraphDense(void setWeight(VertexType&, VertexType&) = nullptr) = 0;
 
     // @func   - isConnected
     // @args   - None
@@ -106,9 +107,16 @@ public:
     // @info   - This function searches through the given graph to see if any given vertex can be reached from any other given vertex
     virtual bool isConnected() = 0;
 
+    // @func   - isBipartite
+    // @args   - None
+    // @return - Bool indicating whether or not the graph is bipartite
+    // @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
+    //           hitting the same value twice in a row. 
+    virtual bool isBipartite() = 0;
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
-    // @return - Bool indicatingetN if the function could find the starting vertex based on arg#1
+    // @return - Bool indicating if the function could find the starting vertex based on arg#1
     // @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
     //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
     //           track of the seen and unseen vertices.

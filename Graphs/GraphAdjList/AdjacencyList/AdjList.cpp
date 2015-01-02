@@ -201,6 +201,38 @@ bool AdjList<VertexType>::deleteEdge(Vertex<VertexType> * vert){
 
 }
 
+// @func - deleteAllEdges
+// @args - None
+// @info - deletes all edges ajascent to the this vertex
+template <class VertexType>
+bool AdjList<VertexType>::deleteAllEdges() {
+
+    Edge<VertexType> * temp1;
+    Edge<VertexType> * temp2;
+    temp1 = pEdge;
+    temp2 = pEdge;
+
+    // Case #1 - No edges in the list, return
+    if(temp1 == nullptr)
+        return true;
+
+    // traverse the chain, deleting as we go.
+    while(temp1->getNext() != nullptr) {
+        temp2 = temp1->getNext();
+        delete(temp1);
+        temp1 = temp2;
+        numEdges--;
+        
+    }
+
+    // delete the head ptr
+    delete(temp1);
+    numEdges--;
+    pEdge = nullptr;
+
+    return true;
+}
+
 
 // @func - getEdge
 // @args - #1 Pointer to the edge to be returned.

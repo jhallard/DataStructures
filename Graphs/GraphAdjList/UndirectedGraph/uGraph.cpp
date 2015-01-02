@@ -48,7 +48,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : numEdges(0), numVertices(0), connectivityCount(0), isMultiGraph(false) {
+uGraph<VertexType>::uGraph() : num_edges(0), num_vertices(0), connectivityCount(0), isMultiGraph(false) {
     
 }
 
@@ -124,7 +124,7 @@ bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
     lookupMap.insert(std::pair<VertexType, AdjList<VertexType> * >(data, newList));
 
     // increment number of vertices
-    numVertices++;
+    num_vertices++;
 
     return true;
     
@@ -237,10 +237,10 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
     }        
 
     // decrement the number of vertices
-    numVertices--;
+    num_vertices--;
 
     // decrement the number of edges by the number of edges that were attached to the vertex we just destroyed.
-    numEdges -= numEdgesToDelete;
+    num_edges -= numEdgesToDelete;
 
     return true;
     
@@ -266,7 +266,7 @@ bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
     
     // add an edge from vertex 1 to vertex 2
     if(adj1->addEdge(adj2->getVertex(), weight) && adj2->addEdge(adj1->getVertex(), weight)) {
-        numEdges++;
+        num_edges++;
         return true;
     }
 
@@ -293,7 +293,7 @@ bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
         return false;
     }
     
-    numEdges--;
+    num_edges--;
     return true;
     
 }
@@ -305,7 +305,7 @@ bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
 template<class VertexType>
 int uGraph<VertexType>::getNumVertices() const {
 
-    return this->numVertices;
+    return this->num_vertices;
 }
 
 
@@ -315,7 +315,7 @@ int uGraph<VertexType>::getNumVertices() const {
 template<class VertexType>
 int uGraph<VertexType>::getNumEdges() const{
 
-    return this->numEdges;
+    return this->num_edges;
 }
 
 
@@ -365,7 +365,7 @@ double uGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
 }
 
 // @func   - setEdgeWeight
-// @args   - #1 data associated with source vetex, data associated with destination vertex
+// @args   - #1 data associated with source vetex, #2 data associated with destination vertex, #3 new weight to be set
 // @return - returns the true if we succeed in changing the value for both edges (undirected graph has edges going both ways)
 template<class VertexType>
 bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const VertexType & dest_vert, double weight) {
@@ -377,14 +377,14 @@ bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const Vertex
     if(adj1 == nullptr || adj2 == nullptr)
         throw std::logic_error("Can't find Vertices in Graph");
 
-    Edge<VertexType> * edge1 = adj1.getEdge(src_Vert);
-    Edge<VertexType> * edge2 = adj2.getEdge(dest_Vert);
+    Edge<VertexType> * edge1 = adj1->getEdge(dest_vert);
+    Edge<VertexType> * edge2 = adj2->getEdge(src_vert);
 
     if(edge1 == nullptr || edge2 == nullptr)
         return false;
 
-    ret = edge1.setWeight(weight);
-    ret = edge2.setWeight(weight);
+    ret = edge1->setWeight(weight);
+    ret = edge2->setWeight(weight);
 
     return ret;
 }
@@ -411,6 +411,26 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
     }
 
     return retVector;
+}
+
+// @func   - makeGraphDense
+// @args   - #1 A function that takes two vertices and assigns a weight to their edge
+// @return - Bool indicating success
+// @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
+//           edge weighting specified by the argument to the function.
+template<class VertexType>
+bool uGraph<VertexType>::makeGraphDense(void setWeight(VertexType&, VertexType&)) {
+
+    for(auto vertex : list) 
+        vertex->deleteAllEdges();
+
+    for(int i = 0; i < list.size(); i++) {
+        for(int j = i+1; j < list.size(); j++) {
+            insertEdge(list[i]->getVertex()->getData(), list[j]->getVertex()->getData());
+        }
+    }
+
+    return true;
 }
 
 
@@ -449,6 +469,17 @@ bool uGraph<VertexType>::isConnected() {
     this->depthFirst(list[0]->getVertex()->getData(), f);
 
     return connectivityCount == list.size();
+}
+
+
+// @func   - isBipartite
+// @args   - None
+// @return - Bool indicating whether or not the graph is bipartite
+// @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
+//           hitting the same value twice in a row. 
+template<class VertexType>
+bool uGraph<VertexType>::isBipartite() {
+    return true;
 }
 
 

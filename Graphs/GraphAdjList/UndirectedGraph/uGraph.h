@@ -157,14 +157,21 @@ public:
     double getEdgeWeight(const VertexType &, const VertexType &);
 
     // @func   - getEdgeWeight
-    // @args   - #1 data associated with vetex #1, data associated with vertex #2
+    // @args   - #1 data associated with vetex #1, data associated with vertex #2, #3 weight to set
     // @return - returns the weight of the edge, throws error if edge not found
-    bool setEdgeWeight(const VertexType &, const VertexType &);
+    bool setEdgeWeight(const VertexType &, const VertexType &, double);
 
     // @func   - getAdjVertices
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
     std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &);
+
+    // @func   - makeGraphDense
+    // @args   - #1 A function that takes two vertices and assigns a weight to their edge
+    // @return - Bool indicating success
+    // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
+    //           edge weighting specified by the argument to the function.
+    bool makeGraphDense(void setWeight(VertexType&, VertexType&) = nullptr);
 
     // @func   - printGraph
     // @args   - none
@@ -177,6 +184,13 @@ public:
     // @return - Bool indicating whether or not the graph is connected
     // @info   - This function uses BFS to search to see if any given vertex can be reached from any other given vertex
     bool isConnected();
+
+    // @func   - isBipartite
+    // @args   - None
+    // @return - Bool indicating whether or not the graph is bipartite
+    // @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
+    //           hitting the same value twice in a row. 
+    bool isBipartite();
 
     // @func   - setIsMultiGraph
     // @args   - boolean to be stored in isMultiGraph
@@ -250,13 +264,13 @@ private:
     //            decoded inside the helper function to return a single shortest path between two vertices, so the user doesn't have to decode it themselves.
     typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
     
-    // @member - numVertices
+    // @member - num_vertices
     // @info   - Number of vertices currently in the graph
-    int numVertices;
+    int num_vertices;
 
-    // @member - numEdges
+    // @member - num_edges
     // @info   - Number of Edges currently in the graph
-    int numEdges;
+    int num_edges;
 
     // @member - list
     // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
