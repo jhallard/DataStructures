@@ -89,6 +89,11 @@ public:
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
     ~uGraph();
 
+    // @func   - operator=
+    // @args   - #1 constant reference to another graph object to copy into
+    // @return - The new graph copy
+    uGraph<VertexType> operator=(const uGraph<VertexType> &);
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
@@ -102,7 +107,7 @@ public:
     // @func   - getAllVertices
     // @args   - none
     // @return - Vector of the data contained inside all vertices. 
-    std::vector<VertexType> getAllVertices();
+    std::vector<VertexType> getAllVertices() const;
 
     // @func   - updateVertex
     // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex
@@ -164,20 +169,27 @@ public:
     // @func   - getAdjVertices
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
-    std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &);
+    std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &) const;
 
     // @func   - makeGraphDense
     // @args   - #1 A function that takes two vertices and assigns a weight to their edge
     // @return - Bool indicating success
     // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
     //           edge weighting specified by the argument to the function.
-    bool makeGraphDense(void setWeight(VertexType&, VertexType&) = nullptr);
+    bool makeGraphDense(double setWeight(VertexType&, VertexType&) = nullptr);
+
+    // @func   - invert
+    // @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them
+    // @return - Bool indicating success
+    // @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
+    //             that didn't already exist.
+    bool invert(double setWeight(VertexType&, VertexType&) = nullptr);
 
     // @func   - printGraph
     // @args   - none
     // @return - none
     // @info   - prints the adjecency list representation of the graph to the console.
-    void printGraph();
+    void printGraph() const;
 
     // @func   - isConnected
     // @args   - None
@@ -304,7 +316,7 @@ private:
     // @args   - #1 Value contained in the vertex to be found
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-    AdjList<VertexType> *  findVertex(const VertexType &);
+    AdjList<VertexType> *  findVertex(const VertexType &) const;
 
 
 };

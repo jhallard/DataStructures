@@ -651,8 +651,8 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 	uGraph<int> graph;
 
     int numVertices = 2000;
-    int minEdges = 40;
-    int maxEdges = 200;
+    int minEdges = 80;
+    int maxEdges = 300;
 
     std::vector<int> input_vec;
 
@@ -694,7 +694,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 
 		std::stringstream ss;
 		// std::cout << "\n BFS TEST : " << i <<  " : " << m  << "\n" << std::endl;
-		ASSERT_EQ(true, m < 200 );
+		ASSERT_EQ(true, m < 400 );
 
 		start = std::chrono::high_resolution_clock::now();
 	    graph.depthFirst(r, f);
@@ -703,7 +703,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 
 
 		// std::cout << "\n DFS TEST : " << i <<  " : " << m  << "\n" << std::endl;
-		ASSERT_EQ(true, m < 200);
+		ASSERT_EQ(true, m < 400);
 	}		
 
 }

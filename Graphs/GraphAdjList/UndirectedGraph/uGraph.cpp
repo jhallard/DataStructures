@@ -73,7 +73,8 @@ uGraph<VertexType>::uGraph(const uGraph<VertexType> & toCopy) {
         this->deleteVertex(i);
     }
 
-    for(auto i : toCopy.getAllVertices()) {
+    auto theirVertices = toCopy.getAllVertices();
+    for(auto i : theirVertices) {
         std::vector<std::pair<VertexType, double> > edges = toCopy.getAdjVertices(i);
         this->insertVertex(i);
 
@@ -92,6 +93,34 @@ uGraph<VertexType>::~uGraph() {
         delete(list[i]);
 
     list.clear();
+}
+
+// @func   - operator=
+// @args   - #1 constant reference to another graph object to copy into
+// @return - The new graph copy
+template<class VertexType>
+uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCopy) {
+    
+    auto ourVertices = this->getAllVertices();
+    // Go through, delete, and clean up all vertices and edges.z
+    for(auto i : ourVertices) {
+        this->deleteVertex(i);
+    }
+    auto theirVertices = toCopy.getAllVertices();
+
+    for(auto i : theirVertices) {
+        insertVertex(i);
+    }
+    
+    for(auto i : theirVertices) {
+        std::vector<std::pair<VertexType, double> > edges = toCopy.getAdjVertices(i);
+
+        for(auto j : edges) {
+            this->insertEdge(i, j.first, j.second);
+        }
+    }
+
+    return *this;
 }
 
 
@@ -150,7 +179,7 @@ bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 // @args   - none
 // @return - Vector of the data contained inside all vertices. 
 template<class VertexType>
-std::vector<VertexType> uGraph<VertexType>::getAllVertices() {
+std::vector<VertexType> uGraph<VertexType>::getAllVertices() const {
     std::vector<VertexType> ret;
     for(auto i : list)
         ret.push_back(i->getVertex()->getData());
@@ -337,7 +366,7 @@ template<class VertexType>
 bool uGraph<VertexType>::containsEdge(const VertexType & src_vert, const VertexType & dest_vert) {
 
     // check if the src vertex exists, if so check if it has an edge to the dest vertex
-    return (findVertex(src_vert) != nullptr)? false : !(findVertex(src_vert)->getEdge(dest_vert) == nullptr);
+    return (findVertex(src_vert) == nullptr)? false : !(findVertex(src_vert)->getEdge(dest_vert) == nullptr);
 }
 
 
@@ -395,7 +424,7 @@ bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const Vertex
 // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
 // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
 template<class VertexType>
-std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(const VertexType & v1){
+std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(const VertexType & v1) const{
 
     std::vector< std::pair<VertexType, double> > retVector;
 
@@ -419,17 +448,55 @@ std::vector< std::pair<VertexType, double> > uGraph<VertexType>::getAdjVertices(
 // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
 //           edge weighting specified by the argument to the function.
 template<class VertexType>
-bool uGraph<VertexType>::makeGraphDense(void setWeight(VertexType&, VertexType&)) {
+bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType&)) {
 
+    double weight = std::numeric_limits<double>::infinity();
     for(auto vertex : list) 
         vertex->deleteAllEdges();
+    num_edges = 0;
 
     for(int i = 0; i < list.size(); i++) {
+        VertexType data1 = list[i]->getVertex()->getData();
+
         for(int j = i+1; j < list.size(); j++) {
-            insertEdge(list[i]->getVertex()->getData(), list[j]->getVertex()->getData());
+            VertexType data2 = list[j]->getVertex()->getData();
+            (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
+            insertEdge(data1, data2);
         }
     }
 
+    return true;
+}
+
+// @func   - invert
+// @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them
+// @return - Bool indicating success
+// @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
+//             that didn't already exist.
+template<class VertexType>
+bool uGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
+
+    uGraph<VertexType> temp_graph;
+    double weight = std::numeric_limits<double>::infinity();
+
+    for(auto vert : list)
+        temp_graph.insertVertex(vert->getVertex()->getData());
+
+    for(int i = 0; i < list.size(); i++) {
+        VertexType data1 = list[i]->getVertex()->getData();
+
+        for(int j = i+1; j < list.size(); j++) {
+            VertexType data2 = list[j]->getVertex()->getData();
+            (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
+
+            if(containsEdge(data1, data2))
+                continue;
+
+            temp_graph.insertEdge(data1, data2, weight);
+        }
+    }
+
+    *this = temp_graph;
     return true;
 }
 
@@ -438,7 +505,8 @@ bool uGraph<VertexType>::makeGraphDense(void setWeight(VertexType&, VertexType&)
 // @args   - none
 // @return - none
 // @info   - prints the adjecency list representation of the graph.
-template<class VertexType> void uGraph<VertexType>::printGraph() {
+template<class VertexType>
+void uGraph<VertexType>::printGraph() const {
     
     for(auto vertex : list) {
         std::cout << "Vertex : " << vertex->getVertex()->getData() << " -> ";
@@ -983,7 +1051,7 @@ std::vector<VertexType> uGraph<VertexType>::aStar(const VertexType &, std::vecto
 // @return - Pointer to the AdjList containing the vertex in queston. nullptr if not found (possibly should throw exception?)
 // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
-AdjList<VertexType> * uGraph<VertexType>::findVertex(const VertexType & data) {
+AdjList<VertexType> * uGraph<VertexType>::findVertex(const VertexType & data) const {
 
     auto get = lookupMap.find(data);
 

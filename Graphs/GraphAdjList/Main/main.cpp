@@ -260,10 +260,16 @@ void dGraphTest() {
     graph.insertVertex(6);
     graph.insertVertex(7);
     graph.insertVertex(8);
-    graph.insertVertex(9);
-    graph.insertVertex(10);
-    graph.insertVertex(11);
-    graph.insertVertex(12);
+    // graph.insertVertex(9);
+    // graph.insertVertex(10);
+    // graph.insertVertex(11);
+    // graph.insertVertex(12);
+    // graph.insertVertex(13);
+    // graph.insertVertex(14);
+    // graph.insertVertex(15);
+    // graph.insertVertex(16);
+    // graph.insertVertex(17);
+    // graph.insertVertex(18);
 
     graph.insertEdge(1, 2, 4.05);
     graph.insertEdge(1, 3, 4.10);
@@ -282,11 +288,17 @@ void dGraphTest() {
     graph.insertEdge(2, 7, 2.505);
     graph.insertEdge(7, 8, 4.50);
 
-
+    if(!graph.isConnected())
+        std::cout << "not connected\n";
     graph.printGraph();
 
-    if(!graph.makeGraphDense())
-        std::cout << "Dense function failed\n";
+    // uGraph<int> tmp(graph);
+    // if(!graph.makeGraphDense())
+    //     std::cout << "Dense function failed\n";
+
+    // graph.printGraph();
+
+    graph.reverse();
 
     graph.printGraph();
 
