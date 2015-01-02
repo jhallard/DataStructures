@@ -20,13 +20,13 @@ public:
 
     // @func - Constructor #2
     // @args - #1 Data associated with the vertex, #2 Index associated with the vertex
-    Vertex(VertexType);
+    Vertex(const VertexType &);
 
     // Get the data that the vertex contains (templated)
     VertexType getData() const;
 
     // set the data that the vertex contains
-    bool setData(VertexType);
+    bool setData(const VertexType &);
 
 private:
 

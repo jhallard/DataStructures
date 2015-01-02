@@ -21,14 +21,14 @@ AdjList<VertexType>::AdjList() : vertex(), pEdge(nullptr), numEdges(0){
 // @func - Constructor#2
 // @args - #1 Vertex data
 template <class VertexType>
-AdjList<VertexType>::AdjList(VertexType newData) : vertex(newData), pEdge(nullptr) {
+AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), pEdge(nullptr) {
 
 }
 
 // @func - Constructor#3
 // @args - #1 A vertex object to set as our vertex
 template <class VertexType>
-AdjList<VertexType>::AdjList(Vertex<VertexType> newV){
+AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV){
     this->vertex = newV;
     this->pEdge = nullptr;
 
@@ -61,7 +61,7 @@ AdjList<VertexType>::~AdjList() {
 // @args   - #1 Vertex Object
 // @return - Bool indicating success or failure
 template <class VertexType>
-bool AdjList<VertexType>::setVertex(Vertex<VertexType> newData){
+bool AdjList<VertexType>::setVertex(const Vertex<VertexType> & newData){
 
     this->vertex = newData;
     return true;
@@ -123,7 +123,7 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 // @args - #1 the data contained by the vertex that you wish to delete the edge from
 // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
 template <class VertexType>
-bool AdjList<VertexType>::deleteEdge(VertexType data){
+bool AdjList<VertexType>::deleteEdge(const VertexType & data){
 
     Edge<VertexType> * temp;
     temp = pEdge;
@@ -210,6 +210,7 @@ Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert)
 
     Edge<VertexType> * temp;
     temp = pEdge;
+    VertexType data = vert.getData();
 
     // Case #1 - No edges in the list, return false
     if(temp == nullptr)
@@ -219,11 +220,10 @@ Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert)
     while(temp != nullptr) {
 
         // if the edge to return is the next node, return that node
-        if(temp->getVertex()->getData() == vert.getData()){
+        if(temp->getVertex()->getData() == data){
             return temp;
         }
-        // else we iterate to the next node in the chain
-        else
+        else // else we iterate to the next node in the chain
             temp = temp->getNext();
         
     }

@@ -34,11 +34,11 @@ public:
 
     // @func - Constructor#2
     // @args - #1 Vertex data
-    AdjList(VertexType);
+    AdjList(const VertexType &);
 
     // @func - Constructor#3
     // @args - #1 A vertex object to set as our vertex
-    AdjList(Vertex<VertexType>);
+    AdjList(const Vertex<VertexType> &);
 
     // @func - Destructor
     // @args - Cleans up the edges allocated with new()
@@ -47,7 +47,7 @@ public:
     // @func - setVertex
     // @args - #1 A vertex object to set as our vertex
     // @ret  - bool indicating success or failure
-    bool setVertex(Vertex<VertexType>);
+    bool setVertex(const Vertex<VertexType> &);
 
     // @func - getVertex
     // @args - none
@@ -63,7 +63,7 @@ public:
     // @func - deleteEdge
     // @args - #1 the data contained by the vertex that you wish to delete the edge from
     // @info - finds the vertex containing the data passed in as an argument, and deletes it from the chain.
-    bool deleteEdge(VertexType);
+    bool deleteEdge(const VertexType &);
 
 
     // @func - deleteEdge
@@ -74,7 +74,7 @@ public:
 
     // @func - getEdge
     // @args - #1 Pointer to the other vertex 
-    // @info - ffinds and returns the given edge if it exists
+    // @info - finds and returns the given edge if it exists
     Edge<VertexType> * getEdge(const Vertex<VertexType> &);
 
     // @func   - getAllEdges

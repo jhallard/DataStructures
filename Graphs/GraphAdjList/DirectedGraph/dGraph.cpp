@@ -77,7 +77,7 @@ dGraph<VertexType>::~dGraph() {
 // @args   - #1 The value of the node to be inserted
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool dGraph<VertexType>::insertVertex(VertexType data) {
+bool dGraph<VertexType>::insertVertex(const VertexType & data) {
 
     // Start by creating a new vertex
     Vertex<VertexType> newVertex;
@@ -148,7 +148,7 @@ bool dGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 //           to be deleted. Thankfully, because of our use of maps and pointers this isn't difficult nor too costly. Running time
 //           should be O(n) where n is the number of edges that leave the vertex to be deleted.
 template<class VertexType>
-bool dGraph<VertexType>::deleteVertex(VertexType data) {
+bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
     AdjList<VertexType> *  adjList = this->findVertex(data);
 
@@ -204,7 +204,7 @@ bool dGraph<VertexType>::deleteVertex(VertexType data) {
 // @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool dGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight) {
+bool dGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2, double weight) {
 
     // This assumes we don't want edges between the same vertex
     if(v1 == v2)
@@ -232,7 +232,7 @@ bool dGraph<VertexType>::insertEdge(VertexType v1, VertexType v2, double weight)
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
 // @return - Boolean indicating succes 
 template<class VertexType>
-bool dGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
+bool dGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2) {
 
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
@@ -249,6 +249,19 @@ bool dGraph<VertexType>::deleteEdge(VertexType v1, VertexType v2) {
     numEdges--;
     return true;
     
+}
+
+// @func   - getAllVertices
+// @args   - none
+// @return - Vector of the data contained inside all vertices. 
+template<class VertexType>
+std::vector<VertexType> dGraph<VertexType>::getAllVertices() {
+    std::vector<VertexType> ret;
+    for(auto i : list)
+        ret.push_back(i->getVertex()->getData());
+
+    return ret;
+
 }
 
 
@@ -276,7 +289,7 @@ int dGraph<VertexType>::getNumEdges() const{
 // @args   - #1 data associated with the vertex that you wish to query for existence 
 // @return - Bool corresponding to the existence of a vertex with the given data in this graph
 template<class VertexType>
-bool dGraph<VertexType>::containsVertex(VertexType v) {
+bool dGraph<VertexType>::containsVertex(const VertexType & v) {
 
     return (nullptr != findVertex(v));
 }
@@ -287,7 +300,7 @@ bool dGraph<VertexType>::containsVertex(VertexType v) {
 // @info   - For directed graphs, this returns true only if the edge is going from arg#1 to arg#2. For undirected
 //           graphs it will return true if an edge exists between the vertices without considering the order.
 template<class VertexType>
-bool dGraph<VertexType>::containsEdge(VertexType src_vert, VertexType dest_vert) {
+bool dGraph<VertexType>::containsEdge(const VertexType & src_vert, const VertexType & dest_vert) {
     
     // check if the src vertex exists, if so check if it has an edge to the dest vertex
     return (findVertex(src_vert) != nullptr)? false : findVertex(src_vert)->getEdge(dest_vert) != nullptr;
@@ -300,7 +313,7 @@ bool dGraph<VertexType>::containsEdge(VertexType src_vert, VertexType dest_vert)
 // @TODO   - Figure out how to implement this without exceptions, although that would
 //           most likely imply putting restrictions on the weighting (e.g. wt >= 0)
 template<class VertexType>
-double dGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
+double dGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType & v2) {
 
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
@@ -323,7 +336,7 @@ double dGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
 // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
 // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
 template<class VertexType>
-std::vector< std::pair<VertexType, double> > dGraph<VertexType>::getAdjVertices(VertexType v1){
+std::vector< std::pair<VertexType, double> > dGraph<VertexType>::getAdjVertices(const VertexType & v1){
 
     std::vector< std::pair<VertexType, double> > retVector;
 
@@ -411,7 +424,7 @@ bool dGraph<VertexType>::getIsMultiGraph() {
 //           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use a 
 //           std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
-bool dGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)) {
+bool dGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(VertexType&)) {
 
     // Our deque object, stores the vertices as they appear to the search
     // We actually use it as a stack for this problem, by inserting and removing from the 
@@ -473,7 +486,7 @@ bool dGraph<VertexType>::depthFirst(VertexType rootData, void visit(VertexType&)
 //           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an
 //           std::unordered_map to keeptrack of the seen and unseen vertices.
 template<class VertexType>
-bool dGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType&)) {
+bool dGraph<VertexType>::breadthFirst(const VertexType & rootData, void visit(VertexType&)) {
 
     // Our queue object, stores the vertices as they appear to the search
     std::deque<Vertex<VertexType> *> q;
@@ -534,7 +547,7 @@ bool dGraph<VertexType>::breadthFirst(VertexType rootData, void visit(VertexType
 // @args   - none
 // @return - 2 column vector of vertices, each column representing one half of the cut. 
 // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
-// @TODO   - Currently in beta-stage, needs to be tested and debugged. Is semi-working through.
+// @TODO   - Currently in beta-stage, needs to be tested, debugged, and cleaned. Is semi-working through.
 template<class VertexType>
 std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 
@@ -547,7 +560,7 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
     std::random_device rd;
     std::mt19937 gen(rd());
     
-
+    // We really need to turn this into a loop that does it the expected number of times it takes to get a min-cut
     for(int i = 0; i < 3; i++) {
 
         std::unordered_map<VertexType, std::vector<VertexType> > collapsed;
@@ -734,7 +747,7 @@ dGraph<VertexType> * dGraph<VertexType>::minimumSpanningTree() {
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
 //           the source vertex is not contained in the map.
 template<class VertexType>
-typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstras(VertexType source) {
+typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstras(const VertexType & source) {
 
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
@@ -811,7 +824,7 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstras(Vertex
 //           between two given vertices, Dijkstras algorithm returns the shortest path to *every* other vertex and the output must be decoded 
 //           to find the path between the source and any other specific vertex.
 template<class VertexType>
-std::pair<std::vector<VertexType>, double> dGraph<VertexType>::dijkstrasComputePath(VertexType src, VertexType dest) {
+std::pair<std::vector<VertexType>, double> dGraph<VertexType>::dijkstrasComputePath(const VertexType & src, const VertexType & dest) {
 
     std::unordered_map<VertexType, VertexType> prev;
     std::unordered_map<VertexType, double> dist;
@@ -864,7 +877,7 @@ std::pair<std::vector<VertexType>, double> dGraph<VertexType>::dijkstrasComputeP
 // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
 // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
 template<class VertexType>
-std::vector<VertexType> dGraph<VertexType>::aStar(VertexType, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) {
+std::vector<VertexType> dGraph<VertexType>::aStar(const VertexType &, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) {
 
      // #TODO - Implement A* Path-finding algorithm
 
@@ -880,7 +893,7 @@ std::vector<VertexType> dGraph<VertexType>::aStar(VertexType, std::vector<Vertex
 // @return - Pointer to the AdjList containing the vertex in queston. nullptr if not found (possibly should throw exception?)
 // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
 template<class VertexType>
-AdjList<VertexType> * dGraph<VertexType>::findVertex(VertexType data) {
+AdjList<VertexType> * dGraph<VertexType>::findVertex(const VertexType & data) {
 
     auto get = lookupMap.find(data);
 

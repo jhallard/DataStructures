@@ -92,12 +92,12 @@ public:
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
-    bool insertVertex(VertexType);
+    bool insertVertex(const VertexType &);
 
     // @func   - deleteVertex
     // @args   - none
     // @return - Boolean indicating success 
-    bool deleteVertex(VertexType);
+    bool deleteVertex(const VertexType &);
 
     // @func   - getAllVertices
     // @args   - none
@@ -107,7 +107,7 @@ public:
     // @func   - updateVertex
     // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex
     // @return - Boolean indicating success, returns false if it can't find the vertex to update.
-    bool updateVertex(VertexType, VertexType);
+    bool updateVertex(const VertexType &, const VertexType &);
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
@@ -122,12 +122,12 @@ public:
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
-    bool insertEdge(VertexType, VertexType, double =  std::numeric_limits<double>::infinity());
+    bool insertEdge(const VertexType &, const VertexType &, double =  std::numeric_limits<double>::infinity());
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, the "To" Node. 
     // @return - Boolean indicating succes 
-    bool deleteEdge(VertexType, VertexType);
+    bool deleteEdge(const VertexType &, const VertexType &);
 
     // @func   - numVertices
     // @args   - None
@@ -142,24 +142,24 @@ public:
     // @func   - containsVerex
     // @args   - #1 data associated with the vertex that you wish to query for existence 
     // @return - Bool corresponding to the existence of a vertex with the given data in this graph
-    bool containsVertex(VertexType);
+    bool containsVertex(const VertexType &);
 
     // @func   - containsEdge
     // @args   - #1 data associated with the 'from' vertex, #2 data associated with the 'to' vertex.
     // @return - Bool corresponding to the existence of an edge in the graph between the two vertices
     // @info   - For directed graphs, this returns true only if the edge is going from arg#1 to arg#2. For undirected
     //           graphs it will return true if an edge exists between the vertices without considering the order.
-    bool containsEdge(VertexType, VertexType);
+    bool containsEdge(const VertexType &, const VertexType &);
 
     // @func   - getEdgeWeight
     // @args   - #1 data associated with vetex #1, data associated with vertex #2
     // @return - returns the weight of the edge, throws error if edge not found
-    double getEdgeWeight(VertexType, VertexType);
+    double getEdgeWeight(const VertexType &, const VertexType &);
 
     // @func   - getAdjVertices
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
-    std::vector< std::pair<VertexType, double> > getAdjVertices(VertexType);
+    std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &);
 
     // @func   - printGraph
     // @args   - none
@@ -189,7 +189,7 @@ public:
     // @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
     //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
     //           track of the seen and unseen vertices.
-    bool depthFirst(VertexType, void visit(VertexType&));
+    bool depthFirst(const VertexType &, void visit(VertexType&));
 
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
@@ -197,7 +197,7 @@ public:
     // @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
     //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
     //           track of the seen and unseen vertices.
-    bool breadthFirst(VertexType, void visit(VertexType&));
+    bool breadthFirst(const VertexType &, void visit(VertexType&));
 
     // @func   - minimuminCut
     // @args   - none
@@ -218,20 +218,20 @@ public:
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    typename uGraph<VertexType>::dist_prev_pair dijkstras(VertexType);
+    typename uGraph<VertexType>::dist_prev_pair dijkstras(const VertexType &);
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex
     // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
     //           #2 the net weight along that path betweent he two vertices.
-    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(VertexType, VertexType);
+    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(const VertexType &, const VertexType &);
 
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
     // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
-    std::vector<VertexType> aStar(VertexType, std::vector<VertexType>, double hueristic(VertexType&, VertexType&));
+    std::vector<VertexType> aStar(const VertexType &, std::vector<VertexType>, double hueristic(VertexType&, VertexType&));
 
 
 
@@ -285,7 +285,7 @@ private:
     // @args   - #1 Value contained in the vertex to be found
     // @return - pointer to the vertex to be found, null if not found
     // @info   - Goes through our vector of vertices and find which one (if any) contain the data given by the argument
-    AdjList<VertexType> *  findVertex(VertexType);
+    AdjList<VertexType> *  findVertex(const VertexType &);
 
 
 };

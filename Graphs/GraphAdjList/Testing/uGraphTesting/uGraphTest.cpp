@@ -24,10 +24,12 @@
 //////////////////////////////////////
 ////////	Vertex Testing    ////////
 // - These tests involve the inserting and deleting of vertices into our graph data structure.
-TEST(VerticesTest, empty_Graph) { 
+TEST(VerticesTest, empty_graph) { 
 	uGraph<int> graph;
 
     ASSERT_EQ(0, graph.getNumVertices());
+    ASSERT_EQ(false, graph.deleteVertex(1));
+    ASSERT_EQ(false, graph.deleteEdge(1, 2));
 }
 
 TEST(VerticesTest, insert_one_by_one) { 
