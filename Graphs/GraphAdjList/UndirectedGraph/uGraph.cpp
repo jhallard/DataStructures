@@ -364,6 +364,31 @@ double uGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
     return temp->getWeight();
 }
 
+// @func   - setEdgeWeight
+// @args   - #1 data associated with source vetex, data associated with destination vertex
+// @return - returns the true if we succeed in changing the value for both edges (undirected graph has edges going both ways)
+template<class VertexType>
+bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const VertexType & dest_vert, double weight) {
+    AdjList<VertexType> *  adj1 = this->findVertex(src_vert);
+    AdjList<VertexType> *  adj2 = this->findVertex(dest_vert);
+    bool ret = true;
+
+    // if value returned in the end of the vector, the vertex doesn't exist
+    if(adj1 == nullptr || adj2 == nullptr)
+        throw std::logic_error("Can't find Vertices in Graph");
+
+    Edge<VertexType> * edge1 = adj1.getEdge(src_Vert);
+    Edge<VertexType> * edge2 = adj2.getEdge(dest_Vert);
+
+    if(edge1 == nullptr || edge2 == nullptr)
+        return false;
+
+    ret = edge1.setWeight(weight);
+    ret = edge2.setWeight(weight);
+
+    return ret;
+}
+
 
 
 // @func   - getAdjVertices
@@ -421,7 +446,7 @@ bool uGraph<VertexType>::isConnected() {
 
     auto f = [](VertexType&) -> void { int x = 0; }; // dummy function that needs to be passed in to BFS
 
-    this->breadthFirst(list[0]->getVertex()->getData(), f);
+    this->depthFirst(list[0]->getVertex()->getData(), f);
 
     return connectivityCount == list.size();
 }
@@ -883,7 +908,7 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
     VertexType prev_vert = dest;
     path.push_back(dest);
     int count = 0;
-    while(prev_vert != src && count < list.size()) {
+    while(prev_vert != src && count < 2*list.size()) {
 
         if(prev.find(prev_vert) == prev.end()) {
             return std::pair<std::vector<VertexType>, double>();

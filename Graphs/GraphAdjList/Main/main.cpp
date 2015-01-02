@@ -1,10 +1,12 @@
 #include "../UndirectedGraph/uGraph.h"
+#include "../DirectedGraph/dGraph.h"
 #include <iostream>
 #include <ctime>
 
 void intTest1();
 void intTest2();
 void stringTest();
+void dGraphTest();
 void visit(std::string&);
 void visit1(int&);
 
@@ -13,9 +15,9 @@ int main()
     srand(time(0));
     rand();
 
-    intTest1();
+    // intTest1();
     // intTest2();
-
+    dGraphTest();
     std::cout << "\n\n\n";
 
     // stringTest();
@@ -116,8 +118,6 @@ void intTest1() {
     std::cout << "\n\n\n";
 
     graph.depthFirst(8, fptr);
-    
-
 }
 
 
@@ -197,8 +197,6 @@ void intTest2() {
     // catch(std::logic_error e) {
     //     std::cout <<"\n " << e.what() << "\n";
     // }
-
-
 }
 
 
@@ -227,25 +225,78 @@ void stringTest() {
     graph.insertEdge("lala", "tada", 0.1);
 
 
+
     graph.printGraph();
 
-    graph.deleteEdge("lala", "abcd");
+    // graph.deleteEdge("lala", "abcd");
     // graph.deleteEdge("tada", "1234");
 
-    graph.printGraph();
+    // graph.printGraph();
     void (*fptr)(std::string&);
     fptr = visit;
 
-    // graph.breadthFirst("abcd", fptr);
+    graph.breadthFirst("abcd", fptr);
 
-    // std::cout << "\n\n\n";
+    std::cout << "\n\n\n";
 
-    graph.deleteVertex("lala");
+    // graph.deleteVertex("lala");
 
     // graph.breadthFirst("abcd", fptr);
 
 
     std::cout << "\n\n\n";
+
+
+}
+
+void dGraphTest() {
+    dGraph<int> graph;
+
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+    graph.insertVertex(7);
+    graph.insertVertex(8);
+
+    graph.insertEdge(1, 2, 4.05);
+    graph.insertEdge(1, 3, 4.10);
+    graph.insertEdge(2, 4, 1.56);
+    graph.insertEdge(3, 5, 2.15);
+    graph.insertEdge(4, 6, 6.3);
+    graph.insertEdge(5, 4, 1.2);
+    graph.insertEdge(5, 1, 4.3);
+    graph.insertEdge(5, 6, 5.1);
+    graph.insertEdge(6, 3, 1.3);
+    graph.insertEdge(4, 8, 7.0);
+    graph.insertEdge(2, 8, 1.1);
+    graph.insertEdge(8, 6, 4.80);
+    graph.insertEdge(1, 7, 5.70);
+    graph.insertEdge(7, 1, 1.305);
+    graph.insertEdge(2, 7, 2.505);
+    graph.insertEdge(7, 8, 4.50);
+
+
+    graph.printGraph();
+
+    // graph.printGraph();
+    void (*fptr)(int&);
+    fptr = visit1;
+
+    graph.breadthFirst(4, fptr);
+
+    std::cout << "\n\n\n";
+
+    graph.depthFirst(4, fptr);
+
+    std::cout << "\n\n\n";
+
+    std::pair<std::vector<int>, double> ret = graph.dijkstrasComputePath(7, 8);
+
+    for(auto i : ret.first)
+        std::cout << i << ", ";
 
 
 }

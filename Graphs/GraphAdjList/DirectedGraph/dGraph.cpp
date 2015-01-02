@@ -152,7 +152,6 @@ bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
     AdjList<VertexType> *  adjList = this->findVertex(data);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adjList == nullptr)
         return false;
 
@@ -213,7 +212,6 @@ bool dGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr) 
         return false;
     
@@ -237,7 +235,6 @@ bool dGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
 
@@ -318,7 +315,6 @@ double dGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
         throw std::logic_error("Can't find Vertices in Graph");
 
@@ -328,6 +324,27 @@ double dGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
         throw std::logic_error("No Edge Exists Between Given Vertices");
 
     return temp->getWeight();
+}
+
+// @func   - setEdgeWeight
+// @args   - #1 data associated with source vetex, data associated with destination vertex
+// @return - returns the true if we succeed in changing the value for both edges (undirected graph has edges going both ways)
+template<class VertexType>
+bool dGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const VertexType & dest_vert, double weight) {
+    AdjList<VertexType> *  adj1 = this->findVertex(src_vert);
+    AdjList<VertexType> *  adj2 = this->findVertex(dest_vert);
+
+    
+    if(adj1 == nullptr || adj2 == nullptr)
+        throw std::logic_error("Can't find Vertices in Graph");
+
+    Edge<VertexType> * edge1 = adj1.getEdge(dest_Vert);
+    // Edge<VertexType> * edge2 = adj2.getEdge(dest_Vert);
+
+    if(edge1 == nullptr || edge2 == nullptr)
+        return false;
+
+    return edge1.setWeight(weight);
 }
 
 
@@ -387,7 +404,7 @@ bool dGraph<VertexType>::isConnected() {
 
     auto f = [](VertexType&) -> void { int x = 0; };
 
-    this->breadthFirst(list[0]->getVertex()->getData(), f);
+    this->depthFirst(list[0]->getVertex()->getData(), f);
 
     return connectivityCount == list.size();
 }
@@ -467,7 +484,7 @@ bool dGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(Vert
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             if(get == marked.end()) {
-                marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
+                marked.insert(std::pair<VertexType, bool>(tempData, true));
                 q.push_back(tempVert);
             }
         }

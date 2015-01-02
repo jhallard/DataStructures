@@ -156,6 +156,11 @@ public:
     // @return - returns the weight of the edge, throws error if edge not found
     double getEdgeWeight(const VertexType &, const VertexType &);
 
+    // @func   - getEdgeWeight
+    // @args   - #1 data associated with vetex #1, data associated with vertex #2
+    // @return - returns the weight of the edge, throws error if edge not found
+    bool setEdgeWeight(const VertexType &, const VertexType &);
+
     // @func   - getAdjVertices
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.

@@ -618,6 +618,8 @@ TEST(Dijkstras, simple_test) {
     for(int k = 1; k < numVertices/10; k++) {
     	
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
+        if(!(graph.containsVertex(r) & graph.containsVertex(y)))
+            continue;
     	std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
     	auto temp = the_pair.first;
     	auto dis = the_pair.second;

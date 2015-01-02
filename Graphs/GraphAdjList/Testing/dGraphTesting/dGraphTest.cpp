@@ -635,9 +635,9 @@ TEST(Dijkstras, simple_test) {
     dGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 4000;
-    int minEdges = 23;
-    int maxEdges = 125;
+    int numVertices = 40;
+    int minEdges = 2;
+    int maxEdges = 12;
 
     std::vector<int> input_vec;
 
@@ -646,12 +646,21 @@ TEST(Dijkstras, simple_test) {
 
     graph.insertVertices(input_vec);
 
+    for(int i = 1, j = 2; i <= numVertices; i++) {
+        int r = rand() % numVertices + 1;
+        if(r == i) r++;
+        graph.insertEdge(i, r);
+        r = rand() % numVertices + 1;
+        graph.insertEdge(i, r);
+    }
 
+    int count = 0;
     while(!graph.isConnected()) {
+        std::cout << count++ << ", ";
         for(int i = 1; i < numVertices; i++) {
 
             int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-            double weight = (double)(rand() % 477 + 20)/100;
+            double weight = 1.0;//(double)(rand() % 477 + 20)/100;
             if(weight <= 0)
                 weight *= -1;
             // std::cout << weight << std::endl;
@@ -669,8 +678,10 @@ TEST(Dijkstras, simple_test) {
         }
     }   
 
+    graph.printGraph();
+
     bool testval = true;
-    for(int k = 1; k < numVertices/10; k++) {
+    for(int k = 1; k < numVertices/2; k++) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
@@ -680,7 +691,7 @@ TEST(Dijkstras, simple_test) {
         // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
         if(!temp.size()) {
             std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-            std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+            // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
             testval = false;
         }
         else {

@@ -1,0 +1,19 @@
+Bugs and Enhancement Report : dGraph
+===============
+
+#### dGraph Overview
+
+ The dGraph class represents a templated, undirected graph that can be either wieghted or unweighted, which is up to the user to decide. This class uses a vector of adjacency lists (as defined in AdjList.h) to represent the graph abstract data type. The class contains a large grouping of premade graph traversal, searching, and partitioning algorithms built in. 
+
+
+##### Bug Report
+This is a list of bugs in contained in the dGraph class (or it's subclasses). The bugs are ranked on a scale of 1-5 in severity, with 5 being the most important.
+* Function : **dijkstras** - This function seems to work the vast majority of the time, especially if the edges have random weights assigned to them. For instance, in the file `/Testing/dGraphTesting/dGraphTest.cpp`, there is a test that loads up a graph with 4,000+ vertices and 20,000-100,000+ edges. If the edge weights are random, the test can find a path between the source node and any node the majority of the time, but once in the while it will fail. This has to be an error because the test is always performed on a connected graph (as in, we keep regenerating a graph until it is connected), which means that any and all vertices contain a path to any other vertex in the graph.
+* Functionality : **isMultiGraph** - Right now, we have a variable called `isMultiGraph` that can set and reset by the user to change the graph to an from a multiset, which means it can have multiple edges between the same vertices. The dGraph class needs this behavior for the minimumCut function, beause the minimumCut function requires you to allows multiple edges between nodes. The problem is, as of right now this member can be changed by the user, and when it is set to true the `deleteEdge` function becomes undefined, because if there are multiple edges between the same nodes it would be arbitrary to decide which one to remove. We need to figure out how to make this functionality private and internal only to the class member functions where we can ensure it is used safely.
+
+#### Enhancements 
+This is a list of future enhancement for the dGraph class. These aren't necessarily bugs, as the code still works, but they are ways to improve the run time, layout, or abstraction of the project.
+* Function : **minimumSpanningTree** - Bottom line, we need to add in a priority queue to keep track of which edges have the lowest value. Right now we are have to scan through the entire unordered_map object, key by key, to find the lowest value, this adds a number of steps that is linear in V inside of the main while loop, which really hurts this algorithms running time. Good news, the function works.
+* Function : **minimumCut** - As of right now, the main problem with the minimum cut function is that we want to perform it on a copy of the graph that the function is being called on, so we don't edit the current graph. But, we want to have internal access to the graph's members for optimization purposes. This leads me to believe that we should have two functions, minimumCut and minCutHelper (the latter of which is private). The user will call minimumCut() on some graph object. We will then call minCutHelper on a copy of the this object from inside minimumCut. Inside minCutHelper, we will actually modify the internal copy of the graph, however because this function will only ever be called by the minimumCut function on a copy of the graph to be analyzed, we won't lose any of the data and we will still have access to internal data.
+* Functionality **operator==** - We need a function that compares to dGraph object's for equality, and it makes sense to implement this by overriding the == operator for the class. The default one won't work because of the extensive use of pointers in the class.
+

@@ -73,8 +73,8 @@ public:
 
 
     // @func - getEdge
-    // @args - #1 Pointer to the other vertex 
-    // @info - finds and returns the given edge if it exists
+    // @args - #1 Pointer to the edge object
+    // @info - finds and returns the given edge if it exists, returns null otherwise
     Edge<VertexType> * getEdge(const Vertex<VertexType> &);
 
     // @func   - getAllEdges
