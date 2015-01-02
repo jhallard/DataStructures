@@ -626,8 +626,8 @@ TEST(Dijkstras, simple_test) {
 
     	// std::cout << "# Edges : " << graph.getNumEdges() << "\n";
         if(!temp.size()) {
-            std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-            std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+            std::cout << " [" << k << "/" <<numVertices/10 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
             testval = false;
         }
         else {

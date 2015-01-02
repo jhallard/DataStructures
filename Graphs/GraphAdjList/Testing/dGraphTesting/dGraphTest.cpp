@@ -492,7 +492,7 @@ TEST(MinTreeTests, simple_test2) {
     graph.insertEdge(0, 4, 6);
     graph.insertEdge(1, 5, 2);
 
-    graph.printGraph();
+    // graph.printGraph();
 
 
 
@@ -641,9 +641,9 @@ TEST(Dijkstras, simple_test) {
     dGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 40;
-    int minEdges = 30;
-    int maxEdges = 33;
+    int numVertices = 400;
+    int minEdges = 35;
+    int maxEdges = 43;
 
     std::vector<int> input_vec;
 
@@ -688,10 +688,8 @@ TEST(Dijkstras, simple_test) {
         auto temp = the_pair.first;
         auto dis = the_pair.second;
 
-        // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
         if(!temp.size()) {
-            std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-            // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+            std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
         }
         else {

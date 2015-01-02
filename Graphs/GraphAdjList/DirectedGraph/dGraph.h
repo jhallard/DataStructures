@@ -183,7 +183,7 @@ public:
     // @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them
     // @return - Bool indicating success
     // @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
-    //             that didn't already exist.
+    //           that didn't already exist.
     bool invert(double setWeight(VertexType&, VertexType&) = nullptr);
 
     // @func   - printGraph

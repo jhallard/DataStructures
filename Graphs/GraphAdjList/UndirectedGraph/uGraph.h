@@ -38,7 +38,6 @@
 
 //****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
 //****          #1 - Override equals comparison operator, check to see if two graphs are equivilent                                      ****//
-//****          #2 - Override equals assignment operator, sets one graph equal to the other                                              ****//
 //****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
 
 #ifndef U_GRAPH_A_LIST_H

@@ -91,13 +91,13 @@ public:
     // @func   - getAdjVertices
     // @args   - #1 Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is an adjacent vertex, second is the weight of the edge between the two vertices.
-    virtual std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &) const = 0;
+    virtual std::vector<std::pair<VertexType, double> > getAdjVertices(const VertexType &) const = 0;
 
     // @func   - makeGraphDense
     // @args   - #1 Weight to assign to all edges in the new graph.
     // @return - Bool indicating success
-    // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
-    //           edge weighting specified by the argument to the function.
+    // @info   - This function removes all current edges from the graph, and instead makes a dense graph out of the current vertices
+    //           with an edge weighting retrieved via the argument to the function.
     virtual bool makeGraphDense(double setWeight(VertexType&, VertexType&) = nullptr) = 0;
 
     // @func   - invert

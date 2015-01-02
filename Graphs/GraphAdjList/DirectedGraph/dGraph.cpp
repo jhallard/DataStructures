@@ -547,8 +547,6 @@ bool dGraph<VertexType>::isConnected() {
 
     depthFirst(list[0]->getVertex()->getData(), f);
 
-    std::cout << connectivityCount << "\n";
-    
     if(connectivityCount != list.size())
         return false;
 
@@ -558,8 +556,6 @@ bool dGraph<VertexType>::isConnected() {
     reverse();
 
     depthFirst(list[0]->getVertex()->getData(), f);
-
-    std::cout << connectivityCount << "\n";
 
     *this = temp_graph;
 
