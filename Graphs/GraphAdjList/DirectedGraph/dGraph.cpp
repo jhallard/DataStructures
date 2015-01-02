@@ -281,6 +281,18 @@ bool dGraph<VertexType>::containsVertex(VertexType v) {
     return (nullptr != findVertex(v));
 }
 
+// @func   - containsEdge
+// @args   - #1 data associated with the 'from' vertex, #2 data associated with the 'to' vertex.
+// @return - Bool corresponding to the existence of an edge in the graph between the two vertices
+// @info   - For directed graphs, this returns true only if the edge is going from arg#1 to arg#2. For undirected
+//           graphs it will return true if an edge exists between the vertices without considering the order.
+template<class VertexType>
+bool dGraph<VertexType>::containsEdge(VertexType src_vert, VertexType dest_vert) {
+    
+    // check if the src vertex exists, if so check if it has an edge to the dest vertex
+    return (findVertex(src_vert) != nullptr)? false : findVertex(src_vert)->getEdge(dest_vert) != nullptr;
+}
+
 
 // @func   - getEdgeWeight
 // @args   - #1 data associated with vetex #1, data associated with vertex #2
@@ -297,7 +309,7 @@ double dGraph<VertexType>::getEdgeWeight(VertexType v1, VertexType v2) {
     if(adj1 == nullptr || adj2 == nullptr)
         throw std::logic_error("Can't find Vertices in Graph");
 
-    Edge<VertexType> * temp =  adj1->getEdge(adj2->getVertex());
+    Edge<VertexType> * temp =  adj1->getEdge(*adj2->getVertex());
 
     if(temp == nullptr)
         throw std::logic_error("No Edge Exists Between Given Vertices");
@@ -788,7 +800,7 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstras(Vertex
     ret.first = prev;
     ret.second = dist;
 
-     return ret;
+    return ret;
 }
 
 // @func   - dijkstrasComputePath

@@ -2,11 +2,10 @@
 *   @Author   - John H Allard Jr.
 *   @File     - GraphInterface.h
 *   @Data     - 11/11/2014
-*   @Purpose  - Defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual functions,
-*               which ensures that the all of the graphs I build (un/directed, adjacency lists, adjacency matrices, etc), which will derive 
-*               from this interface, must implement every function listed below. To see graph implementations that use this interface, look inside
-*               of the GraphAdjList or GraphAdjMat directories. All code is open license and free to use, just leave some
-*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*   @Purpose  - This file defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual
+*               functions, which ensures that the all of the graphs which will derive from this interface must implement every function listed below. 
+*               To see graph implementations that use this interface, look inside of the GraphAdjList or GraphAdjMat directories. All code is open 
+*               license and free to use, just leave some sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 **/
 
 #ifndef GraphInterface_h
@@ -66,6 +65,13 @@ public:
     // @args   - #1 data associated with the vertex that you wish to query for existence 
     // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     virtual bool containsVertex(VertexType) = 0;
+
+    // @func   - containsEdge
+    // @args   - #1 data associated with the 'from' vertex, #2 data associated with the 'to' vertex.
+    // @return - Bool corresponding to the existence of an edge in the graph between the two vertices
+    // @info   - For directed graphs, this returns true only if the edge is going from arg#1 to arg#2. For undirected
+    //           graphs it will return true if an edge exists between the vertices without considering the order.
+    virtual bool containsEdge(VertexType, VertexType) = 0;
 
     // @func   - getEdgeWeight
     // @args   - #1 data associated with vetex #1, data associated with vertex #2

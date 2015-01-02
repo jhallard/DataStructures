@@ -144,6 +144,13 @@ public:
     // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     bool containsVertex(VertexType);
 
+    // @func   - containsEdge
+    // @args   - #1 data associated with the 'from' vertex, #2 data associated with the 'to' vertex.
+    // @return - Bool corresponding to the existence of an edge in the graph between the two vertices
+    // @info   - For directed graphs, this returns true only if the edge is going from arg#1 to arg#2. For undirected
+    //           graphs it will return true if an edge exists between the vertices without considering the order.
+    bool containsEdge(VertexType, VertexType);
+
     // @func   - getEdgeWeight
     // @args   - #1 data associated with vetex #1, data associated with vertex #2
     // @return - returns the weight of the edge, throws error if edge not found

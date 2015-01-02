@@ -631,68 +631,68 @@ TEST(Dijkstras, simple_test2) {
     ASSERT_EQ(true, testval);
 }
 
-// TEST(Dijkstras, simple_test) {
-//     dGraph<int> graph;
+TEST(Dijkstras, simple_test) {
+    dGraph<int> graph;
 
-//     srand(time(0));
-//     int numVertices = 4000;
-//     int minEdges = 23;
-//     int maxEdges = 125;
+    srand(time(0));
+    int numVertices = 4000;
+    int minEdges = 23;
+    int maxEdges = 125;
 
-//     std::vector<int> input_vec;
+    std::vector<int> input_vec;
 
-//     for(int i = 1; i <= numVertices; i++)
-//         input_vec.push_back(i);
+    for(int i = 1; i <= numVertices; i++)
+        input_vec.push_back(i);
 
-//     graph.insertVertices(input_vec);
+    graph.insertVertices(input_vec);
 
 
-//     while(!graph.isConnected()) {
-//         for(int i = 1; i < numVertices; i++) {
+    while(!graph.isConnected()) {
+        for(int i = 1; i < numVertices; i++) {
 
-//             int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-//             double weight = (double)(rand() % 477 + 20)/100;
-//             if(weight <= 0)
-//                 weight *= -1;
-//             // std::cout << weight << std::endl;
-//             for(int j = 0; j < loop; j++) {
+            int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
+            double weight = (double)(rand() % 477 + 20)/100;
+            if(weight <= 0)
+                weight *= -1;
+            // std::cout << weight << std::endl;
+            for(int j = 0; j < loop; j++) {
 
-//                 int r = rand() % numVertices + 1; r++;
-//                 if(r == i) {
-//                     j--;
-//                     continue;
-//                 }
+                int r = rand() % numVertices + 1; r++;
+                if(r == i) {
+                    j--;
+                    continue;
+                }
 
-//                 if(!graph.insertEdge(i, r, weight))
-//                     j--;
-//             }
-//         }
-//     }   
+                if(!graph.insertEdge(i, r, weight))
+                    j--;
+            }
+        }
+    }   
 
-//     bool testval = true;
-//     for(int k = 1; k < numVertices/10; k++) {
+    bool testval = true;
+    for(int k = 1; k < numVertices/10; k++) {
         
-//         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-//         std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
-//         auto temp = the_pair.first;
-//         auto dis = the_pair.second;
+        int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
+        std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
+        auto temp = the_pair.first;
+        auto dis = the_pair.second;
 
-//         // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
-//         if(!temp.size()) {
-//             // std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-//             // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
-//             testval = false;
-//         }
-//         else {
-//             ASSERT_EQ(true, temp.size() > 0);
-//             ASSERT_EQ(r, temp[0]);
-//             ASSERT_EQ(y, temp[temp.size()-1]);
-//         }
-//     }
+        // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
+        if(!temp.size()) {
+            std::cout << "Path Not Found : " << r << " -> " << y << "\n";
+            std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+            testval = false;
+        }
+        else {
+            ASSERT_EQ(true, temp.size() > 0);
+            ASSERT_EQ(r, temp[0]);
+            ASSERT_EQ(y, temp[temp.size()-1]);
+        }
+    }
 
-//     ASSERT_EQ(true, testval);
+    ASSERT_EQ(true, testval);
 
-// }
+}
 
 
 /////////////////////////////////////////////////

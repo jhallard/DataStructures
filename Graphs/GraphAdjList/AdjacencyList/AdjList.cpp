@@ -206,7 +206,7 @@ bool AdjList<VertexType>::deleteEdge(Vertex<VertexType> * vert){
 // @args - #1 Pointer to the edge to be returned.
 // @info - ffinds and returns the given edge if it exists
 template <class VertexType>
-Edge<VertexType> * AdjList<VertexType>::getEdge(Vertex<VertexType> * vert) {
+Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert) {
 
     Edge<VertexType> * temp;
     temp = pEdge;
@@ -219,7 +219,7 @@ Edge<VertexType> * AdjList<VertexType>::getEdge(Vertex<VertexType> * vert) {
     while(temp != nullptr) {
 
         // if the edge to return is the next node, return that node
-        if(temp->getVertex()->getData() == vert->getData()){
+        if(temp->getVertex()->getData() == vert.getData()){
             return temp;
         }
         // else we iterate to the next node in the chain
