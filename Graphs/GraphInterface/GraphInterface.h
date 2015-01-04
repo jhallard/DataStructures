@@ -21,6 +21,10 @@ class GraphInterface
 {
 public:
 
+    // @func  - Destructor
+    // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
+    virtual ~uGraph() = 0;
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
