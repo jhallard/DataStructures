@@ -123,6 +123,44 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
     return *this;
 }
 
+// @func   - operator==
+// @args   - #1 constant reference to another graph object to compare to this one
+// @return - True if the graphs are the same, that is they have all of the same vertices and edges between vertices, including indentical weights.
+// @info   - This is currently 100% correct implementation, it will only return true if all vertices are the same and stored internally in the same
+//           order, same with the adjacent edges for each vertex. To fix this, we need to hash all vertices for comparison.
+template<class VertexType>
+bool uGraph<VertexType>::operator==(const uGraph<VertexType> & toCopy) {
+    
+    auto our_vertices = getAllVertices();
+
+    auto their_vertices = toCopy.getAllVertices();
+
+    if(our_vertices.size() != their_vertices.size())
+        return false;
+
+    for(int i = 0; i < our_vertices.size(); i++) {
+        if(our_vertices[i] != their_vertices[i])
+            return false;
+
+        auto our_edges = getAdjVertices(our_vertices[i]);
+        auto their_edges = toCopy.getAdjVertices(their_vertices[i]);
+
+        if(our_edges != their_edges)
+            return false;
+    }
+
+    return true;
+}
+
+// @func   - operator!=
+// @args   - #1 constant reference to another graph object to compare to this one
+// @return - True if they are not the same, false otherwise
+template<class VertexType>
+bool uGraph<VertexType>::operator!=(const uGraph<VertexType> & toCopy) {
+    
+    return !(operator==(toCopy));
+}
+
 
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
@@ -467,6 +505,16 @@ bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
 
     return true;
 }
+
+// @func   - reverse
+// @args   - none
+// @return - Bool indicating success
+// @info   - This function switches the direction of all edges
+template<class VertexType>
+bool dGraph<VertexType>::reverse() {
+    return true;
+}
+
 
 // @func   - invert
 // @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them

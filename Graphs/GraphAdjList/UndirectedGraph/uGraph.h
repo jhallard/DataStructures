@@ -93,6 +93,16 @@ public:
     // @return - The new graph copy
     uGraph<VertexType> operator=(const uGraph<VertexType> &);
 
+    // @func   - operator=
+    // @args   - #1 constant reference to another graph object to copy into
+    // @return - The new graph copy
+    bool operator==(const uGraph<VertexType> &);
+
+    // @func   - operator=
+    // @args   - #1 constant reference to another graph object to copy into
+    // @return - The new graph copy
+    bool operator!=(const uGraph<VertexType> &);
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
@@ -184,6 +194,12 @@ public:
     //             that didn't already exist.
     bool invert(double setWeight(VertexType&, VertexType&) = nullptr);
 
+    // @func   - reverse
+    // @args   - none
+    // @return - Bool indicating success
+    // @info   - This function switches the direction of all edges
+    bool reverse();
+    
     // @func   - printGraph
     // @args   - none
     // @return - none

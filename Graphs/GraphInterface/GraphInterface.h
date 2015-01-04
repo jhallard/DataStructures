@@ -97,7 +97,7 @@ public:
     // @args   - #1 Weight to assign to all edges in the new graph.
     // @return - Bool indicating success
     // @info   - This function removes all current edges from the graph, and instead makes a dense graph out of the current vertices
-    //           with an edge weighting retrieved via the argument to the function.
+    //           with the weight for each edge determined by the given function (arg #1).
     virtual bool makeGraphDense(double setWeight(VertexType&, VertexType&) = nullptr) = 0;
 
     // @func   - invert
@@ -106,6 +106,12 @@ public:
     // @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
     //           that didn't already exist.
     virtual bool invert(double setWeight(VertexType&, VertexType&) = nullptr) = 0;
+
+    // @func   - reverse
+    // @args   - none
+    // @return - Bool indicating success
+    // @info   - This function switches the direction of all edges, only does something meaningful for directed graphs.
+    virtual bool reverse() = 0;
 
     // @func   - isConnected
     // @args   - None

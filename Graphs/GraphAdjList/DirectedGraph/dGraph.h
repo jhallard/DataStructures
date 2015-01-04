@@ -89,6 +89,16 @@ public:
     // @return - The new graph copy
     dGraph<VertexType> operator=(const dGraph<VertexType> &);
 
+    // @func   - operator=
+    // @args   - #1 constant reference to another graph object to copy into
+    // @return - The new graph copy
+    bool operator==(const dGraph<VertexType> &);
+
+    // @func   - operator=
+    // @args   - #1 constant reference to another graph object to copy into
+    // @return - The new graph copy
+    bool operator!=(const dGraph<VertexType> &);
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 
