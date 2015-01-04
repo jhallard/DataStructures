@@ -266,6 +266,9 @@ public:
     // @args   - #1 Source Vertex, #2 Dest Vertex
     // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
     //           #2 the net weight along that path betweent he two vertices.
+    // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
+    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+    //           structure that contains the shortest path from the source vertex to any vertex in the map.
     std::pair<std::vector<VertexType>, double> dijkstrasComputePath(const VertexType &, const VertexType &);
 
 

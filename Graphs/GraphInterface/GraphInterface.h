@@ -157,14 +157,19 @@ public:
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search
-    // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+    //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
+    // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
+    //           the source vertex is not contained in the map.
     virtual std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dijkstras(const VertexType &) = 0;
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex
     // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
     //           #2 the net weight along that path betweent he two vertices.
+    // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
+    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+    //           structure that contains the shortest path from the source vertex to any vertex in the map.
     virtual std::pair<std::vector<VertexType>, double>dijkstrasComputePath(const VertexType &, const VertexType &) = 0;
 
 
