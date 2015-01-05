@@ -20,11 +20,9 @@ Where x* is an edge that leads from vertex v to vertex x. Thus to find all of th
 As of now, there are two types of graphs that use an adjacency list implementation. They are uGraph (undirected graph) and dGraph(DirectedGraph). Both rely on the same AdjList, Vertex, and Edge classes to accomplish their implementations.
 
 #### uGraph
-An undirected graph, this means that inserting an edge between any two vertices will actually insert two edges into our adjacency list representation with the same weight. 
-TODO
+This is an undirected graph that can be either weighted or unweighted, the choice is up to the user. Internally, the graph is always weighted. But edges without assigned weights are given a weight of infinity, so if no edge weights are assigned then all edges are treated equally. The data structure is templated over the vertex data, allowing the graph to work with standard and custom data types that implement some required functionality (must supply a hash function and equality comparison functionality for the vertex class).
 
-#### dGraph 
-A typical directed graph.
-TODO
+#### dGraph
+This is an directed graph that can be either weighted or unweighted, the choice is up to the user. It is nearly identical to the undirected graph, with slight changes showing up in the insert, remove, and traversal functions. Overall this class shares the majority of its code with the undirected graph, which was implemented first.
 
 
