@@ -4,16 +4,15 @@ DataStructures
 #### Project Overview
 
 **DataStructures** is a collection of data structures implemented using the C++ programming language and some C++11 features.
-The data structures created in this project are all fully templated and made to be as general, efficient, and reliable as possible. This is a personal project developed by John Allard, if you are interested in contributing to this project please email me (john@jhallard.com) and we can work something out. All code in this project is currently unlicensed, but feel free to use, distribute, or poke fun at anything you wish.
+The structures created in this project are all fully templated and made to be as general, efficient, and reliable as possible. This is a personal project developed to improve my understanding of the fundamental data structures, but if you are interested in contributing to this project please email me (john@jhallard.com) and we can work something out. All code in this project is currently unlicensed, but feel free to use, distribute, or poke fun at anything you wish.
 
 ##### Build
-This project was  developed in a linux environment, as of now I cannot guarentee compatibility with other OS's. Open up a terminal (make sure you have Git installed) and type :
+**Note** - *The project is not currently build ready, and can't be used as a library for your use. Certain self-containted parts, like the graphs, are working and tested, those could be manually included into a project.*
 
     git clone https://github.com/jhallard/DataStructures.git
     cd DataStructures
     cmake CMakeLists.txt
     make
-**Note**- *This project is not build ready yet, as in there is no master makefile to make the entire project. You can still download the code and include the needed files into your own project manually.*
 
 #### Graphs
 Graphs are one of the most powerful and all-encompasing data structures known to man, and they are the source for some of the most interesting problems in computer science. This project contains a few different graph implementations, all of which come with their own implementation of BFS, DFS, min-cut, dijkstra's, and other popular graph algorithms. Below is a listing of the various flavors of graphs that are implemented.
