@@ -605,34 +605,38 @@ TEST(Dijkstras, simple_test2) {
     graph.insertEdge(3, 5, 2);
     graph.insertEdge(5, 3, 2);
 
-    std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(0, 4);
-    auto temp = the_pair.first;
-    auto dis = the_pair.second;
+    // std::pair<std::vector<int>,double> the_pair = graph.dijkstrasMinimumPath(0, 4);
+    // auto temp = the_pair.first;
+    // auto dis = the_pair.second;
     bool testval = true;
-    // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
-    if(!temp.size()) {
-        // std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-        // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+    // // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
+    // if(!temp.size()) {
+    //     // std::cout << "Path Not Found : " << r << " -> " << y << "\n";
+    //     // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+    //     testval = false;
+    // }
+    // else {
+    //     ASSERT_EQ(true, temp.size() > 0);
+    //     ASSERT_EQ(0, temp[0]);
+    //     ASSERT_EQ(4, temp[temp.size()-1]);
+    // }
+    if(!graph.dijkstrasMinimumPath(0, 4))
         testval = false;
-    }
-    else {
-        ASSERT_EQ(true, temp.size() > 0);
-        ASSERT_EQ(0, temp[0]);
-        ASSERT_EQ(4, temp[temp.size()-1]);
-    }
 
-    the_pair = graph.dijkstrasComputePath(4, 3);
-    temp = the_pair.first;
-    dis = the_pair.second;
-    testval = true;
-    if(!temp.size()) {
+    // the_pair = graph.dijkstrasMinimumPath(4, 3);
+    // temp = the_pair.first;
+    // dis = the_pair.second;
+    // testval = true;
+    // if(!temp.size()) {
+    //     testval = false;
+    // }
+    // else {
+    //     ASSERT_EQ(true, temp.size() > 0);
+    //     ASSERT_EQ(4, temp[0]);
+    //     ASSERT_EQ(3, temp[temp.size()-1]);
+    // }
+    if(!graph.dijkstrasMinimumPath(4, 3))
         testval = false;
-    }
-    else {
-        ASSERT_EQ(true, temp.size() > 0);
-        ASSERT_EQ(4, temp[0]);
-        ASSERT_EQ(3, temp[temp.size()-1]);
-    }
 
     ASSERT_EQ(true, testval);
 }
@@ -684,19 +688,21 @@ TEST(Dijkstras, simple_test) {
     for(int k = 1; k < numVertices/2; k++) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-        std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
-        auto temp = the_pair.first;
-        auto dis = the_pair.second;
+        // std::pair<std::vector<int>,double> the_pair = graph.dijkstrasMinimumPath(r, y);
+        // auto temp = the_pair.first;
+        // auto dis = the_pair.second;
 
-        if(!temp.size()) {
-            std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-            testval = false;
-        }
-        else {
-            ASSERT_EQ(true, temp.size() > 0);
-            ASSERT_EQ(r, temp[0]);
-            ASSERT_EQ(y, temp[temp.size()-1]);
-        }
+        // if(!temp.size()) {
+        //     std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+        //     testval = false;
+        // }
+        // else {
+        //     ASSERT_EQ(true, temp.size() > 0);
+        //     ASSERT_EQ(r, temp[0]);
+        //     ASSERT_EQ(y, temp[temp.size()-1]);
+        // }
+    if(!graph.dijkstrasMinimumPath(r, y))
+        testval = false;
     }
 
     ASSERT_EQ(true, testval);

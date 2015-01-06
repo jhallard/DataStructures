@@ -71,6 +71,8 @@ void intTest1() {
 
     trav->graph.printGraph();
 
+    delete trav;
+
     // graph.breadthFirst(4, fptr);
 
 
@@ -319,7 +321,7 @@ void dGraphTest() {
 
     // std::cout << "\n\n\n";
 
-    // std::pair<std::vector<int>, double> ret = graph.dijkstrasComputePath(7, 8);
+    // std::pair<std::vector<int>, double> ret = graph.dijkstrasMinimumPath(7, 8);
 
     // for(auto i : ret.first)
     //     std::cout << i << ", ";

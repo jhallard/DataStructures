@@ -14,6 +14,7 @@
 
 
 #include "../../UndirectedGraph/uGraph.h"
+#include "../../Travelers/Traveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -615,28 +616,39 @@ TEST(Dijkstras, simple_test) {
 	}	
 
     bool testval = true;
+    int total = 0;
+    // This Test is currently commented out until it is updated to reflect the new nature of dijkstrasMinimumPath
     for(int k = 1; k < numVertices/10; k++) {
     	
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-        if(!(graph.containsVertex(r) & graph.containsVertex(y)))
-            continue;
-    	std::pair<std::vector<int>,double> the_pair = graph.dijkstrasComputePath(r, y);
-    	auto temp = the_pair.first;
-    	auto dis = the_pair.second;
+        // if(!(graph.containsVertex(r) & graph.containsVertex(y)))
+        //     continue;
+    	// std::pair<std::vector<int>,double> the_pair = graph.dijkstrasMinimumPath(r, y);
+    	// auto temp = the_pair.first;
+    	// auto dis = the_pair.second;
 
-    	// std::cout << "# Edges : " << graph.getNumEdges() << "\n";
-        if(!temp.size()) {
-            std::cout << " [" << k << "/" <<numVertices/10 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-            // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
-            testval = false;
-        }
-        else {
-        	ASSERT_EQ(true, temp.size() > 0);
-        	ASSERT_EQ(r, temp[0]);
-        	ASSERT_EQ(y, temp[temp.size()-1]);
-        }
+    	// // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
+     //    if(!temp.size()) {
+     //        std::cout << " [" << k << "/" <<numVertices/10 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+     //        // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
+     //        testval = false;
+     //    }
+     //    else {
+     //    	ASSERT_EQ(true, temp.size() > 0);
+     //    	ASSERT_EQ(r, temp[0]);
+     //    	ASSERT_EQ(y, temp[temp.size()-1]);
+     //    }
+
+    Traveler<int> * trav = new Traveler<int>();
+    if(!graph.dijkstrasMinimumPath(r, y, trav)) {
+        testval = false;
+        total++;
+    }
+      else
+        trav->graph.printGraph();
     }
 
+    std::cout << total << "/" << numVertices/10 << " Wrong Paths \n";
     ASSERT_EQ(true, testval);
 
 }

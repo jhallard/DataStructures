@@ -19,17 +19,19 @@ class Traveler : public GraphTraveler<VertexType>
 public:
     ~Traveler() {};
 
-    void discover_vertex(VertexType & vert) {
-        last_vertex = vert;
-        graph.insertVertex(vert);
+    void discover_vertex(const VertexType & vert) {
+        VertexType tmp = vert;
+        last_vertex = tmp;
+        graph.insertVertex(last_vertex);
     }
 
-    void examine_edge(Edge<VertexType> & edge) {
-        graph.insertVertex(edge.getVertex()->getData());
-        graph.insertEdge(last_vertex, edge.getVertex()->getData(), edge.getWeight());
+    void examine_edge(const Edge<VertexType> & edge) {
+        Edge<VertexType> tmp = edge;
+        graph.insertVertex(tmp.getVertex()->getData());
+        graph.insertEdge(last_vertex, tmp.getVertex()->getData(), tmp.getWeight());
     }
 
-    void starting_vertex(VertexType vert) {
+    void starting_vertex(const VertexType & vert) {
         last_vertex = vert;
     }
 

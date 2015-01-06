@@ -30,10 +30,6 @@
 *               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
 *               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
 *               me to make amny different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
-*
-*               Time Complexity :
-*               Below is a break down of the time and space complexity for the various operations performed by this graph.
-*               #TODO - List Big-O's for all of the important functions in this class.
 **/
 
 #ifndef D_GRAPH_A_LIST_H
@@ -54,17 +50,14 @@
 #include "../AdjacencyList/AdjList.h"
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
-// #include "../Travelers/Traveler/GraphTraveler.h"
 
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
 class dGraph : public GraphInterface <VertexType>
 {
-
-
-//////////////////////////////////////////////////////
-////////         PUBLIC INTERFACE       //////////////
-//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    ////////         PUBLIC INTERFACE       //////////////
+    //////////////////////////////////////////////////////
 public:
 
     // @func - Constructor#1
@@ -261,16 +254,15 @@ public:
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    typename dGraph<VertexType>::dist_prev_pair dijkstras(const VertexType &);
+    typename dGraph<VertexType>::dist_prev_pair dijkstrasMinimumTree(const VertexType &);
 
-    // @func   - dijkstrasComputePath
-    // @args   - #1 Source Vertex, #2 Dest Vertex
-    // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
-    //           #2 the net weight along that path betweent he two vertices.
+    // @func   - dijkstrasMinimumPath
+    // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
+    // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
     //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
-    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(const VertexType &, const VertexType &);
+    bool dijkstrasMinimumPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
 
     // @func   - aStar
@@ -281,9 +273,9 @@ public:
 
 
 
-//////////////////////////////////////////////////////
-////////           PRIVATE DATA      /////////////////
-//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    ////////           PRIVATE DATA      /////////////////
+    //////////////////////////////////////////////////////
 private:
     
     // @member - num_vertices
@@ -323,9 +315,9 @@ private:
 
 
 
-//////////////////////////////////////////////////////
-////////       PRIVATE FUNCTIONS     /////////////////
-//////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////
+    ////////       PRIVATE FUNCTIONS     /////////////////
+    //////////////////////////////////////////////////////
 
     // @func   - findVertex
     // @args   - #1 Value contained in the vertex to be found

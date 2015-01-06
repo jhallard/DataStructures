@@ -58,8 +58,6 @@
 #include "../AdjacencyList/AdjList.h"
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
-// #include "../Travelers/Traveler/GraphTraveler.h"
-
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
 class uGraph : public GraphInterface <VertexType>
@@ -259,22 +257,21 @@ public:
     //           of the veritces in this graph. Will throw an exception is the graph is not connected. 
     uGraph<VertexType> * minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
-    // @func   - dijkstras
+    // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search
     // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    typename uGraph<VertexType>::dist_prev_pair dijkstras(const VertexType &);
+    typename uGraph<VertexType>::dist_prev_pair dijkstrasMinimumTree(const VertexType &);
 
     // @func   - dijkstrasComputePath
-    // @args   - #1 Source Vertex, #2 Dest Vertex
-    // @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
-    //           #2 the net weight along that path betweent he two vertices.
+    // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
+    // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
     //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
-    std::pair<std::vector<VertexType>, double> dijkstrasComputePath(const VertexType &, const VertexType &);
+    bool dijkstrasMinimumPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
 
     // @func   - aStar

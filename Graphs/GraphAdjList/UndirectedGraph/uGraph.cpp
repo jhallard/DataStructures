@@ -969,14 +969,14 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree(GraphTraveler<Verte
 }
 
 
-// @func   - dijkstras
+// @func   - dijkstrasMinimumTree
 // @args   - #1 Data contained in starting vertex for search
 // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
 //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
 //           the source vertex is not contained in the map.
 template<class VertexType>
-typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(const VertexType & source) {
+typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source) {
 
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
@@ -1045,15 +1045,14 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(const 
      return ret;
 }
 
-// @func   - dijkstrasComputePath
-// @args   - #1 Source Vertex, #2 Dest Vertex
-// @return - A pair consisting of #1Vector of vertices that lead from the source vertex to the destination vertex along the shortest path, 
-//           #2 the net weight along that path betweent the two vertices.
-// @info   - This function exists to allow the user to retrieve a vector containing the edges to travel along to complete the shortest path
-//           between two given vertices, Dijkstras algorithm returns the shortest path to *every* other vertex and the output must be decoded 
-//           to find the path between the source and any other specific vertex.
+// @func   - dijkstrasMinimumPath
+// @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
+// @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
+// @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
+//           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+//           structure that contains the shortest path from the source vertex to any vertex in the map.
 template<class VertexType>
-std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputePath(const VertexType & src, const VertexType & dest) {
+bool uGraph<VertexType>::dijkstrasMinimumPath(const VertexType & src, const VertexType & dest, GraphTraveler<VertexType> * traveler) {
 
     std::unordered_map<VertexType, VertexType> prev; // Maps a vertex to the previous vertex that was taken to get there
     std::unordered_map<VertexType, double> dist;     // Maps a Vertex to the net weight along the path from the src to this vertex
@@ -1067,10 +1066,10 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
         path.push_back(dest);
         ret.first = path;
         ret.second = 0.0;
-        return ret;
+        return true;//ret;
     }
 
-    typename uGraph<VertexType>::dist_prev_pair the_pair = this->dijkstras(src);
+    typename uGraph<VertexType>::dist_prev_pair the_pair = this->dijkstrasMinimumTree(src);
     prev = the_pair.first;
     dist = the_pair.second;
 
@@ -1081,7 +1080,7 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
     while(prev_vert != src && count < 2*list.size()) {
 
         if(prev.find(prev_vert) == prev.end()) {
-            return std::pair<std::vector<VertexType>, double>();
+            return false;//std::pair<std::vector<VertexType>, double>();
         }
         prev_vert = prev.at(prev_vert);
         path.push_back(prev_vert); 
@@ -1098,7 +1097,32 @@ std::pair<std::vector<VertexType>, double> uGraph<VertexType>::dijkstrasComputeP
     ret.first = temp;
     ret.second = dist.at(dest);
 
-    return ret;
+    if(!temp.size())
+        return false;
+
+    if(traveler != nullptr) {
+
+        VertexType current = *temp.begin();
+        VertexType last = current;
+        traveler->starting_vertex(current);
+
+        for(int i = 1; i < temp.size(); i++) {
+            current = temp[i];
+            
+            if(!containsEdge(last, current))
+                return false;
+
+            Edge<VertexType> next_edge = *(findVertex(last)->getEdge(current));
+
+            traveler->examine_edge(next_edge);
+            last = current;
+            traveler->discover_vertex(current);
+        }
+
+        traveler->finished_traversal();
+    }
+
+    return true;
 }
 
 // @func   - aStar
