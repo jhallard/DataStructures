@@ -14,6 +14,7 @@
 
 
 #include "../../DirectedGraph/dGraph.h"
+#include "../../Travelers/Traveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -688,22 +689,17 @@ TEST(Dijkstras, simple_test) {
     for(int k = 1; k < numVertices/2; k++) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-        // std::pair<std::vector<int>,double> the_pair = graph.dijkstrasMinimumPath(r, y);
-        // auto temp = the_pair.first;
-        // auto dis = the_pair.second;
+        Traveler<int> * trav = new Traveler<int>();
+        if(!graph.dijkstrasMinimumPath(r, y, trav)) {
+            std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            testval = false;
+        }
+        else
+            trav->graph.printGraph();
 
-        // if(!temp.size()) {
-        //     std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-        //     testval = false;
-        // }
-        // else {
-        //     ASSERT_EQ(true, temp.size() > 0);
-        //     ASSERT_EQ(r, temp[0]);
-        //     ASSERT_EQ(y, temp[temp.size()-1]);
-        // }
-    if(!graph.dijkstrasMinimumPath(r, y))
-        testval = false;
+        delete(trav);
     }
+
 
     ASSERT_EQ(true, testval);
 
