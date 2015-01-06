@@ -17,24 +17,24 @@
 #ifndef Graph_Traveler_h
 #define Graph_Traveler_h
 
-#include "../../Edge/Edge.h"
-#include "../../Vertex/Vertex.h"
-// #include "../../../GraphInterface/GraphInterface.h"
+#include "../Edge/Edge.h"
+#include "../Vertex/Vertex.h"
+#include "../../GraphInterface/GraphInterface.h"
 
 
 template<class VertexType>
-class Traveler
+class GraphTraveler
 {
 public:
-    ~Traveler() {};
+    ~GraphTraveler() {};
 
-    virtual void discover_vertex(const VertexType &) = 0;
+    virtual void discover_vertex(VertexType &) = 0;
 
-    virtual void examine_edge(const Edge<VertexType> &) = 0;
+    virtual void examine_edge(Edge<VertexType> &) = 0;
 
-    virtual void starting_vertex(const VertexType &) = 0;
+    virtual void starting_vertex(VertexType ) = 0;
 
-    virtual void finished_trasversal() = 0;
+    virtual void finished_traversal() = 0;
 
 };
 

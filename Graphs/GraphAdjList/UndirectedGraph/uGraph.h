@@ -58,7 +58,7 @@
 #include "../AdjacencyList/AdjList.h"
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
-#include "../Travelers/Traveler/Traveler.h"
+// #include "../Travelers/Traveler/GraphTraveler.h"
 
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
@@ -70,13 +70,6 @@ class uGraph : public GraphInterface <VertexType>
 ////////         PUBLIC INTERFACE       //////////////
 //////////////////////////////////////////////////////
 public:
-
-    // @class Traveler
-    // @info  This is an abstract class that is defined within the GraphInterface namespace because it is intimately tied with the graphs in this
-    //        project. This class is used while traversing a graph using BFS/DFS/min-cost search to run various algorithms on the vertices/edges of
-    //        the graph as they are discovered. This means a user doesn't have to querey for data, manipulate a copy, then push the new copy to the graph.
-    //        They can instead override a Traveler class and have this class manipulate the graph during the various traversals.
-    // template<class VType> class Traveler;// : public GraphInterface<VertexType>::Traveler;
 
     // @func - Constructor#1
     // @args - None
@@ -243,7 +236,7 @@ public:
     // @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
     //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
-    bool depthFirst(const VertexType &, Traveler<VertexType> * = nullptr);
+    bool depthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
@@ -251,7 +244,7 @@ public:
     // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
     //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
-    bool breadthFirst(const VertexType &, Traveler<VertexType> * = nullptr);
+    bool breadthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
     // @func   - minimuminCut
     // @args   - none
@@ -264,7 +257,7 @@ public:
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
     //           of the veritces in this graph. Will throw an exception is the graph is not connected. 
-    uGraph<VertexType> * minimumSpanningTree();
+    uGraph<VertexType> * minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search

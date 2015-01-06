@@ -15,20 +15,12 @@
 #include <limits>
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
-#include "../GraphAdjList/Travelers/Traveler/Traveler.h"
+#include "../GraphAdjList/Travelers/GraphTraveler.hpp"
 
 template<class VertexType>
 class GraphInterface
 {
 public:
-    // @class Traveler
-    // @info  This is an abstract class that is defined within the GraphInterface namespace because it is intimately tied with the graphs in this
-    //        project. This class is used while traversing a graph using BFS/DFS/min-cost search to run various algorithms on the vertices/edges of
-    //        the graph as they are discovered. This means a user doesn't have to querey for data, manipulate a copy, then push the new copy to the graph.
-    //        They can instead override a Traveler class and have this class manipulate the graph during the various traversals.
-    // template<class VType> class Traveler;
-
-    // class Iterator;
 
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
@@ -145,7 +137,7 @@ public:
     // @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
     //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
-    virtual bool depthFirst(const VertexType &, Traveler<VertexType> * = nullptr) = 0;
+    virtual bool depthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
@@ -153,12 +145,13 @@ public:
     // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
     //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
-    virtual bool breadthFirst(const VertexType &, Traveler<VertexType> * = nullptr) = 0;
+    virtual bool breadthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - minimuminCut
     // @args   - none
     // @return - 2 column vector of vertices, each column representing one half of the cut. 
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
+    //           Not yet completed, only about half-way done. This function signature probably isn't even final.
     virtual std::vector<std::vector<VertexType> > minimumCut() = 0;
 
     // @func   - minimuminSpanningTree
@@ -166,7 +159,7 @@ public:
     // @return - A graph that represents the minimum spanning tree of the current graph object. 
     // @info   - This function is declared to return a GraphInterface object, but since GraphInterface is abstract, what will really happen is that any of the
     //           classes derived from this one will simply return a graph of their own type when implementing this function. (See uGraph for an example).
-    virtual GraphInterface<VertexType> * minimumSpanningTree() = 0;
+    virtual GraphInterface<VertexType> * minimumSpanningTree(GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - dijkstras
     // @args   - #1 Data contained in starting vertex for search

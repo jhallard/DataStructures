@@ -630,7 +630,7 @@ bool uGraph<VertexType>::getIsMultiGraph() {
 //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
 //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
-bool uGraph<VertexType>::depthFirst(const VertexType & root_data, Traveler<VertexType> * traveler) {
+bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
     // Our deque object, stores the vertices as they appear to the search
     // We actually use it as a stack for this problem, by inserting and removing from the 
@@ -648,6 +648,10 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, Traveler<Verte
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
+
+    // visit the new vertex
+    if(traveler != nullptr)
+        traveler->starting_vertex(root_vert->getVertex()->getData());
 
     while(q.size()) {
 
@@ -668,19 +672,25 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, Traveler<Verte
 
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
-        for(int i = 0; i < edges.size(); i++) {
+        for(auto edge : edges) {
 
-            Vertex<VertexType> * tempVert = edges[i]->getVertex();
+            Vertex<VertexType> * tempVert = edge->getVertex();
             VertexType tempData = tempVert->getData();
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             if(get == marked.end()) {
+                if(traveler != nullptr)
+                    traveler->examine_edge(*edge);
+                
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 q.push_back(tempVert);
             }
         }
 
     }
+
+    if(traveler != nullptr)
+        traveler->finished_traversal();
 
     return true;
     
@@ -694,7 +704,7 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, Traveler<Verte
 //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
 //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
-bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, Traveler<VertexType> * traveler) {
+bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
     // Our queue object, stores the vertices as they appear to the search
     std::deque<Vertex<VertexType> *> q;
@@ -711,6 +721,10 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, Traveler<Ver
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
+
+    // visit the new vertex
+    if(traveler != nullptr)
+        traveler->starting_vertex(root_vert->getVertex()->getData());
 
     while(q.size()) {
 
@@ -731,15 +745,18 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, Traveler<Ver
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
         // Go through all of the edges associated with the current vertex
-        for(int i = 0; i < edges.size(); i++) {
+        for(auto edge : edges) {
 
-            Vertex<VertexType> * tempVert = edges[i]->getVertex();
+            Vertex<VertexType> * tempVert = edge->getVertex();
             VertexType tempData = tempVert->getData();
 
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             // if the current vertex hasn't been seen
             if(get == marked.end()) {
+                // examine the new edge
+                if(traveler != nullptr)
+                    traveler->examine_edge(*edge);
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex
@@ -749,6 +766,8 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, Traveler<Ver
         }
 
     }
+    if(traveler != nullptr)
+        traveler->finished_traversal();
 
     return true;
 }
@@ -890,7 +909,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 //           spanning tree of the veritces in this graph. Will throw an exception is the graph is not connected. Prims alg. 
 //           is used to find the min. spanning tree, and the source vertex is the first vertex that was stored into the graph.
 template<class VertexType>
-uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree() {
+uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
     // A non connected graph cannot be spanned, without this we risk an infinite loop
     if(!this->isConnected())

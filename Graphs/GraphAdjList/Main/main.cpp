@@ -1,5 +1,6 @@
 #include "../UndirectedGraph/uGraph.h"
 #include "../DirectedGraph/dGraph.h"
+#include "../Travelers/Traveler.hpp"
 #include <iostream>
 #include <ctime>
 
@@ -15,9 +16,9 @@ int main()
     srand(time(0));
     rand();
 
-    // intTest1();
+    intTest1();
     // intTest2();
-    dGraphTest();
+    // dGraphTest();
     std::cout << "\n\n\n";
 
     // stringTest();
@@ -61,10 +62,14 @@ void intTest1() {
     fptr = visit1;
     graph.breadthFirst(8);//, fptr);
 
+    Traveler<int> * trav = new Traveler<int>();
+
 
     std::cout << "\n\n\n";
 
-    graph.depthFirst(8);//, fptr);
+    graph.depthFirst(8, trav);//, fptr);
+
+    trav->graph.printGraph();
 
     // graph.breadthFirst(4, fptr);
 
