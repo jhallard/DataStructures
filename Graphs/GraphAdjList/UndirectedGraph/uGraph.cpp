@@ -511,7 +511,7 @@ bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
 // @return - Bool indicating success
 // @info   - This function switches the direction of all edges
 template<class VertexType>
-bool dGraph<VertexType>::reverse() {
+bool uGraph<VertexType>::reverse() {
     return true;
 }
 
@@ -580,9 +580,9 @@ bool uGraph<VertexType>::isConnected() {
 
     this->connectivityCount = 0;
 
-    auto f = [](VertexType&) -> void { int x = 0; }; // dummy function that needs to be passed in to BFS
+    // auto f = [](VertexType&) -> void { int x = 0; }; // dummy function that needs to be passed in to BFS
 
-    this->depthFirst(list[0]->getVertex()->getData(), f);
+    this->depthFirst(list[0]->getVertex()->getData());//, f);
 
     return connectivityCount == list.size();
 }
@@ -624,13 +624,13 @@ bool uGraph<VertexType>::getIsMultiGraph() {
 
 
 // @func   - depthFirst
-// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+// @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data 
-//           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use a 
-//           std::unordered_map to keep track of the seen and unseen vertices.
+// @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
+//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
+//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
-bool uGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(VertexType&)) {
+bool uGraph<VertexType>::depthFirst(const VertexType & root_data, Traveler<VertexType> * traveler) {
 
     // Our deque object, stores the vertices as they appear to the search
     // We actually use it as a stack for this problem, by inserting and removing from the 
@@ -641,13 +641,13 @@ bool uGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(Vert
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    AdjList<VertexType> *  rootVert = findVertex(rootData);
+    AdjList<VertexType> *  root_vert = findVertex(root_data);
 
-    if(rootVert == nullptr)
+    if(root_vert == nullptr)
         return false;
 
-    marked.insert(std::pair<VertexType, bool>(rootData, true));
-    q.push_back(rootVert->getVertex());
+    marked.insert(std::pair<VertexType, bool>(root_data, true));
+    q.push_back(root_vert->getVertex());
 
     while(q.size()) {
 
@@ -661,8 +661,10 @@ bool uGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(Vert
 
         // visit the node that we just popped off the stack
         VertexType tempData = adj->getVertex()->getData();
-        if(visit != nullptr)
-            visit(tempData);
+        
+        // visit the new vertex
+        if(traveler != nullptr)
+            traveler->discover_vertex(tempData);
 
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
@@ -685,14 +687,14 @@ bool uGraph<VertexType>::depthFirst(const VertexType & rootData, void visit(Vert
 }
 
 
-// @func   - breadthFirst
-// @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+//@func   - breadthFirst
+// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data
-//           is unique, so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an
-//           std::unordered_map to keeptrack of the seen and unseen vertices.
+// @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
+//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
+//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
-bool uGraph<VertexType>::breadthFirst(const VertexType & rootData, void visit(VertexType&)) {
+bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, Traveler<VertexType> * traveler) {
 
     // Our queue object, stores the vertices as they appear to the search
     std::deque<Vertex<VertexType> *> q;
@@ -701,14 +703,14 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & rootData, void visit(Ve
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    AdjList<VertexType> *  rootVert = findVertex(rootData);
+    AdjList<VertexType> *  root_vert = findVertex(root_data);
 
-    if(rootVert == nullptr)
+    if(root_vert == nullptr)
         return false;
 
 
-    marked.insert(std::pair<VertexType, bool>(rootData, true));
-    q.push_back(rootVert->getVertex());
+    marked.insert(std::pair<VertexType, bool>(root_data, true));
+    q.push_back(root_vert->getVertex());
 
     while(q.size()) {
 
@@ -721,8 +723,10 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & rootData, void visit(Ve
             return false;
 
         VertexType tempData = adj->getVertex()->getData();
-        if(visit != nullptr)
-            visit(tempData);
+
+        // visit the new vertex
+        if(traveler != nullptr)
+            traveler->discover_vertex(tempData);
 
         std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
 
@@ -978,7 +982,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(const 
     prev.reserve(this->getNumVertices());
 
 
-    for(auto vertex : list) { // Initialize the distances to infinity for all vertices
+    for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
         if(vertex->getVertex()->getData() != source)
             dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
         else
@@ -996,7 +1000,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstras(const 
 
         auto edges = current_vert->getAllEdges();
 
-        for(auto edge : edges) {
+        for(auto & edge : edges) {
 
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();

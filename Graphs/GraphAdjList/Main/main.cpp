@@ -59,12 +59,12 @@ void intTest1() {
 
     void (*fptr)(int&);
     fptr = visit1;
-    graph.breadthFirst(8, fptr);
+    graph.breadthFirst(8);//, fptr);
 
 
     std::cout << "\n\n\n";
 
-    graph.depthFirst(8, fptr);
+    graph.depthFirst(8);//, fptr);
 
     // graph.breadthFirst(4, fptr);
 
@@ -113,11 +113,11 @@ void intTest1() {
         std::cerr << e.what();
     }
 
-    graph.breadthFirst(8, fptr);
+    graph.breadthFirst(8);//, fptr);
 
     std::cout << "\n\n\n";
 
-    graph.depthFirst(8, fptr);
+    graph.depthFirst(8);//, fptr);
 }
 
 
@@ -235,7 +235,7 @@ void stringTest() {
     void (*fptr)(std::string&);
     fptr = visit;
 
-    graph.breadthFirst("abcd", fptr);
+    graph.breadthFirst("abcd");//, fptr);
 
     std::cout << "\n\n\n";
 

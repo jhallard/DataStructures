@@ -101,7 +101,7 @@ uGraph<int> graph;
 
 TEST(VerticesTest, delete_test) { 
 uGraph<int> graph;
-    int numVertices = rand()%800+2;
+    int numVertices = rand()%800+200;
 
     std::vector<int> input_vec;
 
@@ -688,7 +688,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
     	int r = rand()%(numVertices-1)+1;
 
 	    auto start = std::chrono::high_resolution_clock::now();
-	    graph.breadthFirst(r, f);
+	    graph.breadthFirst(r);//, f);
 		auto elapsed = std::chrono::high_resolution_clock::now() - start;	
 		long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
@@ -697,7 +697,7 @@ TEST(SpeedTests, large_bfs_dfs_test) {
 		ASSERT_EQ(true, m < 400 );
 
 		start = std::chrono::high_resolution_clock::now();
-	    graph.depthFirst(r, f);
+	    graph.depthFirst(r);//, f);
 		elapsed = std::chrono::high_resolution_clock::now() - start;	
 		m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 

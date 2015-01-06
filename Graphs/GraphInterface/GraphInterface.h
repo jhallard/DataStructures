@@ -15,15 +15,24 @@
 #include <limits>
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
+#include "../GraphAdjList/Travelers/Traveler/Traveler.h"
 
 template<class VertexType>
 class GraphInterface
 {
 public:
+    // @class Traveler
+    // @info  This is an abstract class that is defined within the GraphInterface namespace because it is intimately tied with the graphs in this
+    //        project. This class is used while traversing a graph using BFS/DFS/min-cost search to run various algorithms on the vertices/edges of
+    //        the graph as they are discovered. This means a user doesn't have to querey for data, manipulate a copy, then push the new copy to the graph.
+    //        They can instead override a Traveler class and have this class manipulate the graph during the various traversals.
+    // template<class VType> class Traveler;
+
+    // class Iterator;
 
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
-    virtual ~uGraph() = 0;
+    virtual ~GraphInterface() {};
 
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
@@ -131,20 +140,20 @@ public:
     virtual bool isBipartite() = 0;
 
     // @func   - depthFirst
-    // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+    // @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a depth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
-    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
-    //           track of the seen and unseen vertices.
-    virtual bool depthFirst(const VertexType &, void visit(VertexType&)) = 0;
+    // @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
+    //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
+    //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+    virtual bool depthFirst(const VertexType &, Traveler<VertexType> * = nullptr) = 0;
 
     // @func   - breadthFirst
-    // @args   - #1 Data associated with the starting vertex for the search, #2 function pointer that takes a set of vertex data as an argument
+    // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the visit() function on each item. This function assumes that all vertex data is unique,
-    //           so if this is a graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map to keep
-    //           track of the seen and unseen vertices.
-    virtual bool breadthFirst(const VertexType &, void visit(VertexType&)) = 0;
+    // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
+    //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
+    //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+    virtual bool breadthFirst(const VertexType &, Traveler<VertexType> * = nullptr) = 0;
 
     // @func   - minimuminCut
     // @args   - none
@@ -185,5 +194,4 @@ public:
 
 
 };
-
 #endif
