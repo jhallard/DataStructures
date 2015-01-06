@@ -90,15 +90,15 @@ public:
     // @return - The number of edges connected to this particular vertex
     unsigned int getNumEdges();
 
-    // @func   - setIsMultiGraph
-    // @args   - boolean to be stored in isMultiGraph
+    // @func   - set_is_multi_graph
+    // @args   - boolean to be stored in is_multi_graph
     // @return - Bool indicating success
-    bool setIsMultiGraph(bool);
+    bool set_is_multi_graph(bool);
 
-    // @func   - getIsMultiGraph
+    // @func   - get_is_multi_graph
     // @args   - None
-    // @return - Bool value of isMultiGraph
-    bool getIsMultiGraph();
+    // @return - Bool value of is_multi_graph
+    bool get_is_multi_graph();
 
 
 
@@ -123,7 +123,7 @@ private:
 
     unsigned int numEdges;
 
-    bool isMultiGraph;
+    bool is_multi_graph;
 
 
 };

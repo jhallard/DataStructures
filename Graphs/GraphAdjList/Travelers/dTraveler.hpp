@@ -1,46 +1,41 @@
 /**
 *   @Author   - John H Allard Jr.
-*   @File     - Traveler.h
+*   @File     - uTraveler.h
 *   @Data     - 1/2/2014
 *   @Purpose  - This file defines the a testing traveler class that will process the vertices and edges as they come in.
 **/
 
-#ifndef My_Traveler_h
-#define My_Traveler_h
+#ifndef dTraveler_h
+#define dTraveler_h
 
 #include "../Edge/Edge.h"
 #include "../Vertex/Vertex.h"
-#include "../DirectedGraph/dGraph.h"
 
+template<class V> class dGraph; // forward declaring dGraph class
 
 template<class VertexType>
-class Traveler : public GraphTraveler<VertexType>
+class dTraveler : public GraphTraveler<VertexType>
 {
 public:
-    ~Traveler() {};
+    ~dTraveler() {};
 
     void discover_vertex(const VertexType & vert) {
-        VertexType tmp = vert;
-        last_vertex = tmp;
-        graph.insertVertex(last_vertex);
+        graph.insertVertex(vert);
     }
 
     void examine_edge(const Edge<VertexType> & edge) {
-        Edge<VertexType> tmp = edge;
-        graph.insertVertex(tmp.getVertex()->getData());
-        graph.insertEdge(last_vertex, tmp.getVertex()->getData(), tmp.getWeight());
+        graph.insertVertex(edge.getVertex()->getData());
+        graph.insertEdge(edge.getSource()->getData(), edge.getVertex()->getData(), edge.getWeight());
     }
 
     void starting_vertex(const VertexType & vert) {
-        last_vertex = vert;
+        graph.insertVertex(vert);
     }
 
     void finished_traversal() {
-        last_vertex = VertexType();
     }
 
     dGraph<VertexType> graph;
-    VertexType last_vertex;
 
 };
 

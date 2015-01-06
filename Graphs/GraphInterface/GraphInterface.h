@@ -156,10 +156,9 @@ public:
 
     // @func   - minimuminSpanningTree
     // @args   - none
-    // @return - A graph that represents the minimum spanning tree of the current graph object. 
-    // @info   - This function is declared to return a GraphInterface object, but since GraphInterface is abstract, what will really happen is that any of the
-    //           classes derived from this one will simply return a graph of their own type when implementing this function. (See uGraph for an example).
-    virtual GraphInterface<VertexType> * minimumSpanningTree(GraphTraveler<VertexType> * = nullptr) = 0;
+    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
+    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+    virtual bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search

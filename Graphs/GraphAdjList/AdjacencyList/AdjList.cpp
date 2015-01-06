@@ -83,7 +83,7 @@ Vertex<VertexType> * AdjList<VertexType>::getVertex() {
 template <class VertexType>
 bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 
-    Edge<VertexType> * newEdge = new Edge<VertexType>(vert, wt);
+    Edge<VertexType> * newEdge = new Edge<VertexType>(&this->vertex, vert, wt);
 
     if(pEdge == nullptr) {
         pEdge = newEdge;
@@ -101,7 +101,7 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
     while(temp->getNext() != nullptr){
 
         // make sure we don't have duplicate edges if this isn't a multigraph
-        if(!this->isMultiGraph && temp->getNext()->getVertex()->getData() == vert->getData()) {
+        if(!this->is_multi_graph && temp->getNext()->getVertex()->getData() == vert->getData()) {
             delete(newEdge);
             return false;
         }
@@ -313,22 +313,22 @@ unsigned int AdjList<VertexType>::getNumEdges() {
     return ret;
 }
 
-// @func   - setIsMultiGraph
-// @args   - boolean to be stored in isMultiGraph
+// @func   - set_is_multi_graph
+// @args   - boolean to be stored in is_multi_graph
 // @return - Bool indicating success
 template<class VertexType>
-bool AdjList<VertexType>::setIsMultiGraph(bool val) {
+bool AdjList<VertexType>::set_is_multi_graph(bool val) {
 
-    this->isMultiGraph = val;
+    this->is_multi_graph = val;
     return true;
 }
 
-// @func   - getIsMultiGraph
+// @func   - get_is_multi_graph
 // @args   - None
-// @return - Bool value of isMultiGraph
+// @return - Bool value of is_multi_graph
 template<class VertexType>
-bool AdjList<VertexType>::getIsMultiGraph() {
-    return isMultiGraph;
+bool AdjList<VertexType>::get_is_multi_graph() {
+    return is_multi_graph;
 }
 
 

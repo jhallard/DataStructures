@@ -14,7 +14,7 @@
 
 
 #include "../../DirectedGraph/dGraph.h"
-#include "../../Travelers/Traveler.hpp"
+#include "../../Travelers/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -450,15 +450,11 @@ TEST(MinTreeTests, simple_test) {
     graph.insertEdge(3, 1, 0.15);
 
 
-    ASSERT_EQ(true, graph.isConnected());
-
-    dGraph<int> * newGraph = graph.minimumSpanningTree();
-
+    ASSERT_EQ(true, graph.minimumSpanningTree());
 
     // newGraph->printGraph();
 
 
-    delete(newGraph);
 }
 
 TEST(MinTreeTests, simple_test2) {
@@ -497,7 +493,7 @@ TEST(MinTreeTests, simple_test2) {
 
 
 
-    dGraph<int> * newGraph = graph.minimumSpanningTree();
+    ASSERT_EQ(true, graph.minimumSpanningTree());
 
 
     // // newGraph->printGraph();
@@ -512,8 +508,6 @@ TEST(MinTreeTests, simple_test2) {
     // ASSERT_EQ(0, newGraph->getAdjVertices(5).size());
     // ASSERT_EQ(2, newGraph->getAdjVertices(0).size());
 
-
-    delete(newGraph);
 }
 
 
@@ -536,15 +530,14 @@ TEST(MinTreeTests, larger_test) {
 
 
     ASSERT_EQ(true, graph.isConnected());
-    dGraph<int> * newGraph = graph.minimumSpanningTree();
 
-    ASSERT_EQ(newGraph->getNumVertices(), numVertices);
-    ASSERT_EQ(newGraph->getNumEdges(), numVertices-1);
+    dTraveler<int> * trav = new dTraveler<int>();
+
+    ASSERT_EQ(true, graph.minimumSpanningTree(trav));
+
+    ASSERT_EQ(trav->graph.getNumVertices(), numVertices);
+    ASSERT_EQ(trav->graph.getNumEdges(), numVertices-1);
     
-
-    // newGraph->printGraph();
-
-    delete(newGraph);
 }
 
 
@@ -571,16 +564,8 @@ TEST(MinTreeTests, non_connected_error) {
     graph.insertEdge(3, 5, 3.1);
     graph.insertEdge(4, 5, 3.1);
 
-    bool shouldBeFalse = true;
-    try {
-        dGraph<int> * newGraph = graph.minimumSpanningTree();
-        delete(newGraph);
-    } 
-    catch(std::logic_error e) {
-        shouldBeFalse = false;
-    }
 
-    ASSERT_FALSE(shouldBeFalse);
+    ASSERT_FALSE(graph.minimumSpanningTree());
 
 }
 
@@ -689,13 +674,13 @@ TEST(Dijkstras, simple_test) {
     for(int k = 1; k < numVertices/2; k++) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
-        Traveler<int> * trav = new Traveler<int>();
+        dTraveler<int> * trav = new dTraveler<int>();
         if(!graph.dijkstrasMinimumPath(r, y, trav)) {
             std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
         }
-        else
-            trav->graph.printGraph();
+        // else
+            // trav->graph.printGraph();
 
         delete(trav);
     }

@@ -19,18 +19,33 @@ class Edge
 {
 public:
     // @func - Constructor
-    // @args - #1 Vertex that the edge points to, #2 the weighting of the edge
-    Edge(Vertex<VertexType> *, double =  std::numeric_limits<double>::infinity());
+    // @args - #1 source vertex, #2 target vertex, #2 the weighting of the edge
+    Edge(Vertex<VertexType> *, Vertex<VertexType> *, double =  std::numeric_limits<double>::infinity());
 
-    // @func   - getVertex
+    // @func   - getSource
+    // @args   - None
+    // @return - The vertex that this edge comes from 
+    Vertex<VertexType> * getSource() const;
+
+    // @func   - getTarget
     // @args   - None
     // @return - The vertex object pointed to by this edge. 
+    Vertex<VertexType> * getTarget() const;
+
+    // @func   - getTarget
+    // @args   - None
+    // @return - The target vertex. this function is kept for backwards compatibility
     Vertex<VertexType> * getVertex() const;
 
-    // @func   - setVertex
+    // @func   - setTarget
     // @args   - Pointer to the vertex that you wish to set
     // @return - Bool indicating success or failure
-    bool setVertex(Vertex<VertexType> *);
+    bool setTarget(Vertex<VertexType> *);
+
+    // @func   - setSource
+    // @args   - Pointer to the vertex that you wish to set
+    // @return - Bool indicating success or failure
+    bool setSource(Vertex<VertexType> *);
 
     // @func   - getNext
     // @args   - None
@@ -58,7 +73,10 @@ public:
 private:
 
     // @info - The vertex that the edge is pointing to
-    Vertex<VertexType> * vertex;
+    Vertex<VertexType> * target;
+
+    // @info - The vertex that the edge comes from
+    Vertex<VertexType> * source;
 
     // @info - The weight associated with this vertex, default value will be 1.0
     double weight;

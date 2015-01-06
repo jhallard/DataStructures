@@ -10,32 +10,61 @@
 #include "Edge.h"
 
 // @func - Constructor
-// @args - #1 Vertex that the edge points to, #2 the weighting of the edge
+// @args - #1 source vertex, #2 target vertex, #2 the weighting of the edge
 template <class VertexType>
-Edge<VertexType>::Edge(Vertex<VertexType> * vert , double wt) {
-    this->setVertex(vert);
+Edge<VertexType>::Edge(Vertex<VertexType> * source, Vertex<VertexType> * target, double wt) {
+    this->setSource(source);
+    this->setTarget(target);
     this->setWeight(wt);
     this->setNext(nullptr);
 
 }
 
-// @func   - getVertex
+// @func   - getSource
 // @args   - None
 // @return - The vertex object pointed to by this edge. 
 template <class VertexType>
-Vertex<VertexType> * Edge<VertexType>::getVertex() const {
-    return this->vertex;
+Vertex<VertexType> * Edge<VertexType>::getSource() const {
+    return this->source;
 }
 
-// @func   - setVertex
+// @func   - getTarget
+// @args   - None
+// @return - The vertex object pointed to by this edge. 
+template <class VertexType>
+Vertex<VertexType> * Edge<VertexType>::getTarget() const {
+    return this->target;
+}
+
+// @func   - getVertex
+// @args   - None
+// @return - The target vertex 
+template <class VertexType>
+Vertex<VertexType> * Edge<VertexType>::getVertex() const {
+    return this->target;
+}
+
+// @func   - setTarget
 // @args   - Pointer to the vertex that you wish to set
 // @return - Bool indicating success or failure
 template <class VertexType>
-bool Edge<VertexType>::setVertex(Vertex<VertexType> * vert) {
+bool Edge<VertexType>::setTarget(Vertex<VertexType> * vert) {
     if(vert == nullptr)
         return false;
 
-    this->vertex = vert;
+    this->target = vert;
+    return true;
+}
+
+// @func   - setSource
+// @args   - Pointer to the vertex that you wish to set
+// @return - Bool indicating success or failure
+template <class VertexType>
+bool Edge<VertexType>::setSource(Vertex<VertexType> * vert) {
+    if(vert == nullptr)
+        return false;
+
+    this->source = vert;
     return true;
 }
 

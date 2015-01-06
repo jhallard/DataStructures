@@ -48,7 +48,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-uGraph<VertexType>::uGraph() : num_edges(0), num_vertices(0), connectivityCount(0), isMultiGraph(false) {
+uGraph<VertexType>::uGraph() : num_edges(0), num_vertices(0), is_multi_graph(false) {
     
 }
 
@@ -182,7 +182,7 @@ bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
-    newList->setIsMultiGraph(this->isMultiGraph);
+    newList->set_is_multi_graph(this->is_multi_graph);
 
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
@@ -578,13 +578,15 @@ void uGraph<VertexType>::printGraph() const {
 template<class VertexType>
 bool uGraph<VertexType>::isConnected() {
 
-    this->connectivityCount = 0;
+    uTraveler<VertexType> * trav = new uTraveler<VertexType>();
 
-    // auto f = [](VertexType&) -> void { int x = 0; }; // dummy function that needs to be passed in to BFS
+    this->depthFirst(list[0]->getVertex()->getData(), trav);
 
-    this->depthFirst(list[0]->getVertex()->getData());//, f);
+    bool ret = trav->graph.getNumVertices() == list.size();
+    
+    delete(trav);
 
-    return connectivityCount == list.size();
+    return ret;
 }
 
 
@@ -599,27 +601,27 @@ bool uGraph<VertexType>::isBipartite() {
 }
 
 
-// @func   - setIsMultiGraph
-// @args   - boolean to be stored in isMultiGraph
+// @func   - set_is_multi_graph
+// @args   - boolean to be stored in is_multi_graph
 // @return - Bool indicating success
 template<class VertexType>
-bool uGraph<VertexType>::setIsMultiGraph(bool val) {
+bool uGraph<VertexType>::set_is_multi_graph(bool val) {
 
-    this->isMultiGraph = val;
+    this->is_multi_graph = val;
 
     for(auto i : list) {
-        i->setisMultiGraph(val);
+        i->set_is_multi_graph(val);
     }
 
     return true;
 }
 
-// @func   - getIsMultiGraph
+// @func   - get_is_multi_graph
 // @args   - None
-// @return - Bool value of isMultiGraph
+// @return - Bool value of is_multi_graph
 template<class VertexType>
-bool uGraph<VertexType>::getIsMultiGraph() {
-    return isMultiGraph;
+bool uGraph<VertexType>::get_is_multi_graph() {
+    return is_multi_graph;
 }
 
 
@@ -660,8 +662,6 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
         if(adj == nullptr) 
             return false;
-
-        connectivityCount++;
 
         // visit the node that we just popped off the stack
         VertexType tempData = adj->getVertex()->getData();
@@ -731,8 +731,6 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
         Vertex<VertexType> * tempVert = q.front();q.pop_front();
         AdjList<VertexType> *  adj = findVertex(tempVert->getData());
 
-        connectivityCount++; // used internally
-
         if(adj == nullptr)
             return false;
 
@@ -801,7 +799,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
             collapsed.insert(std::pair<VertexType, std::vector<VertexType> >(i->getVertex()->getData(), std::vector<VertexType>()));
             AdjList<VertexType> * newAdj = new AdjList<VertexType>();
             newAdj->setVertex(i->getVertex()->getData());
-            newAdj->setIsMultiGraph(true);
+            newAdj->set_is_multi_graph(true);
 
             newList.push_back(newAdj);
 
@@ -902,20 +900,16 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 }
 
 
-// @func   - minimumSpanningTree
+// @func   - minimuminSpanningTree
 // @args   - none
-// @return - A graph that represents the minimum spanning tree of the current graph object. 
-// @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum 
-//           spanning tree of the veritces in this graph. Will throw an exception is the graph is not connected. Prims alg. 
-//           is used to find the min. spanning tree, and the source vertex is the first vertex that was stored into the graph.
+// @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
+// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
 template<class VertexType>
-uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
+bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
     // A non connected graph cannot be spanned, without this we risk an infinite loop
     if(!this->isConnected())
-        throw std::logic_error("Graph is not Connected\n");
-
-    uGraph<VertexType> * newGraph = new uGraph();
+        return false;
 
     std::unordered_map<VertexType, std::pair<VertexType, double> > set; // maps a vertex to a weight and the vertex that connects to it
     std::unordered_map<VertexType, bool> mst_set;
@@ -924,34 +918,49 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree(GraphTraveler<Verte
     for(int i = 0; i < list.size(); i++) {
         VertexType tempData = list[i]->getVertex()->getData();
         set.insert(std::pair<VertexType, std::pair<VertexType, double> >(tempData, std::pair<VertexType, double>(tempData, imax)));
-        newGraph->insertVertex(tempData);
     }
 
     set.at(list[0]->getVertex()->getData()).second = 0;
 
+    Vertex<VertexType> * best_vertex = list[0]->getVertex(); // the new best vertex to add to our map
+    Vertex<VertexType> * last_vertex = best_vertex;          // the source vertex on the edge that will connec the new best_vertex
+
+    bool first_iteration = true;
+
     while(mst_set.size() != list.size()) {
-        double temp = imax; // lowest weight found
+        double lowest_weight = imax;
         int index = 0;   // index of the vertex with the lowest wieght found
+
+        if(traveler && first_iteration) {
+            traveler->starting_vertex(set.at(best_vertex->getData()).first);
+            first_iteration = false;
+        }
+        else if(traveler)
+            traveler->discover_vertex(set.at(best_vertex->getData()).first);
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
 
             if(mst_set.find(list[i]->getVertex()->getData()) == mst_set.end()) {
 
-                if(set.at(list[i]->getVertex()->getData()).second <= temp) {
-                    temp = set.at(list[i]->getVertex()->getData()).second;
+                if(set.at(list[i]->getVertex()->getData()).second <= lowest_weight) {
+                    lowest_weight = set.at(list[i]->getVertex()->getData()).second;
                     index = i;
                 }
             }
         }
 
-
-
         // Take the vertex with the smallest weight and mark it as connected to our min tree
-        mst_set.insert(std::pair<VertexType, bool>(list[index]->getVertex()->getData(), true));
+        mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));  
 
-        // add the lowest-weighted edge between the two appropriate vertices in our min tree
-        newGraph->insertEdge(set.at(list[index]->getVertex()->getData()).first, list[index]->getVertex()->getData(), temp);                                                 
+        best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
+        last_vertex =  findVertex(set.at(best_vertex->getData()).first)->getVertex();
+
+        // examine the new edge inserted into the minimum-tree
+        if(traveler)  {
+            Edge<VertexType> new_edge(last_vertex, best_vertex, lowest_weight);
+            traveler->examine_edge(new_edge);
+        }                                           
 
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
@@ -965,7 +974,10 @@ uGraph<VertexType> * uGraph<VertexType>::minimumSpanningTree(GraphTraveler<Verte
 
     }
 
-    return newGraph;
+    if(traveler)
+        traveler->finished_traversal();
+
+    return true;
 }
 
 

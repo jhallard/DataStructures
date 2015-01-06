@@ -1,6 +1,6 @@
 #include "../UndirectedGraph/uGraph.h"
 #include "../DirectedGraph/dGraph.h"
-#include "../Travelers/Traveler.hpp"
+#include "../Travelers/uTraveler.hpp"
 #include <iostream>
 #include <ctime>
 
@@ -62,7 +62,7 @@ void intTest1() {
     fptr = visit1;
     graph.breadthFirst(8);//, fptr);
 
-    Traveler<int> * trav = new Traveler<int>();
+    uTraveler<int> * trav = new uTraveler<int>();
 
 
     std::cout << "\n\n\n";

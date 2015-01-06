@@ -58,6 +58,7 @@
 #include "../AdjacencyList/AdjList.h"
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
+#include "../Travelers/uTraveler.hpp"
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
 class uGraph : public GraphInterface <VertexType>
@@ -218,15 +219,15 @@ public:
     //           hitting the same value twice in a row. 
     bool isBipartite();
 
-    // @func   - setIsMultiGraph
-    // @args   - boolean to be stored in isMultiGraph
+    // @func   - set_is_multi_graph
+    // @args   - boolean to be stored in is_multi_graph
     // @return - Bool indicating success
-    bool setIsMultiGraph(bool);
+    bool set_is_multi_graph(bool);
 
-    // @func   - getIsMultiGraph
+    // @func   - get_is_multi_graph
     // @args   - None
-    // @return - Bool value of isMultiGraph
-    bool getIsMultiGraph();
+    // @return - Bool value of is_multi_graph
+    bool get_is_multi_graph();
 
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
@@ -252,10 +253,9 @@ public:
 
     // @func   - minimuminSpanningTree
     // @args   - none
-    // @return - A graph that represents the minimum spanning tree of the current graph object. 
-    // @info   - This function will return another uGraph object that has the edges reduces to those that exist in the minimum spanning tree
-    //           of the veritces in this graph. Will throw an exception is the graph is not connected. 
-    uGraph<VertexType> * minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
+    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
+    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+    bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
     // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search
@@ -313,14 +313,11 @@ private:
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
 
-    // @member - isMultiGraph
+    // @member - is_multi_graph
     // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
     //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
-    bool isMultiGraph;
+    bool is_multi_graph;
 
-    // @member - connectivityCount
-    // @info   - Used by the isConnected function to count reachable vertices
-    int connectivityCount;
 
 
 
