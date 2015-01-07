@@ -583,7 +583,7 @@ bool uGraph<VertexType>::isConnected() {
     this->depthFirst(list[0]->getVertex()->getData(), trav);
 
     bool ret = trav->graph.getNumVertices() == list.size();
-    
+
     delete(trav);
 
     return ret;
@@ -597,7 +597,12 @@ bool uGraph<VertexType>::isConnected() {
 //           hitting the same value twice in a row. 
 template<class VertexType>
 bool uGraph<VertexType>::isBipartite() {
-    return true;
+
+    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+
+    depthFirst(list[0]->getVertex()->getData(), traveler);
+
+    return traveler->is_bipartite;
 }
 
 
@@ -907,19 +912,21 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 template<class VertexType>
 bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
-    // A non connected graph cannot be spanned, without this we risk an infinite loop
+    // A non strongly-connected graph cannot be spanned, without this we risk an infinite loop
     if(!this->isConnected())
         return false;
 
-    std::unordered_map<VertexType, std::pair<VertexType, double> > set; // maps a vertex to a weight and the vertex that connects to it
-    std::unordered_map<VertexType, bool> mst_set;
+    std::unordered_map<VertexType, std::pair<VertexType, double> > set; // Map : Vertex --> (prev_vertex, path_weight)
+    std::unordered_map<VertexType, bool> mst_set;                       // Map : Vertex --> {true, false} : true if vertex is in our min-tree
     double imax = std::numeric_limits<double>::infinity();
 
+    // Insert all vertices into the map with a weighting of infinity
     for(int i = 0; i < list.size(); i++) {
         VertexType tempData = list[i]->getVertex()->getData();
         set.insert(std::pair<VertexType, std::pair<VertexType, double> >(tempData, std::pair<VertexType, double>(tempData, imax)));
     }
 
+    // set the starting weight at the source to zero
     set.at(list[0]->getVertex()->getData()).second = 0;
 
     Vertex<VertexType> * best_vertex = list[0]->getVertex(); // the new best vertex to add to our map
@@ -928,8 +935,8 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
     bool first_iteration = true;
 
     while(mst_set.size() != list.size()) {
-        double lowest_weight = imax;
-        int index = 0;   // index of the vertex with the lowest wieght found
+        double lowest_weight = imax;        // lowest weight found this iteration
+        int index = 0;                      // index of the vertex with the lowest wieght found in our $list vector
 
         if(traveler && first_iteration) {
             traveler->starting_vertex(set.at(best_vertex->getData()).first);

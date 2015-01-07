@@ -569,6 +569,46 @@ TEST(MinTreeTests, non_connected_error) {
 
 }
 
+TEST(Bipartite, simple_positive_test) {
+
+    dGraph<int> graph;
+
+    for(int i = 1; i < 6; i++)
+        graph.insertVertex(i);
+
+    graph.insertEdge(5, 4);
+    graph.insertEdge(3, 5);
+    graph.insertEdge(4, 1);
+    graph.insertEdge(1, 3);
+    graph.insertEdge(2, 4);
+    graph.insertEdge(3, 2);
+
+    ASSERT_EQ(true, graph.isBipartite());
+
+}
+
+TEST(Bipartite, simple_negative_test) {
+
+    dGraph<int> graph;
+
+    for(int i = 1; i < 6; i++)
+        graph.insertVertex(i);
+
+    graph.insertEdge(5, 4);
+    graph.insertEdge(3, 5);
+    graph.insertEdge(4, 1);
+    graph.insertEdge(1, 3);
+    graph.insertEdge(2, 4);
+    graph.insertEdge(3, 2);
+    graph.insertEdge(1, 2);
+    graph.insertEdge(3, 4);
+    graph.insertEdge(1, 5);
+    graph.insertEdge(2, 5);
+
+    ASSERT_FALSE(graph.isBipartite());
+
+}
+
 TEST(Dijkstras, simple_test2) {
 
     dGraph<int> graph;

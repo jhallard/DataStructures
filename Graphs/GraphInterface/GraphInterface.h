@@ -23,7 +23,7 @@ class GraphInterface
 public:
 
     // @func  - Destructor
-    // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
+    // @info  - Cleans up the dynamically allocated AdjList objects contained in the list vector.
     virtual ~GraphInterface() {};
 
     // @func   - insertVertex

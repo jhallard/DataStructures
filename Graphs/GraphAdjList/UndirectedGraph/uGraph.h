@@ -36,9 +36,6 @@
 *               #TODO - List Big-O's for all of the important functions in this class.
 **/
 
-//****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
-//****          #1 - Override equals comparison operator, check to see if two graphs are equivilent                                      ****//
-//****          ------------------------------------------------------ #TODO ------------------------------------------------------      ****//
 
 #ifndef U_GRAPH_A_LIST_H
 #define U_GRAPH_A_LIST_H
@@ -59,6 +56,8 @@
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
 #include "../Travelers/uTraveler.hpp"
+#include "../Travelers/BiPartiteTraveler.hpp"
+
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
 class uGraph : public GraphInterface <VertexType>

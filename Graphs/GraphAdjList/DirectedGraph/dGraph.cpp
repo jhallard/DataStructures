@@ -47,7 +47,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-dGraph<VertexType>::dGraph() : num_edges(0), num_vertices(0), connectivityCount(0) {
+dGraph<VertexType>::dGraph() : num_edges(0), num_vertices(0) {
     
 }
 
@@ -606,7 +606,12 @@ bool dGraph<VertexType>::isConnected() {
 //           hitting the same value twice in a row. 
 template<class VertexType>
 bool dGraph<VertexType>::isBipartite() {
-    return true;
+
+    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+
+    depthFirst(list[0]->getVertex()->getData(), traveler);
+
+    return traveler->is_bipartite;
 }
 
 
@@ -672,9 +677,7 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
         if(adj == nullptr) 
             return false;
 
-        connectivityCount++;
-
-        // visit the node that we just popped off the stack
+        // get the vertex that we just popped off the stack
         VertexType tempData = adj->getVertex()->getData();
 
         // visit the new vertex
@@ -690,8 +693,10 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             if(get == marked.end()) {
-                if(traveler != nullptr)
+
+                if(traveler != nullptr) {
                     traveler->examine_edge(*edge);
+                }
 
                 marked.insert(std::pair<VertexType, bool>(tempData, true));
                 q.push_back(tempVert);
@@ -741,8 +746,6 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
 
         Vertex<VertexType> * tempVert = q.front();q.pop_front();
         AdjList<VertexType> *  adj = findVertex(tempVert->getData());
-
-        connectivityCount++; // used internally
 
         if(adj == nullptr)
             return false;

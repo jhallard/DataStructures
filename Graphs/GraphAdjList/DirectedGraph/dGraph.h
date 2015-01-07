@@ -51,6 +51,9 @@
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
 #include "../Travelers/dTraveler.hpp"
+#include "../Travelers/BiPartiteTraveler.hpp"
+
+// template<class V> BipartiteTraveler;
 
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
@@ -80,13 +83,15 @@ public:
     ~dGraph();
 
     // @func   - operator=
-    // @args   - #1 constant reference to another graph object to copy into
+    // @args   - #1 constant reference to another graph object, the value of which will be placed in this graph.
     // @return - The new graph copy
     dGraph<VertexType> operator=(const dGraph<VertexType> &);
 
-    // @func   - operator=
-    // @args   - #1 constant reference to another graph object to copy into
-    // @return - The new graph copy
+    // @func   - operator==
+    // @args   - #1 constant reference to another graph object to check for equality
+    // @return - True if the graphs are the same, false otherwise.
+    // @TODO   - This needs to be updated, it currently only returns true if the graphs are internally represented the same, which is not true
+    //           if two graphs have all the same vertices and edges but are stored in different order.
     bool operator==(const dGraph<VertexType> &);
 
     // @func   - operator=
@@ -302,10 +307,6 @@ private:
     // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
     //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
     bool is_multi_graph;
-
-    // @member - connectivityCount
-    // @info   - Used by the isConnected function to count reachable vertices
-    int connectivityCount;
 
     // @typedef - (too long to retype)
     // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained inside these two maps
