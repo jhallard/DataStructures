@@ -16,6 +16,7 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <list>
 
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
@@ -85,10 +86,10 @@ public:
     // @return - Vector of pointers to all the edge objects in the class
     std::vector<Edge<VertexType> *> getAllEdges();
 
-    // @func   - getNumEdges
+    // @func   - get_num_edges
     // @args   - None
     // @return - The number of edges connected to this particular vertex
-    unsigned int getNumEdges();
+    unsigned int get_num_edges();
 
     // @func   - set_is_multi_graph
     // @args   - boolean to be stored in is_multi_graph
@@ -117,11 +118,9 @@ private:
     // @info    - The vertex object for this adj list.
     Vertex<VertexType> vertex;
 
-    // @member  - pEdge
-    // @info    - Head node pointer for the linked list of edges that eminate from the vertex member
-    Edge<VertexType> * pEdge;
+    std::list<Edge<VertexType> * > edge_list;
 
-    unsigned int numEdges;
+    unsigned int num_edges;
 
     bool is_multi_graph;
 

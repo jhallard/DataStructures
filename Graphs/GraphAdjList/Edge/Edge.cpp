@@ -2,9 +2,9 @@
 *   @Author   - John H Allard Jr.
 *   @File     - Edge.cpp
 *   @Data     - 11/13/2014
-*   @Purpose  - This is the implementation of the Edge class, which will be used by the different Graph classes in this directory.  This edge class will
-*               contain a pointer to a vertex and a pointer to another edge, creating a linked list edges eminating from a source vertex to many other
-*               vertices in the graph
+*   @Purpose  - This is the implementation of the Edge class, which will be used by the different Graph classes in this directory. At first we had this
+*               class contain a pointer to the next edge in the AdjList, but we decided to forgo this method and instead just store all edges
+*               inside of a std::list inside of each AdjList class. Makes it much easier to remove/add/query than using a manually linked list.
 **/
 
 #include "Edge.h"
@@ -16,8 +16,6 @@ Edge<VertexType>::Edge(Vertex<VertexType> * source, Vertex<VertexType> * target,
     this->setSource(source);
     this->setTarget(target);
     this->setWeight(wt);
-    this->setNext(nullptr);
-
 }
 
 // @func   - getSource
@@ -65,26 +63,6 @@ bool Edge<VertexType>::setSource(Vertex<VertexType> * vert) {
         return false;
 
     this->source = vert;
-    return true;
-}
-
-// @func   - getNext
-// @args   - None
-// @return - The next edge in the list of outgoing edges contained by a single vertex
-template <class VertexType>
-Edge<VertexType> * Edge<VertexType>::getNext() const {
-
-    return this->nextEdge;
-
-}
-
-// @func   - setNext
-// @args   - #1 Pointer to the next Edge object
-// @return - Pointless boolean indicating success
-template <class VertexType>
-bool Edge<VertexType>::setNext(Edge * next){
-
-    this->nextEdge = next;
     return true;
 }
 

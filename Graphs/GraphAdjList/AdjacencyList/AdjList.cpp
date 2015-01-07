@@ -15,13 +15,13 @@
 // @args - None
 // @info - Initializes everything to empty
 template <class VertexType>
-AdjList<VertexType>::AdjList() : vertex(), pEdge(nullptr), numEdges(0){
+AdjList<VertexType>::AdjList() : vertex(), edge_list(), num_edges(0){
 }
 
 // @func - Constructor#2
 // @args - #1 Vertex data
 template <class VertexType>
-AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), pEdge(nullptr) {
+AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), edge_list() {
 
 }
 
@@ -30,7 +30,6 @@ AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), pEdg
 template <class VertexType>
 AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV){
     this->vertex = newV;
-    this->pEdge = nullptr;
 
 }
 
@@ -41,19 +40,11 @@ AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV){
 template <class VertexType>
 AdjList<VertexType>::~AdjList() {
 
-    Edge<VertexType> * temp = pEdge;
-
-    if(temp == nullptr)
-        return;
-
-    Edge<VertexType> * temp2 = temp->getNext();
-
-    while(temp2 != nullptr){
-        delete(temp);
-        temp = temp2;
-        temp2 = temp2->getNext();
+    for(auto edge : edge_list) {
+        delete(edge);
     }
-    delete(temp);
+
+    edge_list.clear();
 }
 
 
@@ -85,35 +76,22 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 
     Edge<VertexType> * newEdge = new Edge<VertexType>(&this->vertex, vert, wt);
 
-    if(pEdge == nullptr) {
-        pEdge = newEdge;
-        return true;
-    }
-
-    // no self loops
-    if(pEdge->getVertex()->getData() == vert->getData()) {
+        // no self loops
+    if(this->vertex.getData() == vert->getData()) {
         delete(newEdge);
         return false;
     }
 
-    Edge<VertexType> * temp;
-    temp = pEdge;
-    while(temp->getNext() != nullptr){
-
-        // make sure we don't have duplicate edges if this isn't a multigraph
-        if(!this->is_multi_graph && temp->getNext()->getVertex()->getData() == vert->getData()) {
+    for(auto edge : edge_list) {
+        if(vert->getData() == edge->getTarget()->getData()) {
             delete(newEdge);
             return false;
         }
+    }
 
-        temp = temp->getNext();
-    }
-    
-    if(temp->setNext(newEdge)) {
-        numEdges++;
-        return true;
-    }
-    return false;
+    edge_list.push_back(newEdge);
+
+    return true;
 
 }
 
@@ -125,39 +103,22 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 template <class VertexType>
 bool AdjList<VertexType>::deleteEdge(const VertexType & data){
 
-    Edge<VertexType> * temp;
-    temp = pEdge;
-
-    // Case #1 - No edges in the list, return false
-    if(temp == nullptr)
+    if(!edge_list.size())
         return false;
 
-    // Case #2 - The edge to delete is the first node found
-    else if(temp->getVertex()->getData() == data){
-        pEdge = temp->getNext();
-        numEdges--;
-        delete(temp);
-        return true;
-    }
-    // Case #3 - The edge may or may not be somewhere down the chain
-    while(temp->getNext() != nullptr) {
+    auto edge_iterator = edge_list.begin();
 
-        // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
-        if(temp->getNext()->getVertex()->getData() == data){
-            Edge<VertexType> * toDelete = temp->getNext();
-            temp->setNext(temp->getNext()->getNext());
-            delete(toDelete);
-            numEdges--;
+    for(; edge_iterator != edge_list.end(); ++edge_iterator) {
+
+        if((*edge_iterator)->getTarget()->getData() == data) {
+            delete(*edge_iterator); 
+            edge_list.erase(edge_iterator);
+            num_edges--;
             return true;
         }
-        // else we iterate to the next node in the chain
-        else
-            temp = temp->getNext();
-        
     }
-    // else we couldn't find an edge to the given vertex with the given data
-    return false;
 
+    return false;
 }
 
 
@@ -167,37 +128,7 @@ bool AdjList<VertexType>::deleteEdge(const VertexType & data){
 template <class VertexType>
 bool AdjList<VertexType>::deleteEdge(Vertex<VertexType> * vert){
 
-    Edge<VertexType> * temp;
-    temp = pEdge;
-
-    // Case #1 - No edges in the list, return false
-    if(temp == nullptr)
-        return false;
-
-    // Case #2 - The edge to delete is the first node found
-    else if(temp->getVertex()->getData() == vert->getData()){
-        pEdge = temp->getNext();
-        numEdges--;
-        delete(temp);
-        return true;
-    }
-    // Case #3 - The edge may or may not be somewhere down the chain
-    while(temp->getNext() != nullptr) {
-
-        // if the edge to delete is the next node, set the next chain to be 2 nodes down, looping around the node to be deleted
-        if(temp->getNext()->getVertex()->getData() == vert->getData()){
-            Edge<VertexType> * toDelete = temp->getNext();
-            temp->setNext(temp->getNext()->getNext());
-            delete(toDelete);
-            numEdges--;
-            return true;
-        }
-        
-        temp = temp->getNext();
-        
-    }
-    // else we couldn't find an edge to the given vertex with the given data
-    return false;
+    deleteEdge(vert->getData());
 
 }
 
@@ -207,28 +138,16 @@ bool AdjList<VertexType>::deleteEdge(Vertex<VertexType> * vert){
 template <class VertexType>
 bool AdjList<VertexType>::deleteAllEdges() {
 
-    Edge<VertexType> * temp1;
-    Edge<VertexType> * temp2;
-    temp1 = pEdge;
-    temp2 = pEdge;
-
-    // Case #1 - No edges in the list, return
-    if(temp1 == nullptr)
+    if(!edge_list.size())
         return true;
 
-    // traverse the chain, deleting as we go.
-    while(temp1->getNext() != nullptr) {
-        temp2 = temp1->getNext();
-        delete(temp1);
-        temp1 = temp2;
-        numEdges--;
-        
+    auto edge_iterator = edge_list.begin();
+
+    for(; edge_iterator != edge_list.end(); ++edge_iterator) {
+            delete(*edge_iterator);
     }
 
-    // delete the head ptr
-    delete(temp1);
-    numEdges--;
-    pEdge = nullptr;
+    edge_list.clear();
 
     return true;
 }
@@ -240,26 +159,17 @@ bool AdjList<VertexType>::deleteAllEdges() {
 template <class VertexType>
 Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert) {
 
-    Edge<VertexType> * temp;
-    temp = pEdge;
-    VertexType data = vert.getData();
-
-    // Case #1 - No edges in the list, return false
-    if(temp == nullptr)
+    if(!edge_list.size())
         return nullptr;
 
-    // Case #3 - The edge may or may not be somewhere down the chain
-    while(temp != nullptr) {
+    auto edge_iterator = edge_list.begin();
 
-        // if the edge to return is the next node, return that node
-        if(temp->getVertex()->getData() == data){
-            return temp;
+    for(; edge_iterator != edge_list.end(); ++edge_iterator) {
+        if((*edge_iterator)->getTarget()->getData() == vert.getData()) {
+            return *edge_iterator;
         }
-        else // else we iterate to the next node in the chain
-            temp = temp->getNext();
-        
     }
-    // else we couldn't find an edge to the given vertex with the given data
+
     return nullptr;
 
 }
@@ -272,18 +182,12 @@ template <class VertexType>
 std::vector<Edge<VertexType> *> AdjList<VertexType>::getAllEdges() {
 
     std::vector<Edge<VertexType> *> retVec;
-    Edge<VertexType> * temp;
-    temp = pEdge;
-
-    // Case #1 - No edges in the list, return false
-    if(temp == nullptr)
+    
+    if(!edge_list.size())
         return retVec;
 
-    while(temp != nullptr) {
-
-        retVec.push_back(temp);
-        temp = temp->getNext();
-        
+    for(auto edge : edge_list) {
+        retVec.push_back(edge);
     }
 
     return retVec;
@@ -291,26 +195,13 @@ std::vector<Edge<VertexType> *> AdjList<VertexType>::getAllEdges() {
 }
 
 
-// @func   - getNumEdges
+// @func   - get_num_edges
 // @args   - None
 // @return - The number of edges connected to this particular vertex
 template <class VertexType>
-unsigned int AdjList<VertexType>::getNumEdges() {
-    uint ret = 0;
-    Edge<VertexType> * temp;
-    temp = pEdge;
+unsigned int AdjList<VertexType>::get_num_edges() {
 
-    // Case #1 - No edges in the list, return false
-    if(temp == nullptr)
-        return ret;
-
-    while(temp != nullptr) {
-        ret++;
-        temp = temp->getNext();
-        
-    }
-
-    return ret;
+    return edge_list.size();
 }
 
 // @func   - set_is_multi_graph

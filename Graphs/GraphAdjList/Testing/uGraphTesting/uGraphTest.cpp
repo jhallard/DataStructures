@@ -102,7 +102,7 @@ uGraph<int> graph;
 }
 
 TEST(VerticesTest, delete_test) { 
-uGraph<int> graph;
+    uGraph<int> graph;
     int numVertices = rand()%800+200;
 
     std::vector<int> input_vec;
@@ -152,6 +152,11 @@ TEST(EdgesTest, insert_few) {
 	graph.insertEdge(6, 2);
 
     ASSERT_EQ(6, graph.getNumEdges());
+    ASSERT_EQ(true, graph.containsEdge(1, 2));
+    ASSERT_EQ(true, graph.containsEdge(2, 1));
+    ASSERT_EQ(true, graph.containsEdge(3, 4));
+    ASSERT_EQ(true, graph.containsEdge(4, 3));
+    ASSERT_EQ(false, graph.containsEdge(6, 3));
 }
 
 
@@ -162,6 +167,7 @@ TEST(EdgesTest, insert_multiple) {
 
 	ASSERT_FALSE(!graph.insertEdge(1, 2)); // ok
 	ASSERT_FALSE(graph.insertEdge(1, 2)); // duplicate
+    ASSERT_FALSE(graph.insertEdge(2, 1)); // duplicate
 
 }
 

@@ -159,7 +159,7 @@ public:
     //           Not yet completed, only about half-way done. This function signature probably isn't even final.
     virtual std::vector<std::vector<VertexType> > minimumCut() = 0;
 
-    // @func   - minimuminSpanningTree
+    // @func   - minimumunSpanningTree
     // @args   - none
     // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
     // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 

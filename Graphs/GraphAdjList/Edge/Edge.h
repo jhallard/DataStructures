@@ -32,7 +32,7 @@ public:
     // @return - The vertex object pointed to by this edge. 
     Vertex<VertexType> * getTarget() const;
 
-    // @func   - getTarget
+    // @func   - getVertex
     // @args   - None
     // @return - The target vertex. this function is kept for backwards compatibility
     Vertex<VertexType> * getVertex() const;
@@ -46,16 +46,6 @@ public:
     // @args   - Pointer to the vertex that you wish to set
     // @return - Bool indicating success or failure
     bool setSource(Vertex<VertexType> *);
-
-    // @func   - getNext
-    // @args   - None
-    // @return - The next edge in the list of outgoing edges contained by a single vertex
-    Edge * getNext() const;
-
-    // @func   - setNext #1
-    // @args   - #1 Pointer to the next Edge object
-    // @return - The vertex object pointed to by this edge. 
-    bool setNext(Edge *);
 
 
     // @func - setWeight 
@@ -81,8 +71,6 @@ private:
     // @info - The weight associated with this vertex, default value will be 1.0
     double weight;
 
-    // @info - A pointer to the next edge object in the list
-    Edge * nextEdge;
 
 };
 

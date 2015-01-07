@@ -470,7 +470,7 @@ std::vector< std::pair<VertexType, double> > dGraph<VertexType>::getAdjVertices(
     std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
     for(int i = 0; i < edgeList.size(); i++)  {
-        retVector.push_back(std::pair<VertexType, double>(edgeList[i]->getVertex()->getData(), edgeList[i]->getWeight()));
+        retVector.push_back(std::pair<VertexType, double>(edgeList[i]->getTarget()->getData(), edgeList[i]->getWeight()));
     }
 
     return retVector;
@@ -1058,8 +1058,8 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
                 traveler->examine_edge(new_edge);
             }
 
-            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second) {
-                set.at(edge->getVertex()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
+            if(edge->getWeight() <= set.at(edge->getTarget()->getData()).second) {
+                set.at(edge->getTarget()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
             }
             
         }
@@ -1125,7 +1125,7 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
 
         for(auto edge : edges) {
 
-            AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
+            AdjList<VertexType> * temp_vert = this->findVertex(edge->getTarget()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
