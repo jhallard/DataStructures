@@ -14,7 +14,7 @@
 
 
 #include "../../DirectedGraph/dGraph.h"
-#include "../../Travelers/dTraveler.hpp"
+#include "../../../GraphTraveler/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -448,7 +448,7 @@ TEST(MinTreeTests, simple_test) {
     graph.insertEdge(4, 3, 6.15);
     graph.insertEdge(5, 3, 6.15);
     graph.insertEdge(3, 1, 0.15);
-    
+
 
     ASSERT_EQ(true, graph.minimumSpanningTree());
 

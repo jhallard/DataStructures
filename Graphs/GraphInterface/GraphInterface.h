@@ -15,7 +15,7 @@
 #include <limits>
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
-#include "../GraphAdjList/Travelers/GraphTraveler.hpp"
+#include "../GraphTraveler/GraphTraveler.hpp"
 
 template<class VertexType>
 class GraphInterface

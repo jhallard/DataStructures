@@ -8,9 +8,6 @@
 #ifndef dTraveler_h
 #define dTraveler_h
 
-#include "../Edge/Edge.h"
-#include "../Vertex/Vertex.h"
-
 template<class V> class dGraph; // forward declaring dGraph class
 
 template<class VertexType>

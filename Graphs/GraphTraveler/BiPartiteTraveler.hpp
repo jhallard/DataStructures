@@ -2,14 +2,13 @@
 *   @Author   - John H Allard Jr.
 *   @File     - uTraveler.h
 *   @Data     - 1/2/2014
-*   @Purpose  - This file defines the a testing traveler class that will process the vertices and edges as they come in.
+*   @Purpose  - This file defines the BipartitTraveler class. This class is used for two purposes, to check for bipartiteness of a graph and
+*               to return a bipartition of a graph. It does this by coloring adjacent vertices different colors and checking to see if it finds
+*               a vertex that is colored incorrectly.
 **/
 
 #ifndef BiPartite_Traveler_h
 #define BiPartite_Traveler_h
-
-#include "../Edge/Edge.h"
-#include "../Vertex/Vertex.h"
 
 template<class V> class dGraph; // forward declaring dGraph class
 
@@ -54,7 +53,7 @@ public:
     void traverse_edge(const Edge<VertexType> & edge) {
 
         VertexType vert = edge.getVertex()->getData();
-        
+
         if(vertex_colors.find(vert) == vertex_colors.end()) {
             vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
         }

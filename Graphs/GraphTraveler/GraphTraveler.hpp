@@ -16,9 +16,9 @@
 #ifndef Graph_Traveler_h
 #define Graph_Traveler_h
 
-#include "../Edge/Edge.h"
-#include "../Vertex/Vertex.h"
-#include "../../GraphInterface/GraphInterface.h"
+#include "../GraphAdjList/Edge/Edge.h"
+#include "../GraphAdjList/Vertex/Vertex.h"
+#include "../GraphInterface/GraphInterface.h"
 
 
 template<class VertexType>

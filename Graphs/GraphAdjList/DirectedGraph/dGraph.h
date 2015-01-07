@@ -50,8 +50,8 @@
 #include "../AdjacencyList/AdjList.h"
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
-#include "../Travelers/dTraveler.hpp"
-#include "../Travelers/BiPartiteTraveler.hpp"
+#include "../../GraphTraveler/dTraveler.hpp"
+#include "../../GraphTraveler/BiPartiteTraveler.hpp"
 
 // template<class V> BipartiteTraveler;
 

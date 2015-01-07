@@ -7,9 +7,7 @@
 
 #ifndef uTraveler_h
 #define uTraveler_h
-
-#include "../Edge/Edge.h"
-#include "../Vertex/Vertex.h"
+    
 
 template<class V> class uGraph;
 
