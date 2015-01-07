@@ -56,7 +56,7 @@
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
 #include "../../GraphTraveler/uTraveler.hpp"
-#include "../../GraphTraveler/BiPartiteTraveler.hpp"
+#include "../../GraphTraveler/BipartiteTraveler.hpp"
 
 
 template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)

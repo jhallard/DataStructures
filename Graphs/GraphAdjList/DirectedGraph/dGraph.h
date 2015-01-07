@@ -51,7 +51,7 @@
 #include "../Vertex/Vertex.h"
 #include "../Edge/Edge.h"
 #include "../../GraphTraveler/dTraveler.hpp"
-#include "../../GraphTraveler/BiPartiteTraveler.hpp"
+#include "../../GraphTraveler/BipartiteTraveler.hpp"
 
 // template<class V> BipartiteTraveler;
 
