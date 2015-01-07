@@ -25,8 +25,17 @@ public:
 
     void examine_edge(const Edge<VertexType> & edge) {
         graph.insertVertex(edge.getTarget()->getData());
-        graph.insertEdge(edge.getSource()->getData(), edge.getTarget()->getData(), edge.getWeight());
     }
+
+    // @function - traverse_edge
+    // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
+    // @info     - This function is called when we traverse an edge to a new vertex 
+    void traverse_edge(const Edge<VertexType> & edge) {
+        graph.insertVertex(edge.getVertex()->getData());
+        graph.insertVertex(edge.getSource()->getData());
+        graph.insertEdge(edge.getSource()->getData(), edge.getVertex()->getData(), edge.getWeight());
+    }
+
 
     void starting_vertex(const VertexType & vert) {
         graph.insertVertex(vert);

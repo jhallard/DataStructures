@@ -578,12 +578,12 @@ template<class VertexType>
 bool dGraph<VertexType>::isConnected() {
 
     dGraph<VertexType> temp_graph = *this;
-
+        
     dTraveler<VertexType> * trav = new dTraveler<VertexType>();
     dTraveler<VertexType> * trav2 = new dTraveler<VertexType>();
 
     depthFirst(list[0]->getVertex()->getData(), trav);//, f);
-
+    
     if(trav->graph.getNumVertices() != list.size())
         return false;
 
@@ -690,53 +690,73 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    AdjList<VertexType> *  root_vertex = findVertex(root_data);
+    // Maps a target vertex that is examined to the source vertex that we were at when we examined it
+    typename std::unordered_map<VertexType, VertexType> prev;
 
-    if(root_vertex == nullptr)
+    AdjList<VertexType> * root_vert = findVertex(root_data);
+
+    if(root_vert == nullptr)
         return false;
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
-    q.push_back(root_vertex->getVertex());
+    q.push_back(root_vert->getVertex());
 
-    // visit the new vertex
-    if(traveler != nullptr)
-        traveler->starting_vertex(root_vertex->getVertex()->getData());
+    AdjList<VertexType> *  current_vertex = nullptr;
+    bool first_iteration = true;
 
     while(q.size()) {
 
         Vertex<VertexType> * tempVert = q.back();q.pop_back();
-        AdjList<VertexType> *  adj = findVertex(tempVert->getData());
+        current_vertex = findVertex(tempVert->getData());
 
-        if(adj == nullptr) 
+        if(current_vertex == nullptr) 
             return false;
 
-        // get the vertex that we just popped off the stack
-        VertexType tempData = adj->getVertex()->getData();
+        // visit the node that we just popped off the stack
+        VertexType tempData = current_vertex->getVertex()->getData();
 
         // visit the new vertex
-        if(traveler != nullptr)
-            traveler->discover_vertex(tempData);
+        if(traveler && first_iteration) {
+            traveler->starting_vertex(root_vert->getVertex()->getData());
+            first_iteration = false;
+        }
+        else if(traveler) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+            Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
+            if(new_edge)
+                traveler->traverse_edge(*new_edge);
+        }
+        
 
-        std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
+        std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
         for(auto edge : edges) {
 
             Vertex<VertexType> * tempVert = edge->getVertex();
             VertexType tempData = tempVert->getData();
+            
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
-
 
             if(traveler != nullptr) {
                 traveler->examine_edge(*edge);
+                // std::cout << "3st\n";
             }
 
+            // if we haven't seen the target vertex for this edge
             if(get == marked.end()) {
-                marked.insert(std::pair<VertexType, bool>(tempData, true));
+                // add the source vertex for this target vertex to our map
+                prev.insert(std::pair<VertexType, VertexType>(tempData, edge->getSource()->getData()));
+
+                // mark the target vertex as seen
+                marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
+
+                // push it into our queue
                 q.push_back(tempVert);
             }
         }
 
     }
+
     if(traveler != nullptr)
         traveler->finished_traversal();
 
@@ -761,35 +781,46 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    AdjList<VertexType> *  root_vertex = findVertex(root_data);
+    // Maps a target vertex that is examined to the source vertex that we were at when we examined it
+    typename std::unordered_map<VertexType, VertexType> prev;
 
-    if(root_vertex == nullptr)
+    AdjList<VertexType> *  root_vert = findVertex(root_data);
+
+    if(root_vert == nullptr)
         return false;
 
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
-    q.push_back(root_vertex->getVertex());
+    q.push_back(root_vert->getVertex());
 
-    // visit the new vertex
-    if(traveler != nullptr)
-        traveler->starting_vertex(root_vertex->getVertex()->getData());
 
+    AdjList<VertexType> *  current_vertex = nullptr;
+    bool first_iteration = true;
 
     while(q.size()) {
 
         Vertex<VertexType> * tempVert = q.front();q.pop_front();
-        AdjList<VertexType> *  adj = findVertex(tempVert->getData());
+        current_vertex = findVertex(tempVert->getData());
 
-        if(adj == nullptr)
+        if(current_vertex == nullptr)
             return false;
 
-        VertexType tempData = adj->getVertex()->getData();
+        VertexType tempData = current_vertex->getVertex()->getData();
 
         // visit the new vertex
-        if(traveler != nullptr)
-            traveler->discover_vertex(tempData);
+        if(traveler && first_iteration) {
+            traveler->starting_vertex(root_vert->getVertex()->getData());
+            first_iteration = false;
+        }
+        else if(traveler) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+            Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
+            if(new_edge)
+                traveler->traverse_edge(*new_edge);
+        }
 
-        std::vector<Edge<VertexType> *> edges = adj->getAllEdges();
+
+        std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
         // Go through all of the edges associated with the current vertex
         for(auto edge : edges) {
@@ -799,10 +830,16 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
 
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
+            // examine the new edge
             if(traveler != nullptr)
                 traveler->examine_edge(*edge);
+
             // if the current vertex hasn't been seen
             if(get == marked.end()) {
+
+                // add the source vertex for this target vertex to our map
+                prev.insert(std::pair<VertexType, VertexType>(tempData, edge->getSource()->getData()));
+
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex
@@ -812,7 +849,6 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
         }
 
     }
-    
     if(traveler != nullptr)
         traveler->finished_traversal();
 
@@ -980,12 +1016,11 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         double lowest_weight = imax;
         int index = 0;   // index of the vertex with the lowest wieght found
 
+
         if(traveler && first_iteration) {
             traveler->starting_vertex(set.at(best_vertex->getData()).first);
             first_iteration = false;
         }
-        else if(traveler)
-            traveler->discover_vertex(set.at(best_vertex->getData()).first);
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
@@ -1008,16 +1043,24 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         // examine the new edge inserted into the minimum-tree
         if(traveler)  {
             Edge<VertexType> new_edge(last_vertex, best_vertex, lowest_weight);
-            traveler->examine_edge(new_edge);
+            traveler->traverse_edge(new_edge);
         }                                           
 
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
 
+
         // Update the weighting of the vertices that are neighbors of the last vertex
         for(auto edge : edges) {
-            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second) 
+
+            if(traveler)  {
+                Edge<VertexType> new_edge(edge->getSource(), edge->getTarget(), edge->getWeight());
+                traveler->examine_edge(new_edge);
+            }
+
+            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second) {
                 set.at(edge->getVertex()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
+            }
             
         }
 
@@ -1175,9 +1218,8 @@ bool dGraph<VertexType>::dijkstrasMinimumPath(const VertexType & src, const Vert
 
             Edge<VertexType> next_edge = *(findVertex(last)->getEdge(current));
 
-            traveler->examine_edge(next_edge);
+            traveler->traverse_edge(next_edge);
             last = current;
-            traveler->discover_vertex(current);
         }
 
         traveler->finished_traversal();

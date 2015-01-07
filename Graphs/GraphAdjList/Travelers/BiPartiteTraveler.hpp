@@ -47,6 +47,23 @@ public:
         }
     }
 
+
+    // @function - traverse_edge
+    // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
+    // @info     - This function is called when we traverse an edge to a new vertex 
+    void traverse_edge(const Edge<VertexType> & edge) {
+
+        VertexType vert = edge.getVertex()->getData();
+        
+        if(vertex_colors.find(vert) == vertex_colors.end()) {
+            vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
+        }
+        else if(vertex_colors.at(vert) != current_color) {
+            current_color = (vertex_colors.at(vert));
+        }
+    }
+
+
     void starting_vertex(const VertexType & vert) {
             vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
     }

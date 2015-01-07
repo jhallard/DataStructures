@@ -40,6 +40,11 @@ public:
     // @info     - This function is called when we are looking at the neighbors of the current vertex during a search. 
     virtual void examine_edge(const Edge<VertexType> &) = 0;
 
+    // @function - traverse_edge
+    // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
+    // @info     - This function is called when we traverse an edge to a new vertex 
+    virtual void traverse_edge(const Edge<VertexType> &) = 0;
+
     // @function - starting_vertex
     // @args     - 
     // @info
