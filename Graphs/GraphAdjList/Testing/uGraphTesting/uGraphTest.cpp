@@ -580,7 +580,7 @@ TEST(MinCutTests, non_connected_error) {
 
 TEST(Bipartite, simple_positive_test) {
 
-    dGraph<int> graph;
+    uGraph<int> graph;
 
     for(int i = 1; i < 6; i++)
         graph.insertVertex(i);
@@ -598,7 +598,7 @@ TEST(Bipartite, simple_positive_test) {
 
 TEST(Bipartite, simple_negative_test) {
 
-    dGraph<int> graph;
+    uGraph<int> graph;
 
     for(int i = 1; i < 6; i++)
         graph.insertVertex(i);
@@ -618,13 +618,36 @@ TEST(Bipartite, simple_negative_test) {
 
 }
 
+TEST(Bipartition, simple_positive_test) {
+
+    uGraph<int> graph;
+
+    for(int i = 1; i < 6; i++)
+        graph.insertVertex(i);
+
+    graph.insertEdge(5, 4);
+    graph.insertEdge(3, 5);
+    graph.insertEdge(4, 1);
+    graph.insertEdge(1, 3);
+    graph.insertEdge(2, 4);
+    graph.insertEdge(3, 2);
+
+    std::pair<std::vector<int>, std::vector<int> > * pair = new std::pair<std::vector<int>, std::vector<int> >();
+
+    ASSERT_EQ(true, graph.getBipartition(pair));
+
+    ASSERT_EQ(true, pair->first.size() == 3 || pair->first.size() == 2);
+    ASSERT_EQ(true, pair->second.size() == 3 || pair->second.size() == 2);
+
+}
+
 
 TEST(Dijkstras, simple_test) {
     uGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 4000;
-    int minEdges = 23;
+    int numVertices = 800;
+    int minEdges = 28;
     int maxEdges = 125;
 
     std::vector<int> input_vec;

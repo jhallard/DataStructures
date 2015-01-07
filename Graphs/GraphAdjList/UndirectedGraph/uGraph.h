@@ -218,6 +218,11 @@ public:
     //           hitting the same value twice in a row. 
     bool isBipartite();
 
+    // @func   - getBipartition
+    // @args   - std::pair pointer that will be filled with two vectors of vertices, consisting of one bipartition of the graph
+    // @return - Bool indicating whether or not the graph is bipartite and able to be bipartitioned
+    bool getBipartition(std::pair<std::vector<VertexType>, std::vector<VertexType> > *);
+
     // @func   - set_is_multi_graph
     // @args   - boolean to be stored in is_multi_graph
     // @return - Bool indicating success

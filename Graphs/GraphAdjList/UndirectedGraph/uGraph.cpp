@@ -602,7 +602,40 @@ bool uGraph<VertexType>::isBipartite() {
 
     depthFirst(list[0]->getVertex()->getData(), traveler);
 
-    return traveler->is_bipartite;
+    bool ret = traveler->is_bipartite;
+    delete(traveler);
+
+    return ret;
+}
+
+// @func   - getBipartition
+// @args   - std::pair pointer that will be filled with two vectors of vertices, consisting of one bipartition of the graph
+// @return - Bool indicating whether or not the graph is bipartite and able to be bipartitioned
+template<class VertexType>
+bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::vector<VertexType> > * ret) {
+
+    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+
+    depthFirst(list[0]->getVertex()->getData(), traveler);
+    
+    if(!traveler->is_bipartite)
+        return false;
+
+    std::vector<VertexType> u_vertices, v_vertices;
+
+    for(auto vertex : traveler->vertex_colors) {
+        if(vertex.second)
+            u_vertices.push_back(vertex.first);
+        else
+            v_vertices.push_back(vertex.first);
+    }
+
+    ret->first = u_vertices;
+    ret->second = v_vertices;
+
+    delete(traveler);
+    
+    return true;
 }
 
 
@@ -648,7 +681,7 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
-    AdjList<VertexType> *  root_vert = findVertex(root_data);
+    AdjList<VertexType> * root_vert = findVertex(root_data);
 
     if(root_vert == nullptr)
         return false;
@@ -683,10 +716,10 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
             VertexType tempData = tempVert->getData();
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
+            if(traveler != nullptr)
+                traveler->examine_edge(*edge);
+
             if(get == marked.end()) {
-                if(traveler != nullptr)
-                    traveler->examine_edge(*edge);
-                
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 q.push_back(tempVert);
             }
@@ -754,12 +787,14 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
             VertexType tempData = tempVert->getData();
 
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
+            
+            // examine the new edge
+            if(traveler != nullptr)
+                traveler->examine_edge(*edge);
 
             // if the current vertex hasn't been seen
             if(get == marked.end()) {
-                // examine the new edge
-                if(traveler != nullptr)
-                    traveler->examine_edge(*edge);
+
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex

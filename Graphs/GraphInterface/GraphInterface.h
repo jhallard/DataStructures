@@ -131,6 +131,11 @@ public:
     //           hitting the same value twice in a row. 
     virtual bool isBipartite() = 0;
 
+    // @func   - getBipartition
+    // @args   - std::pair pointer that will be filled with two vectors of vertices, consisting of one bipartition of the graph
+    // @return - Bool indicating whether or not the graph is bipartite and able to be bipartitioned
+    virtual bool getBipartition(std::pair<std::vector<VertexType>, std::vector<VertexType> > *) = 0;
+
     // @func   - depthFirst
     // @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
     // @return - Bool indicating if the function could find the starting vertex based on arg#1

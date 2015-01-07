@@ -517,7 +517,7 @@ TEST(MinTreeTests, larger_test) {
 
     dGraph<int> graph;
 
-    int numVertices = 400;
+    int numVertices = 300;
 
     std::vector<int> input_vec;
 
@@ -604,8 +604,33 @@ TEST(Bipartite, simple_negative_test) {
     graph.insertEdge(3, 4);
     graph.insertEdge(1, 5);
     graph.insertEdge(2, 5);
+    graph.insertEdge(1, 4);
+    graph.insertEdge(2, 5);
 
     ASSERT_FALSE(graph.isBipartite());
+
+}
+
+TEST(Bipartition, simple_positive_test) {
+
+    dGraph<int> graph;
+
+    for(int i = 1; i < 6; i++)
+        graph.insertVertex(i);
+
+    graph.insertEdge(5, 4);
+    graph.insertEdge(3, 5);
+    graph.insertEdge(4, 1);
+    graph.insertEdge(1, 3);
+    graph.insertEdge(2, 4);
+    graph.insertEdge(3, 2);
+
+    std::pair<std::vector<int>, std::vector<int> > * pair = new std::pair<std::vector<int>, std::vector<int> >();
+
+    ASSERT_EQ(true, graph.getBipartition(pair));
+
+    ASSERT_EQ(true, pair->first.size() == 3 || pair->first.size() == 2);
+    ASSERT_EQ(true, pair->second.size() == 3 || pair->second.size() == 2);
 
 }
 
@@ -631,36 +656,10 @@ TEST(Dijkstras, simple_test2) {
     graph.insertEdge(3, 5, 2);
     graph.insertEdge(5, 3, 2);
 
-    // std::pair<std::vector<int>,double> the_pair = graph.dijkstrasMinimumPath(0, 4);
-    // auto temp = the_pair.first;
-    // auto dis = the_pair.second;
+
     bool testval = true;
-    // // std::cout << "# Edges : " << graph.getNumEdges() << "\n";
-    // if(!temp.size()) {
-    //     // std::cout << "Path Not Found : " << r << " -> " << y << "\n";
-    //     // std::cout << "Iteration : " << k << "/" <<numVertices/10 <<"\n\n";
-    //     testval = false;
-    // }
-    // else {
-    //     ASSERT_EQ(true, temp.size() > 0);
-    //     ASSERT_EQ(0, temp[0]);
-    //     ASSERT_EQ(4, temp[temp.size()-1]);
-    // }
     if(!graph.dijkstrasMinimumPath(0, 4))
         testval = false;
-
-    // the_pair = graph.dijkstrasMinimumPath(4, 3);
-    // temp = the_pair.first;
-    // dis = the_pair.second;
-    // testval = true;
-    // if(!temp.size()) {
-    //     testval = false;
-    // }
-    // else {
-    //     ASSERT_EQ(true, temp.size() > 0);
-    //     ASSERT_EQ(4, temp[0]);
-    //     ASSERT_EQ(3, temp[temp.size()-1]);
-    // }
     if(!graph.dijkstrasMinimumPath(4, 3))
         testval = false;
 
@@ -711,6 +710,7 @@ TEST(Dijkstras, simple_test) {
 
 
     bool testval = true;
+    int total = 0;
     for(int k = 1; k < numVertices/2; k++) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
@@ -718,6 +718,7 @@ TEST(Dijkstras, simple_test) {
         if(!graph.dijkstrasMinimumPath(r, y, trav)) {
             std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
+            total++;
         }
         // else
             // trav->graph.printGraph();
@@ -725,7 +726,7 @@ TEST(Dijkstras, simple_test) {
         delete(trav);
     }
 
-
+    std::cout << total << "/" << numVertices/2 << " Wrong Paths \n";
     ASSERT_EQ(true, testval);
 
 }

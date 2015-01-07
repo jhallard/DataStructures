@@ -10,7 +10,6 @@
 
 #include "../Edge/Edge.h"
 #include "../Vertex/Vertex.h"
-// #include "../DirectedGraph/dGraph.h"
 
 template<class V> class dGraph; // forward declaring dGraph class
 
@@ -27,12 +26,13 @@ public:
     ~BipartiteTraveler() {};
 
     void discover_vertex(const VertexType & vert) {
-        current_color = !current_color;
 
-        if(vertex_colors.find(vert) == vertex_colors.end())
+        if(vertex_colors.find(vert) == vertex_colors.end()) {
             vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
-        else if(vertex_colors.at(vert) != current_color)
-            is_bipartite = false;
+        }
+        else if(vertex_colors.at(vert) != current_color) {
+            current_color = (vertex_colors.at(vert));
+        }
     }
 
     void examine_edge(const Edge<VertexType> & edge) {
@@ -42,13 +42,13 @@ public:
         if(vertex_colors.find(vert) == vertex_colors.end()) {
             vertex_colors.insert(std::pair<VertexType, bool>(vert, !current_color));
         }
-        else if(vertex_colors.at(vert) != current_color) {
+        else if(vertex_colors.at(vert) == current_color) {
                 is_bipartite = false;
         }
     }
 
     void starting_vertex(const VertexType & vert) {
-
+            vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
     }
 
     void finished_traversal() {
