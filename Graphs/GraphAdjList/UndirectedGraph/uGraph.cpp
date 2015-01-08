@@ -1144,14 +1144,15 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 template<class VertexType>
 typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source) {
 
-    auto start = std::chrono::high_resolution_clock::now();
+    // auto start = std::chrono::high_resolution_clock::now();
 
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  (a.first - b.first < 0.0000001); };
+    // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  (a.first - b.first < 0.0000001); };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
 
     // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
     // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
@@ -1170,31 +1171,31 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
-        if(vertex->getVertex()->getData() != source)
-            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-        else
-            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), 0));
+        dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
         queue.insert(std::pair<double, VertexType>(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
     }
 
+    queue.erase(std::make_pair(dist.at(source), source));
+    dist.at(source) = 0;
+    queue.insert(std::make_pair(dist.at(source), source));
+
+
+
+
     while(!queue.empty()) {
-        // auto start1 = std::chrono::high_resolution_clock::now();
-        // grab from the front of the queue
         double current_dist = queue.begin()->first;
         AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
         queue.erase(queue.begin());
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
 
-        auto edges = current_vert->getAllEdges();
-
-        for(auto & edge : edges) {
+        for(auto & edge : current_vert->getAllEdges()) {
 
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(scanned.find(temp_data) == scanned.end() && temp_weight <= dist.at(temp_data)) {
+            if(scanned.find(temp_data) == scanned.end() && temp_weight < dist.at(temp_data)) {
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
                 if(prev.find(temp_data) == prev.end())
@@ -1206,19 +1207,15 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
         }
 
-        // auto elapsed1 = std::chrono::high_resolution_clock::now() - start1;   
-        // long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed1).count();
-
-        // std::cout << "Total Time : " << m << "\n";
     }
 
     ret.first = prev;
     ret.second = dist;
 
-    auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-    long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+    // auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+    // long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
-    std::cout << "Total Time : " << m << "\n";
+    // std::cout << "Total Time : " << m << "\n";
     
     return ret;
 }

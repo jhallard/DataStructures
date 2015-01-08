@@ -650,7 +650,7 @@ TEST(Bipartition, simple_positive_test) {
 
 TEST(Dijkstras, dense_graph_test) {
 
-    int num_vertices = 300;
+    int num_vertices = 350;
     srand(time(0));
 
     uGraph<int> graph;
@@ -664,7 +664,7 @@ TEST(Dijkstras, dense_graph_test) {
 
     graph.makeGraphDense(fptr);
 
-    for(int i = 0; i < num_vertices/2; i++) {
+    for(int i = 0; i < num_vertices; i++) {
         int l = rand() % num_vertices;
         int r = rand() % num_vertices;
 
@@ -675,14 +675,16 @@ TEST(Dijkstras, dense_graph_test) {
 
         ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
     }
+
+    std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
 }
 
 TEST(Dijkstras, large_test) {
     uGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 1200;
-    int minEdges = 90;
+    int numVertices = 1000;
+    int minEdges = 70;
     int maxEdges = 125;
 
     std::vector<int> input_vec;
@@ -736,6 +738,7 @@ TEST(Dijkstras, large_test) {
     }
 
     std::cout << total << "/" << numVertices/4 << " Wrong Paths \n";
+    std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
     ASSERT_EQ(true, testval);
 
 }
