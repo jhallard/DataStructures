@@ -1153,12 +1153,15 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 template<class VertexType>
 typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source) {
 
+    auto start = std::chrono::high_resolution_clock::now();
+
+
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return ((a.first - b.first) < 0.0000001); };
 
     // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
     // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
@@ -1201,13 +1204,16 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
 
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(scanned.find(temp_data) == scanned.end() && temp_weight <= dist.at(temp_data)) {
+            if(scanned.find(temp_data) == scanned.end() && temp_weight < dist.at(temp_data)) {
+
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
-                if(prev.find(temp_data) == prev.end())
+                if(prev.find(temp_data) == prev.end()) {
                     prev.insert(std::pair<VertexType, VertexType>(temp_data, current_vert->getVertex()->getData()));
-                else
+                }
+                else {
                     prev.at(temp_data) = current_vert->getVertex()->getData();
+                }
                 queue.insert(std::make_pair(dist.at(temp_data), temp_data));
             }
 
@@ -1216,7 +1222,11 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
 
     ret.first = prev;
     ret.second = dist;
+    auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+    long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
+    std::cout << "Total Time : " << m << "\n";
+    
     return ret;
 }
 
@@ -1284,8 +1294,9 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         for(int i = 1; i < temp.size(); i++) {
             current = temp[i];
             
-            if(!containsEdge(last, current))
+            if(!containsEdge(last, current)) {
                 return false;
+            }
 
             Edge<VertexType> next_edge = *(findVertex(last)->getEdge(current));
 

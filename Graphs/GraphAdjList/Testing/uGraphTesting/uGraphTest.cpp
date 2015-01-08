@@ -7,8 +7,7 @@
 *				of the graph in different ways, they are run individually then tallied together to ensure that entire subsystems work correctly.
 *				The different sections of uGraph that will be tested are as follows :
 *				1.) Vertex Testing    - Tests the insertion, deletion, and lookup of vertices in the graph. 
-*				2.) Edge Testing      - Tests the insertion, deletion, and lookup of edges in the graph. This includes making sure so duplicates for
-*									    non multi-graphs.
+*				2.) Edge Testing      - Tests the insertion, deletion, and lookup of edges in the graph. 
 *				3.) Algorithm/Speed Testing - Tests the various algorithms that come with this graph.
 **/
 
@@ -21,7 +20,9 @@
 #include <chrono>
 
 
-
+double setweight(int & one, int & two) {
+    return (one*13.0+two*17.0)/(one+two+2.0)*27.0;
+}
 
 //////////////////////////////////////
 ////////	Vertex Testing    ////////
@@ -43,6 +44,14 @@ uGraph<int> graph;
         graph.insertVertex(i);
 
     ASSERT_EQ(numVertices, graph.getNumVertices());
+    ASSERT_EQ(true, graph.containsVertex(23));
+    ASSERT_EQ(true, graph.containsVertex(125));
+    ASSERT_EQ(true, graph.containsVertex(76));
+
+    ASSERT_FALSE(graph.containsVertex(802));
+    ASSERT_FALSE(graph.containsVertex(-1));
+    ASSERT_FALSE(graph.containsVertex(10512));
+
 }
 
 TEST(VerticesTest, insert_all_at_once) { 
@@ -56,6 +65,13 @@ uGraph<int> graph;
     graph.insertVertices(input_vec);
 
     ASSERT_EQ(numVertices, graph.getNumVertices());
+    ASSERT_EQ(true, graph.containsVertex(23));
+    ASSERT_EQ(true, graph.containsVertex(125));
+    ASSERT_EQ(true, graph.containsVertex(76));
+
+    ASSERT_FALSE(graph.containsVertex(802));
+    ASSERT_FALSE(graph.containsVertex(-1));
+    ASSERT_FALSE(graph.containsVertex(10512));
 }
 
 
@@ -65,7 +81,7 @@ TEST(VerticesTest, large_insert_delete) {
 	std::vector<int> vec;
 	std::unordered_map<int, bool> m;
 
-	for(int i = 0; i < 4000; i++) {
+	for(int i = 0; i < 8000; i++) {
 		int temp = rand()%1367532+200;
 		if(m.find(temp) != m.end()) {
 			i--;
@@ -172,7 +188,7 @@ TEST(EdgesTest, insert_multiple) {
 }
 
 
-TEST(EdgesTest, insert_multiple2) { 
+TEST(EdgesTest, insert_multiple_larger) { 
 	uGraph<int> graph;
 
 	graph.insertVertex(1);
@@ -209,6 +225,7 @@ TEST(EdgesTest, edge_deletion) {
 	graph.insertVertex(4);
 	graph.insertVertex(5);
 	graph.insertVertex(6);
+
 	ASSERT_EQ(0, graph.getNumEdges());
 
 	graph.insertEdge(1, 2); 
@@ -217,6 +234,7 @@ TEST(EdgesTest, edge_deletion) {
 	graph.insertEdge(3, 4); 
 	graph.insertEdge(4, 1); 
 	graph.insertEdge(6, 2); 
+
 	graph.deleteEdge(1, 2); 
 	graph.deleteEdge(1, 3); 
 	graph.deleteEdge(2, 3); 
@@ -260,9 +278,7 @@ TEST(EdgesTest, edge_deletion2) {
 TEST(EdgesTest, large_dense_graph) { 
 
 	uGraph<int> graph;
-
  	int numVertices = 400;
-
     std::vector<int> input_vec;
 
     for(int i = 1; i <= numVertices; i++) {
@@ -327,7 +343,6 @@ uGraph<int> graph;
     }
 }
 
-
 TEST(EdgesTest, adj_vertices) { 
 	uGraph<int> graph;
 
@@ -355,7 +370,6 @@ TEST(EdgesTest, adj_vertices) {
 	ASSERT_EQ(true, (edges[2].getTarget()->getData() == 2 || edges[2].getTarget()->getData() == 3 || edges[2].getTarget()->getData() == 4));
 
 }
-
 
 TEST(EdgesTest, vertex_and_edge_deletion) { 
 	uGraph<int> graph;
@@ -424,7 +438,7 @@ TEST(EdgesTest, vertex_and_edge_deletion) {
 ///////////////// ALGORITHM TESTS //////////////////
 ////////////////////////////////////////////////////
 
-TEST(MinCutTests, simple_test) {
+TEST(MinTreeTests, simple_test) {
 
 	uGraph<int> graph;
     graph.insertVertex(1);
@@ -468,7 +482,7 @@ TEST(MinCutTests, simple_test) {
 
 }
 
-TEST(MinCutTests, simple_test2) {
+TEST(MinTreetTests, simple_test2) {
 
 	uGraph<int> graph;
 	graph.insertVertex(0);
@@ -508,9 +522,7 @@ TEST(MinCutTests, simple_test2) {
 
 }
 
-
-
-TEST(MinCutTests, larger_test) {
+TEST(MinTreeTests, larger_test) {
 
 
 	uGraph<int> graph;
@@ -547,42 +559,32 @@ TEST(MinCutTests, larger_test) {
 
 }
 
+TEST(MinTreeTests, non_connected_error) {
 
+    uGraph<int> graph;
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+    graph.insertVertex(7);
 
-TEST(MinCutTests, non_connected_error) {
+    graph.insertEdge(1, 2, 0.1);
+    graph.insertEdge(1, 3, 0.1);
+    graph.insertEdge(1, 4, 0.1);
+    graph.insertEdge(1, 5, 0.1);
+    graph.insertEdge(2, 3, 0.4);
+    graph.insertEdge(2, 4, 0.4);
+    graph.insertEdge(2, 5, 0.4);
+    graph.insertEdge(3, 4, 2.1);
+    graph.insertEdge(3, 5, 3.1);
+    graph.insertEdge(4, 5, 3.1);
 
-	// uGraph<int> graph;
- //    graph.insertVertex(1);
- //    graph.insertVertex(2);
- //    graph.insertVertex(3);
- //    graph.insertVertex(4);
- //    graph.insertVertex(5);
- //    graph.insertVertex(6);
- //    graph.insertVertex(7);
-
- //    graph.insertEdge(1, 2, 0.1);
- //    graph.insertEdge(1, 3, 0.1);
- //    graph.insertEdge(1, 4, 0.1);
- //    graph.insertEdge(1, 5, 0.1);
- //    graph.insertEdge(2, 3, 0.4);
- //    graph.insertEdge(2, 4, 0.4);
- //    graph.insertEdge(2, 5, 0.4);
- //    graph.insertEdge(3, 4, 2.1);
- //    graph.insertEdge(3, 5, 3.1);
- //    graph.insertEdge(4, 5, 3.1);
-
- //    bool shouldBeFalse = true;
- //    try {
- //    	uGraph<int> * newGraph = graph.minimumSpanningTree();
- //    	delete(newGraph);
- //    } 
- //    catch(std::logic_error e) {
- //    	shouldBeFalse = false;
- //    }
-
- //    ASSERT_FALSE(shouldBeFalse);
-
+    ASSERT_FALSE(graph.minimumSpanningTree());
 }
+
+
 
 TEST(Bipartite, simple_positive_test) {
 
@@ -599,7 +601,6 @@ TEST(Bipartite, simple_positive_test) {
     graph.insertEdge(3, 2);
 
     ASSERT_EQ(true, graph.isBipartite());
-
 }
 
 TEST(Bipartite, simple_negative_test) {
@@ -621,7 +622,6 @@ TEST(Bipartite, simple_negative_test) {
     graph.insertEdge(2, 5);
 
     ASSERT_FALSE(graph.isBipartite());
-
 }
 
 TEST(Bipartition, simple_positive_test) {
@@ -648,12 +648,41 @@ TEST(Bipartition, simple_positive_test) {
 }
 
 
+TEST(Dijkstras, dense_graph_test) {
+
+    int num_vertices = 300;
+    srand(time(0));
+
+    uGraph<int> graph;
+
+    for(int i = 0; i < num_vertices; i++) {
+        graph.insertVertex(i);
+    }
+
+    double (*fptr)(int &, int &);
+    fptr = setweight;
+
+    graph.makeGraphDense(fptr);
+
+    for(int i = 0; i < num_vertices/2; i++) {
+        int l = rand() % num_vertices;
+        int r = rand() % num_vertices;
+
+        if(r == l) {
+            i--;
+            continue;
+        }
+
+        ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
+    }
+}
+
 TEST(Dijkstras, large_test) {
     uGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 800;
-    int minEdges = 28;
+    int numVertices = 1200;
+    int minEdges = 90;
     int maxEdges = 125;
 
     std::vector<int> input_vec;
@@ -668,13 +697,14 @@ TEST(Dijkstras, large_test) {
 	    for(int i = 1; i < numVertices; i++) {
 
 	        int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-	        double weight = (double)(rand() % 477 + 20)/100;
+	        double weight = (double)(rand() % 477 + 20)/10.0;
 	        if(weight <= 0)
 	        	weight *= -1;
 	        // std::cout << weight << std::endl;
 	        for(int j = 0; j < loop; j++) {
 
 	            int r = rand() % numVertices + 1; r++;
+                weight += (r*13+i*17)/(i*27+r*10.0);
 	            if(r == i) {
 	                j--;
 	                continue;
@@ -688,15 +718,14 @@ TEST(Dijkstras, large_test) {
 
     bool testval = true;
     int total = 0;
-    for(int k = 1; k < numVertices/10; k++) {
-    	
+    for(int k = 1; k < numVertices/4; k++) {
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         if(!(graph.containsVertex(r) & graph.containsVertex(y)))
             continue;
 
         uTraveler<int> * trav = new uTraveler<int>();
         if(!graph.dijkstrasShortestPath(r, y, trav)) {
-            std::cout << " [" << k << "/" <<numVertices/10 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            std::cout << " [" << k << "/" <<numVertices/4 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
             total++;
         }
@@ -706,35 +735,9 @@ TEST(Dijkstras, large_test) {
         delete(trav);
     }
 
-    std::cout << total << "/" << numVertices/10 << " Wrong Paths \n";
+    std::cout << total << "/" << numVertices/4 << " Wrong Paths \n";
     ASSERT_EQ(true, testval);
 
-}
-
-TEST(dijkstras, dense_graph_test) {
-
-    int num_vertices = 800;
-    srand(time(0));
-
-    dGraph<int> graph;
-
-    for(int i = 0; i < num_vertices; i++) {
-        graph.insertVertex(i);
-    }
-
-    graph.makeGraphDense();
-
-    for(int i = 0; i < num_vertices/2; i++) {
-        int l = rand() % num_vertices;
-        int r = rand() % num_vertices;
-
-        if(r == l) {
-            i--;
-            continue;
-        }
-
-        ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
-    }
 }
 
 

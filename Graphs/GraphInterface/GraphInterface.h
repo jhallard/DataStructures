@@ -13,6 +13,8 @@
 
 #include <unordered_map>
 #include <limits>
+#include <chrono>
+
 #include "../GraphAdjList/Edge/Edge.h"
 #include "../GraphAdjList/Vertex/Vertex.h"
 #include "../GraphTraveler/GraphTraveler.hpp"
@@ -198,8 +200,6 @@ public:
     //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
     virtual bool dijkstrasShortestPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
-
-    // dijkstrasMinimumPath dijkstrasShortestPath
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node

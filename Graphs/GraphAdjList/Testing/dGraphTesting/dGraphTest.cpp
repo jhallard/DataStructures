@@ -20,7 +20,9 @@
 #include <chrono>
 
 
-
+double setweight(int & one, int & two) {
+    return (one*13.0+two*17.0)/(one+two+2.0)*27.0;
+}
 
 //////////////////////////////////////
 ////////    Vertex Testing    ////////
@@ -32,7 +34,7 @@ TEST(VerticesTest, empty_Graph) {
 }
 
 TEST(VerticesTest, insert_one_by_one) { 
-dGraph<int> graph;
+    dGraph<int> graph;
     int numVertices = rand()%800+2;
 
     std::vector<int> input_vec;
@@ -40,6 +42,14 @@ dGraph<int> graph;
         graph.insertVertex(i);
 
     ASSERT_EQ(numVertices, graph.getNumVertices());
+    ASSERT_EQ(true, graph.containsVertex(23));
+    ASSERT_EQ(true, graph.containsVertex(125));
+    ASSERT_EQ(true, graph.containsVertex(76));
+
+    ASSERT_FALSE(graph.containsVertex(802));
+    ASSERT_FALSE(graph.containsVertex(-1));
+    ASSERT_FALSE(graph.containsVertex(10512));
+
 }
 
 TEST(VerticesTest, insert_all_at_once) { 
@@ -53,6 +63,13 @@ dGraph<int> graph;
     graph.insertVertices(input_vec);
 
     ASSERT_EQ(numVertices, graph.getNumVertices());
+    ASSERT_EQ(true, graph.containsVertex(23));
+    ASSERT_EQ(true, graph.containsVertex(125));
+    ASSERT_EQ(true, graph.containsVertex(76));
+
+    ASSERT_FALSE(graph.containsVertex(802));
+    ASSERT_FALSE(graph.containsVertex(-1));
+    ASSERT_FALSE(graph.containsVertex(10512));
 }
 
 
@@ -62,7 +79,7 @@ TEST(VerticesTest, large_insert_delete) {
     std::vector<int> vec;
     std::unordered_map<int, bool> m;
 
-    for(int i = 0; i < 4000; i++) {
+    for(int i = 0; i < 8000; i++) {
         int temp = rand()%1367532+200;
         if(m.find(temp) != m.end()) {
             i--;
@@ -163,7 +180,7 @@ TEST(EdgesTest, insert_multiple) {
 }
 
 
-TEST(EdgesTest, insert_multiple2) { 
+TEST(EdgesTest, insert_multiple_larger) { 
     dGraph<int> graph;
 
     graph.insertVertex(1);
@@ -666,13 +683,14 @@ TEST(Dijkstras, simple_test) {
     ASSERT_EQ(true, testval);
 }
 
+
 TEST(Dijkstras, large_test) {
     dGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 400;
-    int minEdges = 35;
-    int maxEdges = 43;
+    int numVertices = 1200;
+    int minEdges = 90;
+    int maxEdges = 125;
 
     std::vector<int> input_vec;
 
@@ -684,19 +702,16 @@ TEST(Dijkstras, large_test) {
     while(!graph.isConnected()) {
 
         for(int i = 1; i <= numVertices; i++) {
-            graph.deleteVertex(i);
-            graph.insertVertex(i);
-        }
 
-        for(int i = 1; i <= numVertices; i++) {
             int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-            double weight = (double)(rand() % 477 + 20)/100;
-            if(weight <= 0)
-                weight *= -1;
+            double weight = (double)(rand() % 477 + 20)/100.0;
+ 
             // std::cout << weight << std::endl;
             for(int j = 0; j < loop; j++) {
 
                 int r = rand() % numVertices + 1;
+                weight += (r*13+i*17)/(i*27+r*10.0);
+
                 if(r == i) {
                     j--;
                     continue;
@@ -709,14 +724,15 @@ TEST(Dijkstras, large_test) {
     }   
 
 
+
     bool testval = true;
     int total = 0;
-    for(int k = 1; k < numVertices/2; k++) {
-        
+    for(int k = 1; k < numVertices/4; k++) {
+
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         dTraveler<int> * trav = new dTraveler<int>();
         if(!graph.dijkstrasShortestPath(r, y, trav)) {
-            std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            std::cout << " [" << k << "/" <<numVertices/4 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
             total++;
         }
@@ -726,14 +742,16 @@ TEST(Dijkstras, large_test) {
         delete(trav);
     }
 
-    std::cout << total << "/" << numVertices/2 << " Wrong Paths \n";
+    std::cout << total << "/" << numVertices << " Wrong Paths \n";
+
+    std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
     ASSERT_EQ(true, testval);
 
 }
 
-TEST(dijkstras, dense_graph_test) {
+TEST(Dijkstras, dense_graph_test) {
 
-    int num_vertices = 800;
+    int num_vertices = 300;
     srand(time(0));
 
     dGraph<int> graph;
@@ -742,7 +760,9 @@ TEST(dijkstras, dense_graph_test) {
         graph.insertVertex(i);
     }
 
-    graph.makeGraphDense();
+    double (*fptr)(int &, int &);
+    fptr = setweight;
+    graph.makeGraphDense(fptr);
 
     for(int i = 0; i < num_vertices/2; i++) {
         int l = rand() % num_vertices;

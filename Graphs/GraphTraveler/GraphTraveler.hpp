@@ -29,30 +29,33 @@ public:
     // Virtual Destructor
     ~GraphTraveler() {};
 
-    // @function - discover_vertex
-    // @args     - #1 Data in new vertex that has been discovered
-    // @info     - This function is called when a new vertex is moved to as the current vertex (except on the first vertex, starting_vertex is
-    //             called in that case). You can use this function to push vertices into a graph or other structure.
+    // @func - discover_vertex
+    // @args - #1 Data in new vertex that has been discovered
+    // @info - This function is called when we jump to a new vertex without traversing an edge, e.g. if we were going through a list of vertices
+    //         without consideration to their connections to one another. This function is not called for BFS/DFS where we only traverse edges
+    //         to get to new vertices
     virtual void discover_vertex(const VertexType &) = 0;
 
-    // @function - examine_edge
-    // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
-    // @info     - This function is called when we are looking at the neighbors of the current vertex during a search. 
+    // @func - examine_edge
+    // @args - #1 The Edge object that we are currently examining.
+    // @info - This function is called when we are simply looking at the edges of a given vertex. e.g. during BFS, we look at all edges incident
+    //         to the current vertex and push ones we haven't seen into a queue. This function would be called during each edge examination, 
+    //         regardless of whether is has been looked at before.
     virtual void examine_edge(const Edge<VertexType> &) = 0;
 
-    // @function - traverse_edge
-    // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
-    // @info     - This function is called when we traverse an edge to a new vertex 
+    // @func - traverse_edge
+    // @args - #1 An edge object that we are currently traversing (from source to target)
+    // @info - This function is called when we actually move to a new vertex along an edge in the graph.  
     virtual void traverse_edge(const Edge<VertexType> &) = 0;
 
-    // @function - starting_vertex
-    // @args     - 
-    // @info
+    // @func - starting_vertex
+    // @args - #1 The data in the first vertex to be examined.
+    // @info - This function is called once per search algorithm, to let you register the starting vertex and prepare accordingly.
     virtual void starting_vertex(const VertexType &) = 0;
 
-    // @function - finsihed_traversal 
-    // @args     - none
-    // @info     - Called after the last vertex/edge in the graph is traversed
+    // @func - finsihed_traversal 
+    // @args - none
+    // @info - Called after the last vertex/edge in the graph is traversed
     virtual void finished_traversal() = 0;
 
 };

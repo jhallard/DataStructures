@@ -57,17 +57,14 @@ void intTest1() {
     graph.insertEdge(8, 3, 4.0);
     graph.insertEdge(8, 5, 0.1);
 
-
-    void (*fptr)(int&);
-    fptr = visit1;
-    graph.breadthFirst(8);//, fptr);
-
     uTraveler<int> * trav = new uTraveler<int>();
 
 
     std::cout << "\n\n\n";
 
-    graph.depthFirst(8, trav);//, fptr);
+    graph.depthFirst(8, trav);
+    graph.breadthFirst(8, trav);
+
 
     trav->graph.printGraph();
 
