@@ -306,9 +306,9 @@ dGraph<int> graph;
     }
 
     // Go through every adjacency list and make sure no two edges point to the same vertex.
-    for(int i = 0; i < graph.getNumVertices(); i++) {
+    for(int i = 1; i < graph.getNumVertices(); i++) {
 
-        std::vector< std::pair<int, double> > edges = graph.getAdjVertices(i);
+        auto edges = graph.getIncidentEdges(i);
         std::unordered_map<int, bool> themap;
 
         for(int j = 0; j < edges.size(); j++) {
@@ -338,13 +338,13 @@ TEST(EdgesTest, adj_vertices) {
     graph.insertEdge(6, 2); // ok
     graph.insertEdge(1, 5); // ok
 
-    std::vector< std::pair<int, double> > edges = graph.getAdjVertices(1);
+    auto edges = graph.getIncidentEdges(1);
 
     ASSERT_EQ(3, edges.size());
     // Make sure the correct 3 edges are in this adj list
-    ASSERT_EQ(true, (edges[0].first == 2 || edges[0].first == 3 || edges[0].first == 5));
-    ASSERT_EQ(true, (edges[1].first == 2 || edges[1].first == 3 || edges[1].first == 5));
-    ASSERT_EQ(true, (edges[2].first == 2 || edges[2].first == 3 || edges[2].first == 5));
+    ASSERT_EQ(true, (edges[0].getTarget()->getData() == 2 || edges[0].getTarget()->getData() == 3 || edges[0].getTarget()->getData() == 5));
+    ASSERT_EQ(true, (edges[1].getTarget()->getData() == 2 || edges[1].getTarget()->getData() == 3 || edges[1].getTarget()->getData() == 5));
+    ASSERT_EQ(true, (edges[2].getTarget()->getData() == 2 || edges[2].getTarget()->getData() == 3 || edges[2].getTarget()->getData() == 5));
 
 }
 
@@ -501,12 +501,12 @@ TEST(MinTreeTests, simple_test2) {
     // ASSERT_EQ(newGraph->getNumVertices(), 6);
     // ASSERT_EQ(newGraph->getNumEdges(), 5);
     // ASSERT_EQ(true, newGraph->isConnected());
-    // ASSERT_EQ(1, newGraph->getAdjVertices(1).size());
-    // ASSERT_EQ(2, newGraph->getAdjVertices(2).size());
-    // ASSERT_EQ(0, newGraph->getAdjVertices(3).size());
-    // ASSERT_EQ(0, newGraph->getAdjVertices(4).size());
-    // ASSERT_EQ(0, newGraph->getAdjVertices(5).size());
-    // ASSERT_EQ(2, newGraph->getAdjVertices(0).size());
+    // ASSERT_EQ(1, newGraph->getIncidentEdges(1).size());
+    // ASSERT_EQ(2, newGraph->getIncidentEdges(2).size());
+    // ASSERT_EQ(0, newGraph->getIncidentEdges(3).size());
+    // ASSERT_EQ(0, newGraph->getIncidentEdges(4).size());
+    // ASSERT_EQ(0, newGraph->getIncidentEdges(5).size());
+    // ASSERT_EQ(2, newGraph->getIncidentEdges(0).size());
 
 }
 
@@ -634,7 +634,7 @@ TEST(Bipartition, simple_positive_test) {
 
 }
 
-TEST(Dijkstras, simple_test2) {
+TEST(Dijkstras, simple_test) {
 
     dGraph<int> graph;
     graph.insertVertex(0);
@@ -658,15 +658,15 @@ TEST(Dijkstras, simple_test2) {
 
 
     bool testval = true;
-    if(!graph.dijkstrasMinimumPath(0, 4))
+    if(!graph.dijkstrasShortestPath(0, 4))
         testval = false;
-    if(!graph.dijkstrasMinimumPath(4, 3))
+    if(!graph.dijkstrasShortestPath(4, 3))
         testval = false;
 
     ASSERT_EQ(true, testval);
 }
 
-TEST(Dijkstras, simple_test) {
+TEST(Dijkstras, large_test) {
     dGraph<int> graph;
 
     srand(time(0));
@@ -715,7 +715,7 @@ TEST(Dijkstras, simple_test) {
         
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         dTraveler<int> * trav = new dTraveler<int>();
-        if(!graph.dijkstrasMinimumPath(r, y, trav)) {
+        if(!graph.dijkstrasShortestPath(r, y, trav)) {
             std::cout << " [" << k << "/" <<numVertices/2 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
             total++;
@@ -730,6 +730,33 @@ TEST(Dijkstras, simple_test) {
     ASSERT_EQ(true, testval);
 
 }
+
+TEST(dijkstras, dense_graph_test) {
+
+    int num_vertices = 800;
+    srand(time(0));
+
+    dGraph<int> graph;
+
+    for(int i = 0; i < num_vertices; i++) {
+        graph.insertVertex(i);
+    }
+
+    graph.makeGraphDense();
+
+    for(int i = 0; i < num_vertices/2; i++) {
+        int l = rand() % num_vertices;
+        int r = rand() % num_vertices;
+
+        if(r == l) {
+            i--;
+            continue;
+        }
+
+        ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
+    }
+}
+
 
 
 /////////////////////////////////////////////////

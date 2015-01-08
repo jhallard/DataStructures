@@ -114,6 +114,11 @@ public:
     // @return - Vector of the data contained inside all vertices. 
     std::vector<VertexType> getAllVertices() const;
 
+    // @func   - getAllEdges
+    // @args   - none
+    // @return - Vector of all of the edges in the graph 
+    std::vector<Edge<VertexType> > getAllEdges() const;
+
     // @func   - updateVertex
     // @args   - #1 - Data contained by the vertex to be updated, #2 The new data to insert into that verex
     // @return - Boolean indicating success, returns false if it can't find the vertex to update.
@@ -132,7 +137,7 @@ public:
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
-    bool insertEdge(const VertexType &, const VertexType &, double = std::numeric_limits<double>::infinity());
+    bool insertEdge(const VertexType &, const VertexType &, double = 2.0);//std::numeric_limits<double>::infinity());
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, the "To" Node. 
@@ -171,10 +176,23 @@ public:
     // @return - returns the weight of the edge, throws error if edge not found
     bool setEdgeWeight(const VertexType &, const VertexType &, double);
 
-    // @func   - getAdjVertices
+    // @func   - getIncidentEdges
     // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
     // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
-    std::vector< std::pair<VertexType, double> > getAdjVertices(const VertexType &) const;
+    std::vector< Edge<VertexType> > getIncidentEdges(const VertexType &) const;
+
+    // @func   - processVertex
+    // @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
+    // @return - Bool indicating if the vertex could be found or not.
+    // @info   - This function will look at the source vertex and then examine all of it's edges (by calling the traveler functions)
+    bool processVertex(const VertexType &, GraphTraveler<VertexType> *) const;
+
+    // @func   - processVertices
+    // @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
+    // @return - Bool indicating if the vertex could be found or not.
+    // @info   - This function will look at the all of the vertices in the vector and then examine all of the edges of each vertex
+    //           (by calling the appropraite traveler functions)
+    bool processVertices(const std::vector<VertexType> &, GraphTraveler<VertexType> *) const;
 
     // @func   - makeGraphDense
     // @args   - A function that takes two vertices and assigns a weight to their edge
@@ -258,7 +276,7 @@ public:
     // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
     bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
-    // @func   - dijkstras
+    // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search
     // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
@@ -272,7 +290,7 @@ public:
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
     //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
-    bool dijkstrasMinimumPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr);
+    bool dijkstrasShortestPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
 
     // @func   - aStar
@@ -301,12 +319,12 @@ private:
     //           from it to other vertices in the graph
     std::vector< AdjList<VertexType> * > list;
 
-    // @member - lookupMap
+    // @member - lookup_map
     // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us to have an (amortized)
     //           O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly through our vector of AdjLists.    
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
-    std::unordered_map<VertexType,  AdjList<VertexType> *> lookupMap;
+    std::unordered_map<VertexType,  AdjList<VertexType> *> lookup_map;
 
     // @member - is_multi_graph
     // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true

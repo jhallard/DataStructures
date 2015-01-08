@@ -102,7 +102,7 @@ void intTest1() {
         std::cout << graph.getNumEdges() << std::endl;
 
 
-    std::vector< std::pair<int, double> > temp = graph.getAdjVertices(8);
+    auto temp = graph.getIncidentEdges(8);
 
     if(temp.size() == 0)
         std::cout << "EMPTY\n";

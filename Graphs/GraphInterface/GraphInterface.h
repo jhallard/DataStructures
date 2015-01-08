@@ -51,10 +51,15 @@ public:
     // @return - Vector of the data contained inside all vertices. 
     virtual std::vector<VertexType> getAllVertices() const = 0;
 
+    // @func   - getAllEdges
+    // @args   - none
+    // @return - Vector of all of the edges in the graph 
+    virtual std::vector<Edge<VertexType> > getAllEdges() const = 0;
+
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 the weight for this new edge 
     // @return - Boolean indicating succes 
-    virtual bool insertEdge(const VertexType &, const VertexType &, double = std::numeric_limits<double>::infinity()) = 0;
+    virtual bool insertEdge(const VertexType &, const VertexType &, double = 2.0) = 0;//std::numeric_limits<double>::infinity()) = 0;
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, #2 the "To" Node.
@@ -93,10 +98,23 @@ public:
     // @return - returns the weight of the edge, throws error if edge not found
     virtual bool setEdgeWeight(const VertexType &, const VertexType &, double) = 0;
 
-    // @func   - getAdjVertices
-    // @args   - #1 Data contained in vertex that you wish to recieve a list of adjacent vertices of.
-    // @return - Vector of pairs, first item is an adjacent vertex, second is the weight of the edge between the two vertices.
-    virtual std::vector<std::pair<VertexType, double> > getAdjVertices(const VertexType &) const = 0;
+    // @func   - getIncidentEdges
+    // @args   - #1 Data contained in vertex that you wish to recieve a vector of edges incident to.
+    // @return - Vector of edges that eminate from the source vertex, returns the empty vector if vertex not found
+    virtual std::vector<Edge<VertexType> > getIncidentEdges(const VertexType &) const = 0;
+
+    // @func   - processVertex
+    // @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
+    // @return - Bool indicating if the vertex could be found or not.
+    // @info   - This function will look at the source vertex and then examine all of it's edges (by calling the traveler functions)
+    virtual bool processVertex(const VertexType &, GraphTraveler<VertexType> *) const = 0;
+
+    // @func   - processVertices
+    // @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
+    // @return - Bool indicating if the vertex could be found or not.
+    // @info   - This function will look at the all of the vertices in the vector and then examine all of the edges of each vertex
+    //           (by calling the appropraite traveler functions)
+    virtual bool processVertices(const std::vector<VertexType> &, GraphTraveler<VertexType> *) const = 0;
 
     // @func   - makeGraphDense
     // @args   - #1 Weight to assign to all edges in the new graph.
@@ -173,15 +191,15 @@ public:
     //           the source vertex is not contained in the map.
     virtual std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dijkstrasMinimumTree(const VertexType &) = 0;
 
-    // @func   - dijkstrasMinimumPath
+    // @func   - dijkstrasShortestPath
     // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
     // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
     //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
-    virtual bool dijkstrasMinimumPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
+    virtual bool dijkstrasShortestPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
 
-    // dijkstrasMinimumPath dijkstrasMinimumTree
+    // dijkstrasMinimumPath dijkstrasShortestPath
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
