@@ -103,6 +103,20 @@ public:
     // @return - The new graph copy
     bool operator!=(const uGraph<VertexType> &);
 
+    // @func   - intersection
+    // @args   - #1 constant reference to another graph 
+    // @return - A new dGraph that is the intersection of this graph and the argument graph
+    // @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
+    //           only have edges that exist in both graphs.
+    bool getIntersection(const uGraph<VertexType> &);
+
+    // @func   - union
+    // @args   - #1 constant reference to another graph 
+    // @return - A new dGraph that is the union of this graph and the argument graph
+    // @info   - The union will return a new graph that contains only the vertices that are in either graphs. The new graph will also
+    //           only have edges that exist in either graphs.
+    bool getUnion(const uGraph<VertexType> &);
+
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
     // @return - Boolean indicating succes 

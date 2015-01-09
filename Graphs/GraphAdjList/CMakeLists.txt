@@ -14,6 +14,11 @@ target_link_libraries(Testing/uGraphTesting/uGraphTest ${GTEST_LIBRARIES} pthrea
 # Link runTests with what we want to test and the GTest and pthread library
 add_executable(Testing/dGraphTesting/dGraphTest Testing/dGraphTesting/dGraphTest.cpp)
 
+# Link runTests with what we want to test and the GTest and pthread library
+add_executable(Testing/DijkstrasTesting Testing/DijkstrasTesting.cpp)
+
 target_link_libraries(Testing/dGraphTesting/dGraphTest ${GTEST_LIBRARIES} pthread)
+target_link_libraries(Testing/DijkstrasTesting ${GTEST_LIBRARIES} pthread)
+
 
 add_executable(Main/main Main/main.cpp)

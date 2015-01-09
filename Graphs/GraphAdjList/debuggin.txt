@@ -1,0 +1,49 @@
+[==========] Running 29 tests from 9 test cases.
+[----------] Global test environment set-up.
+[----------] 6 tests from VerticesTest
+[ RUN      ] VerticesTest.empty_graph
+[       OK ] VerticesTest.empty_graph (0 ms)
+[ RUN      ] VerticesTest.insert_one_by_one
+[       OK ] VerticesTest.insert_one_by_one (1 ms)
+[ RUN      ] VerticesTest.insert_all_at_once
+[       OK ] VerticesTest.insert_all_at_once (1 ms)
+[ RUN      ] VerticesTest.large_insert_delete
+[       OK ] VerticesTest.large_insert_delete (48 ms)
+[ RUN      ] VerticesTest.test_no_duplicates
+[       OK ] VerticesTest.test_no_duplicates (0 ms)
+[ RUN      ] VerticesTest.delete_test
+[       OK ] VerticesTest.delete_test (0 ms)
+[----------] 6 tests from VerticesTest (50 ms total)
+
+[----------] 10 tests from EdgesTest
+[ RUN      ] EdgesTest.empty_graph
+[       OK ] EdgesTest.empty_graph (0 ms)
+[ RUN      ] EdgesTest.insert_few
+[       OK ] EdgesTest.insert_few (0 ms)
+[ RUN      ] EdgesTest.insert_multiple
+[       OK ] EdgesTest.insert_multiple (0 ms)
+[ RUN      ] EdgesTest.insert_multiple_larger
+[       OK ] EdgesTest.insert_multiple_larger (0 ms)
+[ RUN      ] EdgesTest.edge_deletion
+[       OK ] EdgesTest.edge_deletion (0 ms)
+[ RUN      ] EdgesTest.edge_deletion2
+[       OK ] EdgesTest.edge_deletion2 (0 ms)
+[ RUN      ] EdgesTest.large_dense_graph
+[       OK ] EdgesTest.large_dense_graph (133 ms)
+[ RUN      ] EdgesTest.no_duplicates
+[       OK ] EdgesTest.no_duplicates (14 ms)
+[ RUN      ] EdgesTest.adj_vertices
+[       OK ] EdgesTest.adj_vertices (0 ms)
+[ RUN      ] EdgesTest.vertex_and_edge_deletion
+[       OK ] EdgesTest.vertex_and_edge_deletion (0 ms)
+[----------] 10 tests from EdgesTest (148 ms total)
+
+[----------] 1 test from UnionTests
+[ RUN      ] UnionTests.simple_test
+[       OK ] UnionTests.simple_test (0 ms)
+[----------] 1 test from UnionTests (0 ms total)
+
+[----------] 3 tests from MinTreeTests
+[ RUN      ] MinTreeTests.simple_test
+[       OK ] MinTreeTests.simple_test (0 ms)
+[ RUN      ] MinTreeTests.larger_test

@@ -112,6 +112,19 @@ Main/main/fast:
 .PHONY : Main/main/fast
 
 #=============================================================================
+# Target rules for targets named Testing/DijkstrasTesting
+
+# Build rule for target.
+Testing/DijkstrasTesting: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Testing/DijkstrasTesting
+.PHONY : Testing/DijkstrasTesting
+
+# fast build rule for target.
+Testing/DijkstrasTesting/fast:
+	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/build
+.PHONY : Testing/DijkstrasTesting/fast
+
+#=============================================================================
 # Target rules for targets named Testing/dGraphTesting/dGraphTest
 
 # Build rule for target.
@@ -160,6 +173,30 @@ Main/main.s: Main/main.cpp.s
 Main/main.cpp.s:
 	$(MAKE) -f CMakeFiles/Main/main.dir/build.make CMakeFiles/Main/main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
+
+Testing/DijkstrasTesting.o: Testing/DijkstrasTesting.cpp.o
+.PHONY : Testing/DijkstrasTesting.o
+
+# target to build an object file
+Testing/DijkstrasTesting.cpp.o:
+	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.o
+.PHONY : Testing/DijkstrasTesting.cpp.o
+
+Testing/DijkstrasTesting.i: Testing/DijkstrasTesting.cpp.i
+.PHONY : Testing/DijkstrasTesting.i
+
+# target to preprocess a source file
+Testing/DijkstrasTesting.cpp.i:
+	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.i
+.PHONY : Testing/DijkstrasTesting.cpp.i
+
+Testing/DijkstrasTesting.s: Testing/DijkstrasTesting.cpp.s
+.PHONY : Testing/DijkstrasTesting.s
+
+# target to generate assembly for a file
+Testing/DijkstrasTesting.cpp.s:
+	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.s
+.PHONY : Testing/DijkstrasTesting.cpp.s
 
 Testing/dGraphTesting/dGraphTest.o: Testing/dGraphTesting/dGraphTest.cpp.o
 .PHONY : Testing/dGraphTesting/dGraphTest.o
@@ -216,6 +253,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... Main/main"
+	@echo "... Testing/DijkstrasTesting"
 	@echo "... Testing/dGraphTesting/dGraphTest"
 	@echo "... Testing/uGraphTesting/uGraphTest"
 	@echo "... edit_cache"
@@ -223,6 +261,9 @@ help:
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
+	@echo "... Testing/DijkstrasTesting.o"
+	@echo "... Testing/DijkstrasTesting.i"
+	@echo "... Testing/DijkstrasTesting.s"
 	@echo "... Testing/dGraphTesting/dGraphTest.o"
 	@echo "... Testing/dGraphTesting/dGraphTest.i"
 	@echo "... Testing/dGraphTesting/dGraphTest.s"

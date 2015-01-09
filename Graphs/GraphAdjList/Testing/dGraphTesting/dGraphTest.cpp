@@ -21,7 +21,7 @@
 
 
 double setweight(int & one, int & two) {
-    return (one*13.0+two*17.0)/(one+two+2.0)*27.0;
+    return (rand()%177)/((rand()+1)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
 }
 
 //////////////////////////////////////
@@ -433,6 +433,30 @@ TEST(EdgesTest, vertex_and_edge_deletion) {
 ///////////////// ALGORITHM TESTS //////////////////
 ////////////////////////////////////////////////////
 
+TEST(UnionTests, simple_test) {
+    dGraph<int> graph;
+    graph.insertVertex(1);
+    graph.insertVertex(2);
+    graph.insertVertex(3);
+    graph.insertVertex(4);
+    graph.insertVertex(5);
+    graph.insertVertex(6);
+
+    dGraph<int> graph2;
+    graph2.insertVertex(10);
+    graph2.insertVertex(20);
+    graph2.insertVertex(30);
+    graph2.insertVertex(40);
+    graph2.insertVertex(50);
+    graph2.insertVertex(60);
+
+    graph.getUnion(graph2);
+
+    ASSERT_EQ(12, graph.getNumVertices());
+    ASSERT_EQ(0, graph.getNumEdges());
+
+}
+
 TEST(MinTreeTests, simple_test) {
 
     dGraph<int> graph;
@@ -534,7 +558,7 @@ TEST(MinTreeTests, larger_test) {
 
     dGraph<int> graph;
 
-    int numVertices = 300;
+    int numVertices = 1500;
 
     std::vector<int> input_vec;
 
@@ -543,7 +567,9 @@ TEST(MinTreeTests, larger_test) {
     }
 
     graph.insertVertices(input_vec);
-    graph.makeGraphDense();
+    double (*fptr)(int &, int &);
+    fptr = setweight;
+    graph.makeGraphDense(fptr);
 
 
     ASSERT_EQ(true, graph.isConnected());
@@ -684,8 +710,116 @@ TEST(Dijkstras, simple_test) {
 }
 
 
+TEST(Dijkstras, large_test_union) {
+
+    srand(time(0));
+    int numVertices = 8000;
+    int vertices_per_subgraph = 5;
+    int subGraphs = numVertices/vertices_per_subgraph;
+    int rand_edges = 80000;
+
+    std::vector<dGraph<int> > graphs(subGraphs);
+
+    std::vector<int> subgraph_center;
+
+    std::cout << "Creating " << subGraphs << " Subgraphs...  ";
+    for(int i = 0; i < subGraphs; i++) {
+        for(int j = i*vertices_per_subgraph+1; j <= (i+1)*vertices_per_subgraph; j++) {
+            graphs[i].insertVertex(j);
+        }
+        subgraph_center.push_back(i*vertices_per_subgraph+1);
+    }
+    std::cout << "Finished \n";
+
+
+    dGraph<int> final_graph;
+    double (*fptr)(int &, int &);
+    fptr = setweight;
+
+    std::cout << "Concatinating " << subGraphs << " Subgraphs...  "; int count = 0;
+    for(auto graph : graphs) {
+
+        // std::cout << "Making Dense \n";
+        graph.makeGraphDense(fptr);
+        // std::cout << "Getting the Union " << count++ << " \n";
+        final_graph.getUnion(graph);
+    }
+    std::cout << "Finished \n";
+
+
+    std::cout << "Connecting subGraph Centers... ";
+    for(int i = 0; i < subGraphs-1; i++) {
+        double weight = (double)(rand() % 477 + 2)/100.0;
+        weight += (rand()%27*i)/3.534;
+        final_graph.insertEdge(subgraph_center[i], subgraph_center[i+1], weight*((rand()%100)/50.0));
+        final_graph.insertEdge(subgraph_center[i+1], subgraph_center[i], weight*((rand()%100)/50.0));
+    }
+    std::cout << "Finished \n";
+
+
+    final_graph.insertEdge(subgraph_center[0], subgraph_center[subGraphs-1], 0.45);
+    final_graph.insertEdge(subgraph_center[subGraphs-1], subgraph_center[0], 2.467);
+
+    std::cout << "Adding Random Edges...  ";
+    for(int i = 0; i < rand_edges; i++) {
+        int l = (rand() % numVertices + 1);
+        int r = (rand() % numVertices + 1);
+        double weight = (double)(rand() % 477 + 20)/100.0;
+
+        if(r == l) {
+            i--;
+            continue;
+        }
+
+        final_graph.insertEdge(l, r, weight);
+
+        if(rand() % 4) {
+            final_graph.insertEdge(r, l, 2*weight);
+        }
+
+    } 
+    std::cout << "Finished \n";
+
+
+    if(!final_graph.isConnected()) {
+        std::cout << "non-connected error!\n";
+        return;
+    }
+
+
+    bool testval = true;
+    int total = 0, count1 = 0;
+    double average = 0.0;
+    for(int k = 1; k < numVertices/4; k++) {
+
+        int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
+        dTraveler<int> * trav = new dTraveler<int>();
+        auto start = std::chrono::high_resolution_clock::now();
+        if(!final_graph.dijkstrasShortestPath(r, y, trav)) {
+            std::cout << " [" << k << "/" <<numVertices/4 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            testval = false;
+            total++;
+        }
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+        average += m;
+        count1++;
+
+        delete(trav);
+    }
+
+    average = average/(count1);
+    std::cout << "Analysis : \n";
+    std::cout << "Graph Description : #Vertices = " << final_graph.getNumVertices() << "  #Edges = " << final_graph.getNumEdges() << "\n";
+    std::cout << "Wrong Paths :" << total << "/" << numVertices/4 << " \n";
+    std::cout << "\t Average RunTime : " << average << "\n";
+    ASSERT_EQ(true, testval);
+}
+
+
 TEST(Dijkstras, large_test) {
-    dGraph<int> graph;
+
+dGraph<int> graph;
 
     srand(time(0));
     int numVertices = 2000;
@@ -703,14 +837,13 @@ TEST(Dijkstras, large_test) {
 
         for(int i = 1; i <= numVertices; i++) {
 
-            int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-            double weight = (double)(rand() % 477 + 20)/100.0;
- 
+            int loop = rand() % (maxEdges-minEdges) + minEdges; 
             // std::cout << weight << std::endl;
             for(int j = 0; j < loop; j++) {
 
                 int r = rand() % numVertices + 1;
-                weight += (r*13+i*17)/(i*27+r*10.0);
+                double weight = setweight(i, r);//(double)(rand() % 477 + 20)/100.0;
+                // weight += (r*13+i*17)/(i*27+r*10.0+1);
 
                 if(r == i) {
                     j--;
@@ -722,8 +855,6 @@ TEST(Dijkstras, large_test) {
             }
         }
     }   
-
-
 
     bool testval = true;
     int total = 0;
@@ -755,7 +886,7 @@ TEST(Dijkstras, large_test) {
 
 TEST(Dijkstras, dense_graph_test) {
 
-    int num_vertices = 350;
+    int num_vertices = 5000;
     srand(time(0));
 
     dGraph<int> graph;

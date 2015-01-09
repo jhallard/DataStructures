@@ -73,6 +73,10 @@ uGraph<VertexType>::uGraph(const uGraph<VertexType> & toCopy) {
         this->deleteVertex(i);
     }
 
+    list.clear();
+
+    this->num_vertices = 0;
+
     auto theirVertices = toCopy.getAllVertices();
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
@@ -106,6 +110,11 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
     for(auto i : ourVertices) {
         this->deleteVertex(i);
     }
+
+    list.clear();
+
+    num_vertices = 0;
+
     auto theirVertices = toCopy.getAllVertices();
 
     for(auto i : theirVertices) {
@@ -161,6 +170,38 @@ bool uGraph<VertexType>::operator!=(const uGraph<VertexType> & toCopy) {
     return !(operator==(toCopy));
 }
 
+// @func   - intersection
+// @args   - #1 constant reference to another graph 
+// @return - A new dGraph that is the intersection of this graph and the argument graph
+// @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
+//           only have edges that exist in both graphs.
+template<class VertexType>
+bool uGraph<VertexType>::getIntersection(const uGraph<VertexType> & other_graph) {
+    std::unordered_map<VertexType, bool> their_map;
+    uGraph<VertexType> return_graph;
+
+    return true;
+}
+
+// @func   - union
+// @args   - #1 constant reference to another graph 
+// @return - A new dGraph that is the union of this graph and the argument graph
+// @info   - The union will return a new graph that contains only the vertices that are in either graphs. The new graph will also
+//           only have edges that exist in either graphs.
+template<class VertexType>
+bool uGraph<VertexType>::getUnion(const uGraph<VertexType> & other_graph) {
+
+    for(auto vertex : other_graph.getAllVertices()) {
+        insertVertex(vertex);
+        for(auto edge: other_graph.getIncidentEdges(vertex)) {
+            insertEdge(edge.getSource()->getData(), edge.getTarget()->getData(), edge.getWeight());
+        }
+    }
+
+
+    return true;
+}
+
 
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
@@ -197,7 +238,7 @@ bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
     
 }
 
-// @func   - deleteVertices
+// @func   - insertVertices
 // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
 // @return - Boolean indicating success, is false if any of the individual insertions fail
 template<class VertexType>
@@ -1151,7 +1192,8 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first-b.first < 0.0000000000001; };
+    // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
 
     // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
     // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
