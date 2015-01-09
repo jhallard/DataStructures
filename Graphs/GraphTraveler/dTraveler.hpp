@@ -31,8 +31,6 @@ public:
         graph.insertVertex(edge.getVertex()->getData());
         graph.insertVertex(edge.getSource()->getData());
         graph.insertEdge(edge.getSource()->getData(), edge.getVertex()->getData(), edge.getWeight());
-        graph.insertEdge(edge.getVertex()->getData(), edge.getSource()->getData(), edge.getWeight());
-
     }
 
     void starting_vertex(const VertexType & vert) {

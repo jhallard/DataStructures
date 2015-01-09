@@ -5,7 +5,7 @@
 *   @Purpose  - This file contains all of the main tests for the undirected graph class. The testing framework is provided by Google via their 
 *               Google Test suite for C++. Below you will see numerous groupings of different tests. These groupings of tests all test one aspect
 *               of the graph in different ways, they are run individually then tallied together to ensure that entire subsystems work correctly.
-*               The different sections of dGraph that will be tested are as follows :
+*               The different sections of uGraph that will be tested are as follows :
 *               1.) Vertex Testing    - Tests the insertion, deletion, and lookup of vertices in the graph. 
 *               2.) Edge Testing      - Tests the insertion, deletion, and lookup of edges in the graph. 
 *               3.) Algorithm/Speed Testing - Tests the various algorithms that come with this graph.
@@ -14,7 +14,7 @@
 
 #include "../UndirectedGraph/uGraph.h"
 #include "../DirectedGraph/dGraph.h"
-#include "../../GraphTraveler/dTraveler.hpp"
+#include "../../GraphTraveler/uTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -24,29 +24,7 @@ double setweight(int & one, int & two) {
     return (rand()%177)/((rand()+1)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
 }
 
-
-TEST(Dijkstras, MinTreeSearch) {
-    
-    dGraph<int> * graph = new dGraph<int>();
-    srand(time(0));
-    int num_vertices = 1000;
-    double (*fptr)(int &, int &);
-    fptr = setweight;
-    int iterations = num_vertices;
-
-    std::vector<int> input_vec;
-
-    for(int i = 1; i <= num_vertices; i++)
-        input_vec.push_back(i);
-
-    graph->insertVertices(input_vec);
-
-    graph->makeGraphDense(fptr);
-
-    dTraveler<int> * trav = new dTraveler<int>();
-    graph->minimumSpanningTree(trav);
-
-    graph = &trav->graph;
+void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations) { 
 
     bool testval = true;
     int total = 0, count1 = 0;
@@ -54,7 +32,7 @@ TEST(Dijkstras, MinTreeSearch) {
     for(int k = 1; k < iterations; k++) {
 
         int r,y; r = rand()%num_vertices+1; y = rand()%num_vertices+1;
-        dTraveler<int> * trav = new dTraveler<int>();
+        uTraveler<int> * trav = new uTraveler<int>();
         auto start = std::chrono::high_resolution_clock::now();
         if(!graph->dijkstrasShortestPath(r, y, trav)) {
             std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
@@ -77,8 +55,33 @@ TEST(Dijkstras, MinTreeSearch) {
     std::cout << "Average RunTime : " << average << "\n\n\n";
     ASSERT_EQ(true, testval);
 
-    // delete(graph);
-// 
+}
+
+
+TEST(Dijkstras, MinTreeSearch) {
+    
+    uGraph<int> * graph = new uGraph<int>();
+    srand(time(0));
+    int num_vertices = 1000;
+    double (*fptr)(int &, int &);
+    fptr = setweight;
+    int iterations = num_vertices;
+
+    std::vector<int> input_vec;
+
+    for(int i = 1; i <= num_vertices; i++)
+        input_vec.push_back(i);
+
+    graph->insertVertices(input_vec);
+
+    graph->makeGraphDense(fptr);
+
+    uTraveler<int> * trav = new uTraveler<int>();
+    graph->minimumSpanningTree(trav);
+
+    graph = &trav->graph;
+
+    analyzeGraphDijkstras(graph, num_vertices, iterations);
 
 }
 
@@ -93,7 +96,7 @@ TEST(Dijkstras, dense_graph_test) {
     srand(time(0));
     int iterations = 5;
 
-    dGraph<int> graph;
+    uGraph<int> graph;
 
     for(int i = 0; i < num_vertices; i++) {
         graph.insertVertex(i);
@@ -106,35 +109,8 @@ TEST(Dijkstras, dense_graph_test) {
     graph.makeGraphDense(fptr);
     std::cout << "...finished \n";
 
+    analyzeGraphDijkstras(&graph, num_vertices, iterations);
 
-    bool testval = true;
-    int total = 0, count1 = 0;
-    double average = 0.0;
-    for(int k = 1; k < iterations; k++) {
-
-        int r,y; r = rand()%num_vertices+1; y = rand()%num_vertices+1;
-        dTraveler<int> * trav = new dTraveler<int>();
-        auto start = std::chrono::high_resolution_clock::now();
-        if(!graph.dijkstrasShortestPath(r, y, trav)) {
-            std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-            testval = false;
-            total++;
-            graph.printGraph();
-        }
-        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-        average += m;
-        count1++;
-
-        delete(trav);
-    }
-
-    average = average/(count1);
-    std::cout << "\n\nAnalysis : ___________________\n";
-    std::cout << "Graph Description : #Vertices = " << graph.getNumVertices() << "  #Edges = " << graph.getNumEdges() << "\n";
-    std::cout << "Wrong Paths :" << total << "/" << iterations << " \n";
-    std::cout << "Average RunTime : " << average << "\n\n\n";
-    ASSERT_EQ(true, testval);
 }
 
 
@@ -155,7 +131,7 @@ TEST(Dijkstras, large_test_union) {
     int rand_edges = 10000;
     int iterations = 20;
 
-    std::vector<dGraph<int> > graphs(subGraphs);
+    std::vector<uGraph<int> > graphs(subGraphs);
 
     std::vector<int> subgraph_center;
 
@@ -169,7 +145,7 @@ TEST(Dijkstras, large_test_union) {
     std::cout << "Finished \n";
 
 
-    dGraph<int> final_graph;
+    uGraph<int> final_graph;
     double (*fptr)(int &, int &);
     fptr = setweight;
 
@@ -222,34 +198,8 @@ TEST(Dijkstras, large_test_union) {
         return;
     }
 
-    bool testval = true;
-    int total = 0, count1 = 0;
-    double average = 0.0;
-    for(int k = 1; k < iterations; k++) {
+    analyzeGraphDijkstras(&final_graph, num_vertices, iterations);
 
-        int r,y; r = rand()%num_vertices+1; y = rand()%num_vertices+1;
-        dTraveler<int> * trav = new dTraveler<int>();
-        auto start = std::chrono::high_resolution_clock::now();
-        if(!final_graph.dijkstrasShortestPath(r, y, trav)) {
-            std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-            testval = false;
-            total++;
-            final_graph.printGraph();
-        }
-        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-        average += m;
-        count1++;
-
-        delete(trav);
-    }
-
-    average = average/(count1);
-    std::cout << "Analysis : ___________________\n";
-    std::cout << "Graph Description : #Vertices = " << final_graph.getNumVertices() << "  #Edges = " << final_graph.getNumEdges() << "\n";
-    std::cout << "Wrong Paths :" << total << "/" << iterations << " \n";
-    std::cout << "Average RunTime : " << average << "\n\n";
-    ASSERT_EQ(true, testval);
 }
 
 
@@ -268,7 +218,7 @@ TEST(Dijkstras, large_test) {
     int rand_edges = 50000;
     int iterations = 10;
 
-    std::vector<dGraph<int> > graphs(subGraphs);
+    std::vector<uGraph<int> > graphs(subGraphs);
 
     std::vector<int> subgraph_center;
 
@@ -281,7 +231,7 @@ TEST(Dijkstras, large_test) {
     }
     std::cout << "Finished \n";
 
-    dGraph<int> final_graph;
+    uGraph<int> final_graph;
     double (*fptr)(int &, int &);
     fptr = setweight;
 
@@ -334,34 +284,8 @@ TEST(Dijkstras, large_test) {
         return;
     }
 
-    bool testval = true;
-    int total = 0, count1 = 0;
-    double average = 0.0;
-    for(int k = 1; k < iterations; k++) {
+    analyzeGraphDijkstras(&final_graph, num_vertices, iterations);
 
-        int r,y; r = rand()%num_vertices+1; y = rand()%num_vertices+1;
-        dTraveler<int> * trav = new dTraveler<int>();
-        auto start = std::chrono::high_resolution_clock::now();
-        if(!final_graph.dijkstrasShortestPath(r, y, trav)) {
-            std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
-            testval = false;
-            total++;
-            final_graph.printGraph();
-        }
-        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-        average += m;
-        count1++;
-
-        delete(trav);
-    }
-
-    average = average/(count1);
-    std::cout << "Analysis : ___________________\n";
-    std::cout << "Graph Description : #Vertices = " << final_graph.getNumVertices() << "  #Edges = " << final_graph.getNumEdges() << "\n";
-    std::cout << "Wrong Paths :" << total << "/" << iterations << " \n";
-    std::cout << "Average RunTime : " << average << "\n\n";
-    ASSERT_EQ(true, testval);
 }
 
 
