@@ -688,9 +688,9 @@ TEST(Dijkstras, large_test) {
     dGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 1000;
-    int minEdges = 70;
-    int maxEdges = 125;
+    int numVertices = 2000;
+    int minEdges = 40;
+    int maxEdges = 100;
 
     std::vector<int> input_vec;
 
@@ -727,21 +727,26 @@ TEST(Dijkstras, large_test) {
 
     bool testval = true;
     int total = 0;
+    double average = 0.0;
     for(int k = 1; k < numVertices/4; k++) {
 
         int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         dTraveler<int> * trav = new dTraveler<int>();
+        auto start = std::chrono::high_resolution_clock::now();
         if(!graph.dijkstrasShortestPath(r, y, trav)) {
             std::cout << " [" << k << "/" <<numVertices/4 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
             total++;
         }
-        // else
-            // trav->graph.printGraph();
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+        average += m;
 
         delete(trav);
     }
 
+    average = average/(numVertices/4);
+    std::cout << "Average Dijkstras RunTime : " << average << "\n";
     std::cout << total << "/" << numVertices/4 << " Wrong Paths \n";
     std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
     ASSERT_EQ(true, testval);
@@ -762,7 +767,7 @@ TEST(Dijkstras, dense_graph_test) {
     double (*fptr)(int &, int &);
     fptr = setweight;
     graph.makeGraphDense(fptr);
-
+    double average = 0.0;
     for(int i = 0; i < num_vertices; i++) {
         int l = rand() % num_vertices;
         int r = rand() % num_vertices;
@@ -771,10 +776,15 @@ TEST(Dijkstras, dense_graph_test) {
             i--;
             continue;
         }
-
+        auto start = std::chrono::high_resolution_clock::now();
         ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+        average += m;
     }
 
+    average = average/num_vertices;
+    std::cout << "Average Dijkstras RunTime : " << average << "\n";
     std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
 
 }

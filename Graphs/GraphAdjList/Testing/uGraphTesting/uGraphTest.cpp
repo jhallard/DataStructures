@@ -547,7 +547,14 @@ TEST(MinTreeTests, larger_test) {
 
 
     uTraveler<int> * trav = new uTraveler<int>();
+
+    auto start = std::chrono::high_resolution_clock::now();
     ASSERT_EQ(true, graph.minimumSpanningTree(trav));
+    auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+    long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+    std::cout << "MinSpanTree Time : " << m << "\n";
+    std::cout << "Vertices : " << graph.getNumVertices() << " -- Edges : " << graph.getNumEdges() << "\n";
+
     ASSERT_EQ(trav->graph.getNumVertices(), numVertices);
     ASSERT_EQ(trav->graph.getNumEdges(), numVertices-1);
     ASSERT_EQ(true, trav->graph.isConnected());
@@ -664,6 +671,7 @@ TEST(Dijkstras, dense_graph_test) {
 
     graph.makeGraphDense(fptr);
 
+    double average = 0.0;
     for(int i = 0; i < num_vertices; i++) {
         int l = rand() % num_vertices;
         int r = rand() % num_vertices;
@@ -672,10 +680,15 @@ TEST(Dijkstras, dense_graph_test) {
             i--;
             continue;
         }
-
+        auto start = std::chrono::high_resolution_clock::now();
         ASSERT_EQ(true, graph.dijkstrasShortestPath(l, r));
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+        average += m;
     }
 
+    average = average/(1.0*num_vertices);
+    std::cout << "Average Dijkstras RunTime : " << average << "\n";
     std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
 }
 
@@ -683,9 +696,9 @@ TEST(Dijkstras, large_test) {
     uGraph<int> graph;
 
     srand(time(0));
-    int numVertices = 1000;
-    int minEdges = 70;
-    int maxEdges = 125;
+    int numVertices = 2000;
+    int minEdges = 23;
+    int maxEdges = 100;
 
     std::vector<int> input_vec;
 
@@ -699,14 +712,14 @@ TEST(Dijkstras, large_test) {
 	    for(int i = 1; i < numVertices; i++) {
 
 	        int loop = rand()*rand()*rand() % (maxEdges-minEdges) + minEdges;
-	        double weight = (double)(rand() % 477 + 20)/10.0;
+	        double weight = (double)(rand() % 477 + 20.0)/10.0;
 	        if(weight <= 0)
 	        	weight *= -1;
 	        // std::cout << weight << std::endl;
 	        for(int j = 0; j < loop; j++) {
 
 	            int r = rand() % numVertices + 1; r++;
-                weight += (r*13+i*17)/(i*27+r*10.0);
+                weight += (r*13+27+i*17)/(i*27+r*10.0);
 	            if(r == i) {
 	                j--;
 	                continue;
@@ -720,23 +733,28 @@ TEST(Dijkstras, large_test) {
 
     bool testval = true;
     int total = 0;
+    double average = 0.0;
     for(int k = 1; k < numVertices/4; k++) {
     	int r,y; r = rand()%numVertices+1; y = rand()%numVertices+1;
         if(!(graph.containsVertex(r) & graph.containsVertex(y)))
             continue;
 
         uTraveler<int> * trav = new uTraveler<int>();
+        auto start = std::chrono::high_resolution_clock::now();
         if(!graph.dijkstrasShortestPath(r, y, trav)) {
             std::cout << " [" << k << "/" <<numVertices/4 << "] " << "Path Not Found : " << r << " -> " << y << "\n";
             testval = false;
             total++;
         }
-          // else
-          //   trav->graph.printGraph();
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+        average += m;
 
         delete(trav);
     }
 
+    average = average/(numVertices/4);
+    std::cout << "Average Dijkstras RunTime : " << average << "\n";
     std::cout << total << "/" << numVertices/4 << " Wrong Paths \n";
     std::cout << "Vert :" << graph.getNumVertices() << "  Edges : " << graph.getNumEdges() << "\n";
     ASSERT_EQ(true, testval);

@@ -82,13 +82,12 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
         return false;
     }
 
-    for(auto edge : edge_list) {
-        if(vert->getData() == edge->getTarget()->getData()) {
-            delete(newEdge);
-            return false;
-        }
+    if(edge_map.find(vert->getData()) != edge_map.end()) {
+        delete(newEdge);
+        return false;
     }
 
+    edge_map.insert(std::pair<VertexType, bool>(vert->getData(), true));
     edge_list.push_back(newEdge);
 
     return true;
@@ -105,6 +104,12 @@ bool AdjList<VertexType>::deleteEdge(const VertexType & data){
 
     if(!edge_list.size())
         return false;
+
+    if(edge_map.find(data) == edge_map.end()) {
+        return false;
+    }
+
+    edge_map.erase(data);
 
     auto edge_iterator = edge_list.begin();
 
@@ -162,12 +167,9 @@ Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert)
     if(!edge_list.size())
         return nullptr;
 
-    auto edge_iterator = edge_list.begin();
-
-    for(; edge_iterator != edge_list.end(); ++edge_iterator) {
-        if((*edge_iterator)->getTarget()->getData() == vert.getData()) {
-            return *edge_iterator;
-        }
+    for(auto edge : edge_list) {
+        if(edge->getTarget()->getData() == vert.getData())
+            return edge;
     }
 
     return nullptr;
@@ -180,18 +182,7 @@ Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert)
 // @return - Vector of pointers to all the edge objects in the class
 template <class VertexType>
 std::vector<Edge<VertexType> *> AdjList<VertexType>::getAllEdges() {
-
-    std::vector<Edge<VertexType> *> retVec;
-    
-    if(!edge_list.size())
-        return retVec;
-
-    for(auto edge : edge_list) {
-        retVec.push_back(edge);
-    }
-
-    return retVec;
-
+    return std::vector<Edge<VertexType> *> {std::begin(edge_list), std::end(edge_list)};
 }
 
 

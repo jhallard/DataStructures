@@ -124,6 +124,8 @@ private:
 
     bool is_multi_graph;
 
+    std::unordered_map<VertexType, bool> edge_map;
+
 
 };
 

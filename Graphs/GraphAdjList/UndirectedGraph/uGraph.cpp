@@ -1151,7 +1151,6 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  (a.first - b.first < 0.0000001); };
     auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
 
     // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
@@ -1183,6 +1182,7 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
 
     while(!queue.empty()) {
+
         double current_dist = queue.begin()->first;
         AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
         queue.erase(queue.begin());
@@ -1211,11 +1211,6 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
 
     ret.first = prev;
     ret.second = dist;
-
-    // auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-    // long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-
-    // std::cout << "Total Time : " << m << "\n";
     
     return ret;
 }
