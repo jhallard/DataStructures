@@ -189,6 +189,42 @@ bool dGraph<VertexType>::operator!=(const dGraph<VertexType> & toCopy) {
 template<class VertexType>
 bool dGraph<VertexType>::getIntersection(const dGraph<VertexType> & other_graph) {
 
+    std::unordered_map<VertexType, int> vertex_map;
+    std::vector<VertexType> common_vertices;
+    dGraph<VertexType> new_graph;
+
+    // map all of our vertices
+    for(auto & vertex : getAllVertices()) {
+        vertex_map.insert(std::make_pair(vertex, 1));
+    }
+
+    // map all of their vertices that intersect with our vertices
+    for(auto & vertex : other_graph.getAllVertices()) {
+        if(vertex_map.find(vertex) != vertex_map.end()) {
+            vertex_map.at(vertex) = 2;
+        }       
+    }
+
+    // get all of the intersected vertices
+    for(auto pair : vertex_map) {
+        if(pair.second == 2) {
+            common_vertices.push_back(pair.first);
+            new_graph.insertVertex(pair.first);
+        }
+    }
+
+    // add all of the intersected edges
+    for(auto vertex : common_vertices) {
+        for(auto edge : getIncidentEdges(vertex)) {
+            if(other_graph.containsEdge(vertex, edge.getTarget())) {
+                new_graph.insertEdge(vertex, edge.getTarget(), edge.getWeight());
+            }
+        }
+    }
+
+    *this = new_graph;
+
+
     return true;
 }
 
@@ -1306,27 +1342,27 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         count++;
     }
 
-    std::vector<VertexType> temp; temp.reserve(list.size());
+    //std::vector<VertexType> temp; temp.reserve(list.size());
 
-    while(path.size()) {
-        temp.push_back(path.back());
-        path.pop_back();
-    }
+    //while(path.size()) {
+    //    temp.push_back(path.back());
+    //    path.pop_back();
+    //}
 
-    ret.first = temp;
-    ret.second = dist.at(dest);
+    //ret.first = temp;
+    //ret.second = dist.at(dest);
 
-    if(!temp.size())
+    if(!path.size())
         return false;
 
     if(traveler != nullptr) {
 
-        VertexType current = *temp.begin();
+        VertexType current = *(path.end()-1);
         VertexType last = current;
         traveler->starting_vertex(current);
 
-        for(int i = 1; i < temp.size(); i++) {
-            current = temp[i];
+        for(int i = path.size()-2; i >= 0; --i) {
+            current = path[i];
             
             if(!containsEdge(last, current)) {
                 return false;
