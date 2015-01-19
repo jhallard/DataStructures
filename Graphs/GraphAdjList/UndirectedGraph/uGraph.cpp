@@ -76,6 +76,7 @@ uGraph<VertexType>::uGraph(const uGraph<VertexType> & toCopy) {
     list.clear();
 
     this->num_vertices = 0;
+    this->num_edges = 0;
 
     auto theirVertices = toCopy.getAllVertices();
     for(auto i : theirVertices) {
@@ -114,6 +115,7 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
     list.clear();
 
     num_vertices = 0;
+    num_edges = 0;
 
     auto theirVertices = toCopy.getAllVertices();
 
@@ -1230,7 +1232,9 @@ typename uGraph<VertexType>::dist_prev_pair uGraph<VertexType>::dijkstrasMinimum
         queue.erase(queue.begin());
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
 
-        for(auto & edge : current_vert->getAllEdges()) {
+        auto edges = current_vert->getEdgeList();
+
+        for(auto & edge : *edges) {
 
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();

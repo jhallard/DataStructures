@@ -43,6 +43,8 @@ void analyzeGraphDijkstras(dGraph<int> * graph, int num_vertices, int iterations
 
 }
 
+
+
 TEST(Dijkstras, MinTreeSearch) {
     
     dGraph<int> * graph = new dGraph<int>();
@@ -63,7 +65,6 @@ TEST(Dijkstras, MinTreeSearch) {
 
     dTraveler<int> * trav = new dTraveler<int>();
     graph->minimumSpanningTree(trav);
-
 
     *graph = trav->graph;
 

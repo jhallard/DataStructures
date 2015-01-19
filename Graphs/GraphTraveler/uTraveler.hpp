@@ -8,7 +8,6 @@
 #ifndef uTraveler_h
 #define uTraveler_h
     
-
 template<class V> class uGraph;
 
 template<class VertexType>
@@ -33,7 +32,6 @@ public:
         graph.insertVertex(edge.getSource()->getData());
         graph.insertEdge(edge.getSource()->getData(), edge.getVertex()->getData(), edge.getWeight());
     }
-
 
     void starting_vertex(const VertexType & vert) {
         graph.insertVertex(vert);

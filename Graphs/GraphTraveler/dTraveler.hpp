@@ -21,7 +21,7 @@ public:
     }
 
     void examine_edge(const Edge<VertexType> & edge) {
-        graph.insertVertex(edge.getVertex()->getData());
+        graph.insertVertex(edge.getTarget()->getData());
     }
 
     // @function - traverse_edge

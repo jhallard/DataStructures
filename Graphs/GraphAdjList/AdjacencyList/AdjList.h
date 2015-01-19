@@ -86,6 +86,11 @@ public:
     // @return - Vector of pointers to all the edge objects in the class
     std::vector<Edge<VertexType> *> getAllEdges();
 
+    // @func   - getEdgeList
+    // @args   - None
+    // @return - The list of edges in the adjlist
+    std::list<Edge<VertexType> * > * getEdgeList();
+
     // @func   - get_num_edges
     // @args   - None
     // @return - The number of edges connected to this particular vertex

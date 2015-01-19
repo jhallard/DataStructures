@@ -185,6 +185,14 @@ std::vector<Edge<VertexType> *> AdjList<VertexType>::getAllEdges() {
     return std::vector<Edge<VertexType> *> {std::begin(edge_list), std::end(edge_list)};
 }
 
+// @func   - getEdgeList
+// @args   - None
+// @return - The list of edges contained in this class
+template <class VertexType>
+std::list<Edge<VertexType> * > * AdjList<VertexType>::getEdgeList() {
+    return &edge_list;
+}
+
 
 // @func   - get_num_edges
 // @args   - None

@@ -67,10 +67,6 @@ template<class VertexType>
 dGraph<VertexType>::dGraph(const dGraph<VertexType> & toCopy) {
 
     auto ourVertices = this->getAllVertices();
-
-    for(auto i : list) {
-        i->deleteAllEdges();
-    }
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
         this->deleteVertex(i);
@@ -79,15 +75,12 @@ dGraph<VertexType>::dGraph(const dGraph<VertexType> & toCopy) {
     list.clear();
 
     this->num_vertices = 0;
+    num_edges = 0;
 
     auto theirVertices = toCopy.getAllVertices();
-
-    for(auto i : theirVertices) {
-        insertVertex(i);
-    }
-
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
+        this->insertVertex(i);
 
         for(auto edge : edges) {
             this->insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
@@ -113,10 +106,6 @@ template<class VertexType>
 dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCopy) {
     
     auto ourVertices = this->getAllVertices();
-
-     for(auto i : list) {
-        i->deleteAllEdges();
-    }
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
         this->deleteVertex(i);
@@ -125,13 +114,13 @@ dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCo
     list.clear();
 
     num_vertices = 0;
-
+    num_edges = 0;
     auto theirVertices = toCopy.getAllVertices();
 
     for(auto i : theirVertices) {
         insertVertex(i);
     }
-
+    
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
 
@@ -643,7 +632,7 @@ bool dGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
 template<class VertexType>
 bool dGraph<VertexType>::reverse() {
 
-    dGraph<VertexType> temp_graph;;
+    dGraph<VertexType> temp_graph;
     for(auto i : list)
         temp_graph.insertVertex(i->getVertex()->getData());
 
@@ -1222,7 +1211,8 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 template<class VertexType>
 typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source) {
 
-    // auto start = std::chrono::high_resolution_clock::now();
+    std::cout << getNumVertices() << " : E -> " << getNumEdges() << "\n";
+    auto start = std::chrono::high_resolution_clock::now();
 
 
     if(this->findVertex(source) == nullptr)
@@ -1265,9 +1255,9 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
         queue.erase(queue.begin());
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
 
-        auto edges = current_vert->getAllEdges();
+        auto edges = current_vert->getEdgeList();
 
-        for(auto edge : edges) {
+        for(auto & edge : *edges) {
 
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getTarget()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
@@ -1292,10 +1282,10 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
 
     ret.first = prev;
     ret.second = dist;
-    // auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-    // long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+    auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+    long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
-    // std::cout << "Total Time : " << m << "\n";
+    std::cout << "Total Time : " << m << "\n";
     
     return ret;
 }
