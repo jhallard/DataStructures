@@ -63,9 +63,7 @@ bool AdjList<VertexType>::setVertex(const Vertex<VertexType> & newData){
 // @return - Vertex data associated with the base of this adj. list
 template <class VertexType>
 Vertex<VertexType> * AdjList<VertexType>::getVertex() {
-
     return &(this->vertex);
-
 }
 
 // @func - addEdge
@@ -164,8 +162,9 @@ bool AdjList<VertexType>::deleteAllEdges() {
 template <class VertexType>
 Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert) {
 
-    if(!edge_list.size())
+    if(!edge_list.size() || edge_map.find(vert.getData()) == edge_map.end()) {
         return nullptr;
+    }
 
     for(auto edge : edge_list) {
         if(edge->getTarget()->getData() == vert.getData())

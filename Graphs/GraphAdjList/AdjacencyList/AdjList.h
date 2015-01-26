@@ -58,7 +58,7 @@ public:
     // @func - addEdge #1
     // @args - #1 Vertex that the edge points to, #2 weighting of the edge
     // @info - pusheds this edge onto the back of the edge list.
-    bool addEdge(Vertex<VertexType> * , double =  std::numeric_limits<double>::infinity());
+    bool addEdge(Vertex<VertexType> * , double = 1.0);// std::numeric_limits<double>::infinity());
 
 
     // @func - deleteEdge

@@ -93,8 +93,9 @@ dGraph<VertexType>::dGraph(const dGraph<VertexType> & toCopy) {
 // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
 template<class VertexType>
 dGraph<VertexType>::~dGraph() {
-    for(int i = 0; i < list.size(); i++)
+    for(int i = 0; i < list.size(); i++) {
         delete(list[i]);
+    }
 
     list.clear();
 }
@@ -135,7 +136,7 @@ dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCo
 // @func   - operator==
 // @args   - #1 constant reference to another graph object to compare to this one
 // @return - True if the graphs are the same, that is they have all of the same vertices and edges between vertices, including indentical weights.
-// @info   - This is currently 100% correct implementation, it will only return true if all vertices are the same and stored internally in the same
+// @info   - This is currently not a 100% correct implementation, it will only return true if all vertices are the same and stored internally in the same
 //           order, same with the adjacent edges for each vertex. To fix this, we need to hash all vertices for comparison.
 template<class VertexType>
 bool dGraph<VertexType>::operator==(const dGraph<VertexType> & toCopy) {
@@ -1203,33 +1204,41 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 
 
 // @func   - dijkstrasMinimumTree
-// @args   - #1 Data contained in starting vertex for search
+// @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
+//           otherwise we stop when we find the destination node
 // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
 //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
 //           the source vertex is not contained in the map.
 template<class VertexType>
-typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source) {
+typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source, const VertexType * dest) {
 
-    std::cout << getNumVertices() << " : E -> " << getNumEdges() << "\n";
-    auto start = std::chrono::high_resolution_clock::now();
+    //auto start = std::chrono::high_resolution_clock::now();
 
 
     if(this->findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
+    double max_weight = std::numeric_limits<double>::infinity();
+
+    // Convenient define, this pair will as the type of each entity in our priority queue (a std::set)
+    using vert_dist_pair = std::pair<double, VertexType>;
+
+    // Convenient syntax define, this set orders its elements based on our custom lambda function, which gives us a priority queue
+    // over the vertices and their distance from the source node
+    using priority_queue = std::set<vert_dist_pair, bool (*)(const vert_dist_pair & a, const vert_dist_pair & b) >;
+
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
     // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
-    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first-b.first < 0.000000001; };
+    auto f = [](const vert_dist_pair & a, const vert_dist_pair & b) -> bool { return  a.first-b.first < 0.000000001; };
 
-    // This is probably the ugliest thing I've ever written, but it's just a set that contains a vertex and the weight associated with it. 
-    // we also have to pass in a pointer to a function that can compare two of these pairs based on the weight and not the Vertex Data.
-    std::set<std::pair<double, VertexType>, bool (*)(const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) > queue (f);
+    // The priority queue object that we use to run the algorithm. This is really a std::set with a specific ordering function. This set consists
+    // of std::pairs, which is a pair of VertexData and a double value, which is the weight along the shortest path to reach that vertex that has
+    // so far been discovered. The ordering function orders the vertices in the set based off of the double value only.
+    priority_queue queue(f);
 
-    double max_weight = std::numeric_limits<double>::infinity();
-
-    typename dGraph<VertexType>::dist_prev_pair ret; // a pair of maps, this returns both the path between the nodes and the net weight along each path
+    typename dGraph<VertexType>::dist_prev_pair * ret = new dGraph<VertexType>::dist_prev_pair(); // a pair of maps, this returns both the path between the nodes and the net weight along each path
                                                      // to the user-accessible interface function 
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
@@ -1238,25 +1247,31 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
     dist.reserve(this->getNumVertices());
     prev.reserve(this->getNumVertices());
 
-
-    for(auto vertex : list) { // Initialize the distances to infinity for all vertices
-        if(vertex->getVertex()->getData() != source)
-            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-        else
-            dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), 0));
-        queue.insert(std::pair<double, VertexType>(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
+    for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
+        dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
+        queue.insert(std::make_pair(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
     }
+
+    queue.erase(std::make_pair(dist.at(source), source));
+    dist.at(source) = 0;
+    queue.insert(std::make_pair(dist.at(source), source));
 
     while(!queue.empty()) {
 
         // grab from the front of the queue
         double current_dist = queue.begin()->first;
         AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
+        if(dest != nullptr && current_vert->getVertex()->getData() == *dest) {
+            break;
+        }
         queue.erase(queue.begin());
         scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
 
+        // get the incident edges for the current vertex
         auto edges = current_vert->getEdgeList();
 
+        // cycle through these edges and adjust the path weighting associated with the target vertex
+        // if it is lower than the current shortest path to that vertex
         for(auto & edge : *edges) {
 
             AdjList<VertexType> * temp_vert = this->findVertex(edge->getTarget()->getData());
@@ -1269,7 +1284,7 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
                 if(prev.find(temp_data) == prev.end()) {
-                    prev.insert(std::pair<VertexType, VertexType>(temp_data, current_vert->getVertex()->getData()));
+                    prev.emplace(temp_data, current_vert->getVertex()->getData());
                 }
                 else {
                     prev.at(temp_data) = current_vert->getVertex()->getData();
@@ -1280,12 +1295,12 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
         }
     }
 
-    ret.first = prev;
-    ret.second = dist;
-    auto elapsed = std::chrono::high_resolution_clock::now() - start;   
-    long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+    ret->first = prev;
+    ret->second = dist;
+    //auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+    //long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
 
-    std::cout << "Total Time : " << m << "\n";
+    //std::cout << "Total Time : " << m << "\n";
     
     return ret;
 }
@@ -1299,24 +1314,26 @@ typename dGraph<VertexType>::dist_prev_pair dGraph<VertexType>::dijkstrasMinimum
 template<class VertexType>
 bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const VertexType & dest, GraphTraveler<VertexType> * traveler) {
 
-    std::unordered_map<VertexType, VertexType> prev;
-    std::unordered_map<VertexType, double> dist;
+    std::unordered_map<VertexType, VertexType> * prev;
+    std::unordered_map<VertexType, double> * dist;
     std::vector<VertexType> path;
-    std::pair<std::vector<VertexType>, double> ret;
+    //std::pair<std::vector<VertexType>, double> ret;
 
     if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
         throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
 
     if(src == dest) {
         path.push_back(dest);
-        ret.first = path;
-        ret.second = 0.0;
-        return true;//ret;
+        if(traveler != nullptr) {
+            traveler->starting_vertex(src);
+            traveler->finished_traversal();
+        }
+        return true;
     }
 
-    typename dGraph<VertexType>::dist_prev_pair the_pair = this->dijkstrasMinimumTree(src);
-    prev = the_pair.first;
-    dist = the_pair.second;
+    typename dGraph<VertexType>::dist_prev_pair * the_pair = this->dijkstrasMinimumTree(src, &dest);
+    prev = &the_pair->first;
+    dist = &the_pair->second;
 
 
     VertexType prev_vert = dest;
@@ -1324,24 +1341,14 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
     int count = 0;
     while(prev_vert != src && count < list.size()) {
 
-        if(prev.find(prev_vert) == prev.end()) {
+        if(prev->find(prev_vert) == prev->end()) {
             return false;//std::pair<std::vector<VertexType>, double>();
         }
-        prev_vert = prev.at(prev_vert);
+        prev_vert = prev->at(prev_vert);
         path.push_back(prev_vert); 
         count++;
     }
-
-    //std::vector<VertexType> temp; temp.reserve(list.size());
-
-    //while(path.size()) {
-    //    temp.push_back(path.back());
-    //    path.pop_back();
-    //}
-
-    //ret.first = temp;
-    //ret.second = dist.at(dest);
-
+    
     if(!path.size())
         return false;
 
@@ -1366,6 +1373,7 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
 
         traveler->finished_traversal();
     }
+    delete(the_pair);
 
     return true;
 }

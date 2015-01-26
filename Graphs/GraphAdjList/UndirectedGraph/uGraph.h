@@ -295,12 +295,13 @@ public:
     bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
     // @func   - dijkstrasMinimumTree
-    // @args   - #1 Data contained in starting vertex for search
+    // @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
+    //           otherwise we stop when we find the destination node
     // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    typename uGraph<VertexType>::dist_prev_pair dijkstrasMinimumTree(const VertexType &);
+    typename uGraph<VertexType>::dist_prev_pair * dijkstrasMinimumTree(const VertexType &, const VertexType * = nullptr);
 
     // @func   - dijkstrasComputePath
     // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
