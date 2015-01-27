@@ -6,12 +6,18 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
  
+# Int Testing for graphs
 add_executable(Testing/uGraphTesting/IntTesting/uGraphTestInt Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp)
-
 target_link_libraries(Testing/uGraphTesting/IntTesting/uGraphTestInt ${GTEST_LIBRARIES} pthread)
 
 add_executable(Testing/dGraphTesting/IntTesting/dGraphTestInt Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp)
-
 target_link_libraries(Testing/dGraphTesting/IntTesting/dGraphTestInt ${GTEST_LIBRARIES} pthread)
+
+# String Testing for Graphs
+add_executable(Testing/dGraphTesting/StringTesting/dGraphTestString Testing/dGraphTesting/StringTesting/dGraphTestString.cpp)
+target_link_libraries(Testing/dGraphTesting/StringTesting/dGraphTestString ${GTEST_LIBRARIES} pthread)
+
+add_executable(Testing/uGraphTesting/StringTesting/uGraphTestString Testing/uGraphTesting/StringTesting/uGraphTestString.cpp)
+target_link_libraries(Testing/uGraphTesting/StringTesting/uGraphTestString ${GTEST_LIBRARIES} pthread)
 
 add_executable(Main/main Main/main.cpp)
