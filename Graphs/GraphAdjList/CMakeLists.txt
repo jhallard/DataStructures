@@ -6,19 +6,12 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
  
-# Link runTests with what we want to test and the GTest and pthread library
-add_executable(Testing/uGraphTesting/uGraphTest Testing/uGraphTesting/uGraphTest.cpp)
+add_executable(Testing/uGraphTesting/IntTesting/uGraphTestInt Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp)
 
-target_link_libraries(Testing/uGraphTesting/uGraphTest ${GTEST_LIBRARIES} pthread)
+target_link_libraries(Testing/uGraphTesting/IntTesting/uGraphTestInt ${GTEST_LIBRARIES} pthread)
 
-# Link runTests with what we want to test and the GTest and pthread library
-add_executable(Testing/dGraphTesting/dGraphTest Testing/dGraphTesting/dGraphTest.cpp)
+add_executable(Testing/dGraphTesting/IntTesting/dGraphTestInt Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp)
 
-# Link runTests with what we want to test and the GTest and pthread library
-add_executable(Testing/DijkstrasTesting Testing/DijkstrasTesting.cpp)
-
-target_link_libraries(Testing/dGraphTesting/dGraphTest ${GTEST_LIBRARIES} pthread)
-target_link_libraries(Testing/DijkstrasTesting ${GTEST_LIBRARIES} pthread)
-
+target_link_libraries(Testing/dGraphTesting/IntTesting/dGraphTestInt ${GTEST_LIBRARIES} pthread)
 
 add_executable(Main/main Main/main.cpp)

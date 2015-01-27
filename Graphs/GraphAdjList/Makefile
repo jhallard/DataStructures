@@ -112,43 +112,30 @@ Main/main/fast:
 .PHONY : Main/main/fast
 
 #=============================================================================
-# Target rules for targets named Testing/DijkstrasTesting
+# Target rules for targets named Testing/dGraphTesting/IntTesting/dGraphTestInt
 
 # Build rule for target.
-Testing/DijkstrasTesting: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Testing/DijkstrasTesting
-.PHONY : Testing/DijkstrasTesting
+Testing/dGraphTesting/IntTesting/dGraphTestInt: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Testing/dGraphTesting/IntTesting/dGraphTestInt
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt
 
 # fast build rule for target.
-Testing/DijkstrasTesting/fast:
-	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/build
-.PHONY : Testing/DijkstrasTesting/fast
+Testing/dGraphTesting/IntTesting/dGraphTestInt/fast:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build.make CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt/fast
 
 #=============================================================================
-# Target rules for targets named Testing/dGraphTesting/dGraphTest
+# Target rules for targets named Testing/uGraphTesting/IntTesting/uGraphTestInt
 
 # Build rule for target.
-Testing/dGraphTesting/dGraphTest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Testing/dGraphTesting/dGraphTest
-.PHONY : Testing/dGraphTesting/dGraphTest
+Testing/uGraphTesting/IntTesting/uGraphTestInt: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 Testing/uGraphTesting/IntTesting/uGraphTestInt
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt
 
 # fast build rule for target.
-Testing/dGraphTesting/dGraphTest/fast:
-	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build
-.PHONY : Testing/dGraphTesting/dGraphTest/fast
-
-#=============================================================================
-# Target rules for targets named Testing/uGraphTesting/uGraphTest
-
-# Build rule for target.
-Testing/uGraphTesting/uGraphTest: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 Testing/uGraphTesting/uGraphTest
-.PHONY : Testing/uGraphTesting/uGraphTest
-
-# fast build rule for target.
-Testing/uGraphTesting/uGraphTest/fast:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build
-.PHONY : Testing/uGraphTesting/uGraphTest/fast
+Testing/uGraphTesting/IntTesting/uGraphTestInt/fast:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/build.make CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/build
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt/fast
 
 Main/main.o: Main/main.cpp.o
 .PHONY : Main/main.o
@@ -174,77 +161,53 @@ Main/main.cpp.s:
 	$(MAKE) -f CMakeFiles/Main/main.dir/build.make CMakeFiles/Main/main.dir/Main/main.cpp.s
 .PHONY : Main/main.cpp.s
 
-Testing/DijkstrasTesting.o: Testing/DijkstrasTesting.cpp.o
-.PHONY : Testing/DijkstrasTesting.o
+Testing/dGraphTesting/IntTesting/dGraphTestInt.o: Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.o
 
 # target to build an object file
-Testing/DijkstrasTesting.cpp.o:
-	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.o
-.PHONY : Testing/DijkstrasTesting.cpp.o
+Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build.make CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o
 
-Testing/DijkstrasTesting.i: Testing/DijkstrasTesting.cpp.i
-.PHONY : Testing/DijkstrasTesting.i
+Testing/dGraphTesting/IntTesting/dGraphTestInt.i: Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.i
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.i
 
 # target to preprocess a source file
-Testing/DijkstrasTesting.cpp.i:
-	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.i
-.PHONY : Testing/DijkstrasTesting.cpp.i
+Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.i:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build.make CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.i
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.i
 
-Testing/DijkstrasTesting.s: Testing/DijkstrasTesting.cpp.s
-.PHONY : Testing/DijkstrasTesting.s
+Testing/dGraphTesting/IntTesting/dGraphTestInt.s: Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.s
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.s
 
 # target to generate assembly for a file
-Testing/DijkstrasTesting.cpp.s:
-	$(MAKE) -f CMakeFiles/Testing/DijkstrasTesting.dir/build.make CMakeFiles/Testing/DijkstrasTesting.dir/Testing/DijkstrasTesting.cpp.s
-.PHONY : Testing/DijkstrasTesting.cpp.s
+Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.s:
+	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build.make CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.s
+.PHONY : Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.s
 
-Testing/dGraphTesting/dGraphTest.o: Testing/dGraphTesting/dGraphTest.cpp.o
-.PHONY : Testing/dGraphTesting/dGraphTest.o
+Testing/uGraphTesting/IntTesting/uGraphTestInt.o: Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.o
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.o
 
 # target to build an object file
-Testing/dGraphTesting/dGraphTest.cpp.o:
-	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.o
-.PHONY : Testing/dGraphTesting/dGraphTest.cpp.o
+Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.o:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/build.make CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.o
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.o
 
-Testing/dGraphTesting/dGraphTest.i: Testing/dGraphTesting/dGraphTest.cpp.i
-.PHONY : Testing/dGraphTesting/dGraphTest.i
-
-# target to preprocess a source file
-Testing/dGraphTesting/dGraphTest.cpp.i:
-	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.i
-.PHONY : Testing/dGraphTesting/dGraphTest.cpp.i
-
-Testing/dGraphTesting/dGraphTest.s: Testing/dGraphTesting/dGraphTest.cpp.s
-.PHONY : Testing/dGraphTesting/dGraphTest.s
-
-# target to generate assembly for a file
-Testing/dGraphTesting/dGraphTest.cpp.s:
-	$(MAKE) -f CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/build.make CMakeFiles/Testing/dGraphTesting/dGraphTest.dir/Testing/dGraphTesting/dGraphTest.cpp.s
-.PHONY : Testing/dGraphTesting/dGraphTest.cpp.s
-
-Testing/uGraphTesting/uGraphTest.o: Testing/uGraphTesting/uGraphTest.cpp.o
-.PHONY : Testing/uGraphTesting/uGraphTest.o
-
-# target to build an object file
-Testing/uGraphTesting/uGraphTest.cpp.o:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.o
-.PHONY : Testing/uGraphTesting/uGraphTest.cpp.o
-
-Testing/uGraphTesting/uGraphTest.i: Testing/uGraphTesting/uGraphTest.cpp.i
-.PHONY : Testing/uGraphTesting/uGraphTest.i
+Testing/uGraphTesting/IntTesting/uGraphTestInt.i: Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.i
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.i
 
 # target to preprocess a source file
-Testing/uGraphTesting/uGraphTest.cpp.i:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.i
-.PHONY : Testing/uGraphTesting/uGraphTest.cpp.i
+Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.i:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/build.make CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.i
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.i
 
-Testing/uGraphTesting/uGraphTest.s: Testing/uGraphTesting/uGraphTest.cpp.s
-.PHONY : Testing/uGraphTesting/uGraphTest.s
+Testing/uGraphTesting/IntTesting/uGraphTestInt.s: Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.s
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.s
 
 # target to generate assembly for a file
-Testing/uGraphTesting/uGraphTest.cpp.s:
-	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/build.make CMakeFiles/Testing/uGraphTesting/uGraphTest.dir/Testing/uGraphTesting/uGraphTest.cpp.s
-.PHONY : Testing/uGraphTesting/uGraphTest.cpp.s
+Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.s:
+	$(MAKE) -f CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/build.make CMakeFiles/Testing/uGraphTesting/IntTesting/uGraphTestInt.dir/Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.s
+.PHONY : Testing/uGraphTesting/IntTesting/uGraphTestInt.cpp.s
 
 # Help Target
 help:
@@ -253,23 +216,19 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... Main/main"
-	@echo "... Testing/DijkstrasTesting"
-	@echo "... Testing/dGraphTesting/dGraphTest"
-	@echo "... Testing/uGraphTesting/uGraphTest"
+	@echo "... Testing/dGraphTesting/IntTesting/dGraphTestInt"
+	@echo "... Testing/uGraphTesting/IntTesting/uGraphTestInt"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Main/main.o"
 	@echo "... Main/main.i"
 	@echo "... Main/main.s"
-	@echo "... Testing/DijkstrasTesting.o"
-	@echo "... Testing/DijkstrasTesting.i"
-	@echo "... Testing/DijkstrasTesting.s"
-	@echo "... Testing/dGraphTesting/dGraphTest.o"
-	@echo "... Testing/dGraphTesting/dGraphTest.i"
-	@echo "... Testing/dGraphTesting/dGraphTest.s"
-	@echo "... Testing/uGraphTesting/uGraphTest.o"
-	@echo "... Testing/uGraphTesting/uGraphTest.i"
-	@echo "... Testing/uGraphTesting/uGraphTest.s"
+	@echo "... Testing/dGraphTesting/IntTesting/dGraphTestInt.o"
+	@echo "... Testing/dGraphTesting/IntTesting/dGraphTestInt.i"
+	@echo "... Testing/dGraphTesting/IntTesting/dGraphTestInt.s"
+	@echo "... Testing/uGraphTesting/IntTesting/uGraphTestInt.o"
+	@echo "... Testing/uGraphTesting/IntTesting/uGraphTestInt.i"
+	@echo "... Testing/uGraphTesting/IntTesting/uGraphTestInt.s"
 .PHONY : help
 
 

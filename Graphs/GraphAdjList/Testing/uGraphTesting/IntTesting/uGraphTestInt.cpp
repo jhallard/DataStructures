@@ -12,13 +12,13 @@
 **/
 
 
-#include "../../UndirectedGraph/uGraph.h"
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/uTraveler.hpp"
-//#include "uGraphEdgeTesting.h"
-//#include "uGraphMinTreeTesting.h"
-//#include "uGraphVertexTesting.h"
-//#include "uGraphOtherTesting.h"
+#include "../../../UndirectedGraph/uGraph.h"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/uTraveler.hpp"
+#include "uGraphEdgeTesting.h"
+#include "uGraphMinTreeTesting.h"
+#include "uGraphVertexTesting.h"
+#include "uGraphOtherTesting.h"
 #include "uGraphDijkstraTesting.h"
 #include <gtest/gtest.h>
 #include <sstream>

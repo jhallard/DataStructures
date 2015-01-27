@@ -1,5 +1,5 @@
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/dTraveler.hpp"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>

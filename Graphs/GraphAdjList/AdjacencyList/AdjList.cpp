@@ -2,10 +2,13 @@
 *   @Author   - John H Allard Jr.
 *   @File     - AdjList.cpp
 *   @Data     - 11/13/2014
-*   @Purpose  - This file defines the adjascency list class, which consists of a vertex and a pointer to an edge. The purpose of this class
-*               is mostly to simplify the syntax of the code inside of the uGraph class. The uGraph class will simply consist of a vector of this AdjLists,
-*               where each AdjList corresponds to a single vertex in the graph and all of the edges that have contact with the vertex. All code is open license 
-*               and free to use, just leave some sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*   @Purpose  - This file defines the adjascency list class, which defines a vertex and all of the edges that are incident to this vertex
+*               (for directed graphs, only outgoing edges). This is done by storing two main pieces of data, the VertexData associated
+*               with the vertex for this adjacenecy list, and a std::list object that contains a series of Edge pointers (Edge is a self
+*               defined type, see Edge/Edge.h). I also recently added a hash_map over the adjacent vertices for each adjacency list. This
+*               allows us to have constant look-up time to see if a given edge exists, instead of having to perform a linear scan through
+*               the edges. We still have to perform a linear scan to actually get the Edge from the list, because we can't map to iterators.
+*               The graph classes (uGraph and dGraph) will all have a std::vector of AdjList objects, representing the actual graph.
 **/
 
 

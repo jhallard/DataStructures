@@ -1,23 +1,25 @@
-
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/dTraveler.hpp"
+#include "../../../UndirectedGraph/uGraph.h"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/uTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
-
+#include <ncurses.h>
 
 //////////////////////////////////////
 ////////    Vertex Testing    ////////
 // - These tests involve the inserting and deleting of vertices into our graph data structure.
-TEST(VerticesTest, empty_Graph) { 
-    dGraph<int> graph;
+TEST(VerticesTest, empty_graph) { 
+    uGraph<int> graph;
 
     ASSERT_EQ(0, graph.getNumVertices());
+    ASSERT_EQ(false, graph.deleteVertex(1));
+    ASSERT_EQ(false, graph.deleteEdge(1, 2));
 }
 
 TEST(VerticesTest, insert_one_by_one) { 
-    dGraph<int> graph;
-    int numVertices = rand()%800+2;
+uGraph<int> graph;
+    int numVertices = rand()%800+200;
 
     std::vector<int> input_vec;
     for(int i = 1; i <= numVertices; i++)
@@ -35,8 +37,8 @@ TEST(VerticesTest, insert_one_by_one) {
 }
 
 TEST(VerticesTest, insert_all_at_once) { 
-dGraph<int> graph;
-    int numVertices = rand()%800+2;
+uGraph<int> graph;
+    int numVertices = rand()%800+300;
 
     std::vector<int> input_vec;
     for(int i = 1; i <= numVertices; i++)
@@ -57,7 +59,7 @@ dGraph<int> graph;
 
 
 TEST(VerticesTest, large_insert_delete) {
-    dGraph<int> graph;
+    uGraph<int> graph;
     std::vector<int> vec;
     std::unordered_map<int, bool> m;
 
@@ -81,7 +83,7 @@ TEST(VerticesTest, large_insert_delete) {
 
 
 TEST(VerticesTest, test_no_duplicates) { 
-dGraph<int> graph;
+uGraph<int> graph;
     int numVertices = rand()%800+2;
 
     std::vector<int> input_vec;
@@ -98,8 +100,8 @@ dGraph<int> graph;
 }
 
 TEST(VerticesTest, delete_test) { 
-dGraph<int> graph;
-    int numVertices = rand()%800+2;
+    uGraph<int> graph;
+    int numVertices = rand()%800+200;
 
     std::vector<int> input_vec;
 
@@ -115,6 +117,3 @@ dGraph<int> graph;
 
     ASSERT_EQ((int)(numVertices-numRemove), graph.getNumVertices());
 }
-
-
-

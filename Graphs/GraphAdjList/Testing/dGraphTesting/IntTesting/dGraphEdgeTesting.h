@@ -1,24 +1,23 @@
-#include "../../UndirectedGraph/uGraph.h"
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/uTraveler.hpp"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
-#include <ncurses.h>
+
 
 //////////////////////////////////////
 ////////    Edge Testing    //////////
 
 // - These tests involve the inserting and deleting of edges into our graph data structure.
 TEST(EdgesTest, empty_graph) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     ASSERT_EQ(0, graph.getNumEdges());
 }
 
 
 TEST(EdgesTest, insert_few) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);
@@ -35,28 +34,22 @@ TEST(EdgesTest, insert_few) {
     graph.insertEdge(6, 2);
 
     ASSERT_EQ(6, graph.getNumEdges());
-    ASSERT_EQ(true, graph.containsEdge(1, 2));
-    ASSERT_EQ(true, graph.containsEdge(2, 1));
-    ASSERT_EQ(true, graph.containsEdge(3, 4));
-    ASSERT_EQ(true, graph.containsEdge(4, 3));
-    ASSERT_EQ(false, graph.containsEdge(6, 3));
 }
 
 
 TEST(EdgesTest, insert_multiple) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
     graph.insertVertex(1);
     graph.insertVertex(2);
 
     ASSERT_FALSE(!graph.insertEdge(1, 2)); // ok
     ASSERT_FALSE(graph.insertEdge(1, 2)); // duplicate
-    ASSERT_FALSE(graph.insertEdge(2, 1)); // duplicate
 
 }
 
 
 TEST(EdgesTest, insert_multiple_larger) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);
@@ -84,7 +77,7 @@ TEST(EdgesTest, insert_multiple_larger) {
 }
 
 TEST(EdgesTest, edge_deletion) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);
@@ -92,7 +85,6 @@ TEST(EdgesTest, edge_deletion) {
     graph.insertVertex(4);
     graph.insertVertex(5);
     graph.insertVertex(6);
-
     ASSERT_EQ(0, graph.getNumEdges());
 
     graph.insertEdge(1, 2); 
@@ -101,7 +93,6 @@ TEST(EdgesTest, edge_deletion) {
     graph.insertEdge(3, 4); 
     graph.insertEdge(4, 1); 
     graph.insertEdge(6, 2); 
-
     graph.deleteEdge(1, 2); 
     graph.deleteEdge(1, 3); 
     graph.deleteEdge(2, 3); 
@@ -114,7 +105,7 @@ TEST(EdgesTest, edge_deletion) {
 }
 
 TEST(EdgesTest, edge_deletion2) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);
@@ -144,8 +135,10 @@ TEST(EdgesTest, edge_deletion2) {
  
 TEST(EdgesTest, large_dense_graph) { 
 
-    uGraph<int> graph;
+    dGraph<int> graph;
+
     int numVertices = 400;
+
     std::vector<int> input_vec;
 
     for(int i = 1; i <= numVertices; i++) {
@@ -166,7 +159,7 @@ TEST(EdgesTest, large_dense_graph) {
 
 
 TEST(EdgesTest, no_duplicates)  {
-uGraph<int> graph;
+dGraph<int> graph;
 
     int numVertices = 400;
     int minEdges = 2;
@@ -210,8 +203,9 @@ uGraph<int> graph;
     }
 }
 
+
 TEST(EdgesTest, adj_vertices) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);
@@ -227,19 +221,21 @@ TEST(EdgesTest, adj_vertices) {
     graph.insertEdge(3, 4); // ok
     graph.insertEdge(4, 1); // ok
     graph.insertEdge(6, 2); // ok
-    graph.deleteEdge(1, 5); // ok
+    graph.insertEdge(1, 5); // ok
 
     auto edges = graph.getIncidentEdges(1);
 
+    ASSERT_EQ(3, edges.size());
     // Make sure the correct 3 edges are in this adj list
-    ASSERT_EQ(true, (edges[0].getTarget()->getData() == 2 || edges[0].getTarget()->getData() == 3 || edges[0].getTarget()->getData() == 4));
-    ASSERT_EQ(true, (edges[1].getTarget()->getData() == 2 || edges[1].getTarget()->getData() == 3 || edges[1].getTarget()->getData() == 4));
-    ASSERT_EQ(true, (edges[2].getTarget()->getData() == 2 || edges[2].getTarget()->getData() == 3 || edges[2].getTarget()->getData() == 4));
+    ASSERT_EQ(true, (edges[0].getTarget()->getData() == 2 || edges[0].getTarget()->getData() == 3 || edges[0].getTarget()->getData() == 5));
+    ASSERT_EQ(true, (edges[1].getTarget()->getData() == 2 || edges[1].getTarget()->getData() == 3 || edges[1].getTarget()->getData() == 5));
+    ASSERT_EQ(true, (edges[2].getTarget()->getData() == 2 || edges[2].getTarget()->getData() == 3 || edges[2].getTarget()->getData() == 5));
 
 }
 
+
 TEST(EdgesTest, vertex_and_edge_deletion) { 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     graph.insertVertex(1);
     graph.insertVertex(2);

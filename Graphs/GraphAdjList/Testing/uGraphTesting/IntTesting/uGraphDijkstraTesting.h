@@ -1,28 +1,16 @@
-/**
-*   @Author   - John H Allard Jr.
-*   @File     - MainTestSuite.cpp
-*   @Data     - 11/19/2014
-*   @Purpose  - This file contains all of the main tests for the undirected graph class. The testing framework is provided by Google via their 
-*               Google Test suite for C++. Below you will see numerous groupings of different tests. These groupings of tests all test one aspect
-*               of the graph in different ways, they are run individually then tallied together to ensure that entire subsystems work correctly.
-*               The different sections of uGraph that will be tested are as follows :
-*               1.) Vertex Testing    - Tests the insertion, deletion, and lookup of vertices in the graph. 
-*               2.) Edge Testing      - Tests the insertion, deletion, and lookup of edges in the graph. 
-*               3.) Algorithm/Speed Testing - Tests the various algorithms that come with this graph.
-**/
-
-
-#include "../UndirectedGraph/uGraph.h"
-#include "../DirectedGraph/dGraph.h"
-#include "../../GraphTraveler/uTraveler.hpp"
+#include "../../../UndirectedGraph/uGraph.h"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/uTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
 #include <ncurses.h>
 
+
 double setweight(int & one, int & two) {
-    return (rand()%177)/((rand()+1)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
+    return 2.0;//(rand()%177)/((rand()+2)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
 }
+
 
 void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations) { 
 
@@ -58,6 +46,8 @@ void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations
 }
 
 
+
+
 TEST(Dijkstras, MinTreeSearch) {
     
     uGraph<int> * graph = new uGraph<int>();
@@ -89,8 +79,6 @@ TEST(Dijkstras, MinTreeSearch) {
 
 
 
-
-
 TEST(Dijkstras, dense_graph_test) {
     int num_vertices = 2500;
     srand(time(0));
@@ -112,15 +100,6 @@ TEST(Dijkstras, dense_graph_test) {
     analyzeGraphDijkstras(&graph, num_vertices, iterations);
 
 }
-
-
-
-
-
-
-
-
-
 
 TEST(Dijkstras, large_test_union) {
 
@@ -286,14 +265,4 @@ TEST(Dijkstras, large_test) {
 
     analyzeGraphDijkstras(&final_graph, num_vertices, iterations);
 
-}
-
-
-
-
-
- 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

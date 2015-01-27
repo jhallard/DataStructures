@@ -1,5 +1,5 @@
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/dTraveler.hpp"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
@@ -66,46 +66,39 @@ TEST(MinTreeTests, simple_test2) {
     graph.insertVertex(4);
     graph.insertVertex(5);
 
-    graph.insertEdge(0, 2, 1);
-    graph.insertEdge(0, 3, 6);
-    graph.insertEdge(0, 1, 3);
-    graph.insertEdge(1, 2, 5);
-    graph.insertEdge(1, 4, 3);
-    graph.insertEdge(2, 3, 5);
-    graph.insertEdge(2, 4, 6);
-    graph.insertEdge(2, 5, 4);
-    graph.insertEdge(4, 5, 6);
-    graph.insertEdge(3, 5, 2);
-    graph.insertEdge(5, 1, 5);
-    graph.insertEdge(5, 2, 6);
-    graph.insertEdge(5, 3, 4);
-    graph.insertEdge(4, 1, 6);
-    graph.insertEdge(4, 3, 2);
-    graph.insertEdge(4, 0, 4);
-    graph.insertEdge(1, 0, 6);
-    graph.insertEdge(3, 0, 2);
-    graph.insertEdge(5, 0, 4);
-    graph.insertEdge(0, 4, 6);
-    graph.insertEdge(1, 5, 2);
+    //graph.makeGraphDense(3.1);
 
-    // graph.printGraph();
+    graph.insertEdge(0, 2, 1.1);
+    graph.insertEdge(0, 3, 6.25);
+    graph.insertEdge(0, 1, 3.15);
+    graph.insertEdge(1, 2, 5.241);
+    graph.insertEdge(1, 4, 3.122);
+    graph.insertEdge(2, 3, 5.4432);
+    graph.insertEdge(2, 4, 6.2322);
+    graph.insertEdge(2, 5, 4.2312);
+    graph.insertEdge(4, 5, 6.12);
+    graph.insertEdge(3, 5, 2.456);
+    graph.insertEdge(5, 1, 5.753);
+    graph.insertEdge(5, 2, 6.862);
+    graph.insertEdge(5, 3, 4.35);
+    graph.insertEdge(4, 1, 6.091);
+    graph.insertEdge(4, 3, 2.0375);
+    graph.insertEdge(4, 0, 4.0289);
+    graph.insertEdge(1, 0, 6.9878);
+    graph.insertEdge(3, 0, 2.88);
+    graph.insertEdge(5, 0, 4.99);
+    graph.insertEdge(0, 4, 6.01);
+    graph.insertEdge(1, 5, 2.1011);
 
+    graph.insertEdge(1, 3, 4.1289);
+    graph.insertEdge(2, 0, 6.9478);
+    graph.insertEdge(3, 1, 2.818);
+    graph.insertEdge(3, 2, 4.919);
+    graph.insertEdge(5, 4, 6.101);
+    graph.insertEdge(4, 2, 2.10111);
 
 
     ASSERT_EQ(true, graph.minimumSpanningTree());
-
-
-    // // newGraph->printGraph();
-
-    // ASSERT_EQ(newGraph->getNumVertices(), 6);
-    // ASSERT_EQ(newGraph->getNumEdges(), 5);
-    // ASSERT_EQ(true, newGraph->isConnected());
-    // ASSERT_EQ(1, newGraph->getIncidentEdges(1).size());
-    // ASSERT_EQ(2, newGraph->getIncidentEdges(2).size());
-    // ASSERT_EQ(0, newGraph->getIncidentEdges(3).size());
-    // ASSERT_EQ(0, newGraph->getIncidentEdges(4).size());
-    // ASSERT_EQ(0, newGraph->getIncidentEdges(5).size());
-    // ASSERT_EQ(2, newGraph->getIncidentEdges(0).size());
 
 }
 

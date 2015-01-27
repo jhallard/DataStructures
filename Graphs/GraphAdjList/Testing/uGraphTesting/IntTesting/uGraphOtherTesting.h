@@ -1,6 +1,6 @@
-#include "../../UndirectedGraph/uGraph.h"
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/uTraveler.hpp"
+#include "../../../UndirectedGraph/uGraph.h"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/uTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>

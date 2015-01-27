@@ -1,18 +1,16 @@
-#include "../../UndirectedGraph/uGraph.h"
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/uTraveler.hpp"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/dTraveler.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
-#include <ncurses.h>
 
 
 double setweight(int & one, int & two) {
-    return 2.0;//(rand()%177)/((rand()+2)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
+    return (rand()%177)/((rand()+1)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
 }
 
 
-void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations) { 
+void analyzeGraphDijkstras(dGraph<int> * graph, int num_vertices, int iterations) { 
 
     bool testval = true;
     int total = 0, count1 = 0;
@@ -20,7 +18,7 @@ void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations
     for(int k = 1; k < iterations; k++) {
 
         int r,y; r = rand()%num_vertices+1; y = rand()%num_vertices+1;
-        uTraveler<int> * trav = new uTraveler<int>();
+        dTraveler<int> * trav = new dTraveler<int>();
         auto start = std::chrono::high_resolution_clock::now();
         if(!graph->dijkstrasShortestPath(r, y, trav)) {
             std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
@@ -47,10 +45,9 @@ void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations
 
 
 
-
 TEST(Dijkstras, MinTreeSearch) {
     
-    uGraph<int> * graph = new uGraph<int>();
+    dGraph<int> * graph = new dGraph<int>();
     srand(time(0));
     int num_vertices = 1000;
     double (*fptr)(int &, int &);
@@ -66,14 +63,20 @@ TEST(Dijkstras, MinTreeSearch) {
 
     graph->makeGraphDense(fptr);
 
-    uTraveler<int> * trav = new uTraveler<int>();
+    dTraveler<int> * trav = new dTraveler<int>();
     graph->minimumSpanningTree(trav);
 
-    graph = &trav->graph;
+    *graph = trav->graph;
+
+    trav->graph.reverse();
+
+    graph->getUnion(trav->graph);
 
     analyzeGraphDijkstras(graph, num_vertices, iterations);
 
 }
+
+
 
 
 
@@ -84,7 +87,7 @@ TEST(Dijkstras, dense_graph_test) {
     srand(time(0));
     int iterations = 5;
 
-    uGraph<int> graph;
+    dGraph<int> graph;
 
     for(int i = 0; i < num_vertices; i++) {
         graph.insertVertex(i);
@@ -101,6 +104,15 @@ TEST(Dijkstras, dense_graph_test) {
 
 }
 
+
+
+
+
+
+
+
+
+
 TEST(Dijkstras, large_test_union) {
 
     srand(time(0));
@@ -110,7 +122,7 @@ TEST(Dijkstras, large_test_union) {
     int rand_edges = 10000;
     int iterations = 20;
 
-    std::vector<uGraph<int> > graphs(subGraphs);
+    std::vector<dGraph<int> > graphs(subGraphs);
 
     std::vector<int> subgraph_center;
 
@@ -124,7 +136,7 @@ TEST(Dijkstras, large_test_union) {
     std::cout << "Finished \n";
 
 
-    uGraph<int> final_graph;
+    dGraph<int> final_graph;
     double (*fptr)(int &, int &);
     fptr = setweight;
 
@@ -197,7 +209,7 @@ TEST(Dijkstras, large_test) {
     int rand_edges = 50000;
     int iterations = 10;
 
-    std::vector<uGraph<int> > graphs(subGraphs);
+    std::vector<dGraph<int> > graphs(subGraphs);
 
     std::vector<int> subgraph_center;
 
@@ -210,7 +222,7 @@ TEST(Dijkstras, large_test) {
     }
     std::cout << "Finished \n";
 
-    uGraph<int> final_graph;
+    dGraph<int> final_graph;
     double (*fptr)(int &, int &);
     fptr = setweight;
 

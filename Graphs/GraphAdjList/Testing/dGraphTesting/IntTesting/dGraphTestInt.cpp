@@ -13,13 +13,13 @@
 **/
 
 
-#include "../../DirectedGraph/dGraph.h"
-#include "../../../GraphTraveler/dTraveler.hpp"
-//#include "dGraphVertexTesting.h"
-//#include "dGraphEdgeTesting.h"
-//#include "dGraphOtherTesting.h"
+#include "../../../DirectedGraph/dGraph.h"
+#include "../../../../GraphTraveler/dTraveler.hpp"
+#include "dGraphVertexTesting.h"
+#include "dGraphEdgeTesting.h"
+#include "dGraphOtherTesting.h"
 #include "dGraphDijkstraTesting.h"
-//#include "dGraphMinTreeTesting.h"
+#include "dGraphMinTreeTesting.h"
 #include <gtest/gtest.h>
 #include <sstream>
 #include <chrono>
