@@ -158,6 +158,17 @@ bool AdjList<VertexType>::deleteAllEdges() {
     return true;
 }
 
+// @func - containsEdge
+// @args - #1 Vertex data associated with the other side of the edge
+// @info - true if an edge exists to the given vertex
+template <class VertexType>
+bool AdjList<VertexType>::containsEdge(const VertexType & data) {
+    if(!edge_list.size() || edge_map.find(data) == edge_map.end()) {
+        return false;
+    }
+    return true;
+}
+
 
 // @func - getEdge
 // @args - #1 Pointer to the edge to be returned.

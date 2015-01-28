@@ -60,7 +60,7 @@ TEST(VerticesTest, largeVertexInsertDelete) {
     int count = 0;
     for(int i = 0; i < file.size(); i++) {
         count++;
-        std::cout << file[i] << "\n";
+        // std::cout << file[i] << "\n";
         ASSERT_EQ(true, graph.containsVertex(file[i]));
     }
 

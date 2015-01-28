@@ -325,8 +325,10 @@ bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
     // Go through the entire graph and delete all edges that point to the vertex to be deleted
     for(auto i : list) {
-        if(i->deleteEdge(data))
+        if(i->containsEdge(data)) {
+            i->deleteEdge(data);
             numEdgesToDelete++;
+        }
     }
 
 
@@ -370,8 +372,9 @@ template<class VertexType>
 bool dGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2, double weight) {
 
     // This assumes we don't want edges between the same vertex
-    if(v1 == v2)
+    if(v1 == v2) {
         return false;
+    }
 
    AdjList<VertexType> *  adj1 = this->findVertex(v1);
    AdjList<VertexType> *  adj2 = this->findVertex(v2);
@@ -481,7 +484,7 @@ template<class VertexType>
 bool dGraph<VertexType>::containsEdge(const VertexType & src_vert, const VertexType & dest_vert) {
     
     // check if the src vertex exists, if so check if it has an edge to the dest vertex
-    return (findVertex(src_vert) == nullptr)? false : findVertex(src_vert)->getEdge(dest_vert) != nullptr;
+    return (findVertex(src_vert) == nullptr)? false : findVertex(src_vert)->containsEdge(dest_vert);
 }
 
 

@@ -78,6 +78,11 @@ public:
     // @info - deletes all edges ajascent to the this vertex
     bool deleteAllEdges();
 
+    // @func - containsEdge
+    // @args - #1 Vertex data associated with the other side of the edge
+    // @info - true if an edge exists to the given vertex
+    bool containsEdge(const VertexType &);
+
     // @func - getEdge
     // @args - #1 Pointer to the edge object
     // @info - finds and returns the given edge if it exists, returns null otherwise
