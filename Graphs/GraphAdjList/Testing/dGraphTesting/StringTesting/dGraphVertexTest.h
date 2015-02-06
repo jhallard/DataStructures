@@ -1,4 +1,3 @@
-
 #include "../../../DirectedGraph/dGraph.h"
 #include "../../../../GraphTraveler/dTraveler.hpp"
 #include "ReadWords.h"

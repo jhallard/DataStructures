@@ -171,7 +171,7 @@ bool dGraph<VertexType>::operator!=(const dGraph<VertexType> & toCopy) {
     return !(operator==(toCopy));
 }
 
-// @func   - intersection
+// @func   - getIntersection
 // @args   - #1 constant reference to another graph 
 // @return - A new dGraph that is the intersection of this graph and the argument graph
 // @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
@@ -218,7 +218,7 @@ bool dGraph<VertexType>::getIntersection(const dGraph<VertexType> & other_graph)
     return true;
 }
 
-// @func   - union
+// @func   - getUnion
 // @args   - #1 constant reference to another graph 
 // @return - A new dGraph that is the union of this graph and the argument graph
 // @info   - The union will return a new graph that contains only the vertices that are in either graphs. The new graph will also
@@ -1121,7 +1121,10 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 // @func   - minimuminSpanningTree
 // @args   - none
 // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
-// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, As of right now it requires 
+//           that the graph be strongly connected, in-order to avoid an infinite loop. It also always starts at the first vertex inserted
+//           into the graph. It really should just take any vertex and create the minimum spanning tree of parts of the graph that are accessable 
+//           to that specific vertex. That way we can have an accompanying function that computes a minimum spanning forest over the graphs vertices.
 template<class VertexType>
 bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
@@ -1219,10 +1222,10 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     //auto start = std::chrono::high_resolution_clock::now();
 
 
-    if(this->findVertex(source) == nullptr)
+    if(findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
-    double max_weight = std::numeric_limits<double>::infinity();
+    double max_weight = std ::numeric_limits<double>::infinity();
 
     // Convenient define, this pair will as the type of each entity in our priority queue (a std::set)
     using vert_dist_pair = std::pair<double, VertexType>;
@@ -1240,9 +1243,11 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     // of std::pairs, which is a pair of VertexData and a double value, which is the weight along the shortest path to reach that vertex that has
     // so far been discovered. The ordering function orders the vertices in the set based off of the double value only.
     priority_queue queue(f);
+    
+    // a pair of maps, this returns both the path between the nodes and the net weight along each path to the user-accessible interface function 
+    typename dGraph<VertexType>::dist_prev_pair * ret = new dGraph<VertexType>::dist_prev_pair();
 
-    typename dGraph<VertexType>::dist_prev_pair * ret = new dGraph<VertexType>::dist_prev_pair(); // a pair of maps, this returns both the path between the nodes and the net weight along each path
-                                                     // to the user-accessible interface function 
+                                                     
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.

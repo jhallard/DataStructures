@@ -1091,7 +1091,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 }
 
 
-// @func   - minimuminSpanningTree
+// @func   - minimumSpanningTree
 // @args   - none
 // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
 // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
