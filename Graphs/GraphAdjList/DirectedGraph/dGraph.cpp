@@ -910,7 +910,7 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
     // Our queue object, stores the vertices as they appear to the search
     std::deque<Vertex<VertexType> *> q;
 
-    // A map that allows us to 'mark' the vertices when they've been seen.
+    // A map that allows us to mark the vertices when they've been seen.
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 

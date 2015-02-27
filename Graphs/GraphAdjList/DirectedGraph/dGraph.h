@@ -56,7 +56,7 @@
 // template<class V> BipartiteTraveler;
 
 
-template <class VertexType> // VertexType is whatever type of data you want your vertices to hold (ints, strings, custom classes, etc.)
+template <class VertexType>
 class dGraph : public GraphInterface <VertexType>
 {
     //////////////////////////////////////////////////////
@@ -102,8 +102,7 @@ public:
     // @func   - intersection
     // @args   - #1 constant reference to another graph 
     // @return - A new dGraph that is the intersection of this graph and the argument graph
-    // @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
-    //           only have edges that exist in both graphs.
+    // @info   - The intersection will return a new graph that contains only the vertices and edges that exist in both graphs.
     bool getIntersection(const dGraph<VertexType> &);
 
     // @func   - union
@@ -152,7 +151,7 @@ public:
     // @func   - insertEdge
     // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
     // @return - Boolean indicating succes 
-    bool insertEdge(const VertexType &, const VertexType &, double = 2.0);//std::numeric_limits<double>::infinity());
+    bool insertEdge(const VertexType &, const VertexType &, double = 1.0);//std::numeric_limits<double>::infinity());
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, the "To" Node. 
@@ -298,7 +297,7 @@ public:
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    typename dGraph<VertexType>::dist_prev_pair * dijkstrasMinimumTree(const VertexType &,const  VertexType * dest = nullptr);
+    typename dGraph<VertexType>::dist_prev_pair * dijkstrasMinimumTree(const VertexType &,const  VertexType * = nullptr);
 
     // @func   - dijkstrasMinimumPath
     // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order

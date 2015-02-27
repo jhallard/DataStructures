@@ -351,6 +351,7 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
     else 
         lookup_map.erase(get);
 
+    // here we go through our list of adj lists and erase the one corresponding to the vertex we are deleting.
     for(typename std::vector<AdjList<VertexType> *>::iterator it = list.begin() ; it != list.end(); ++it) {
 
         AdjList<VertexType> * adj1 = *it;

@@ -1,4 +1,0 @@
-:map <F2> :tabp<CR>
-:map <F3> :tabn<CR>
-:map <C-D> :sh
-:map <leader>ev :e $MYVIMRC

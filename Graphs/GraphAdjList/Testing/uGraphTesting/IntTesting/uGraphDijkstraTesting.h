@@ -8,7 +8,7 @@
 
 
 double setweight(int & one, int & two) {
-    return 2.0;//(rand()%177)/((rand()+2)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
+    return (rand()%177)/((rand()+2)%125+1)*(one*13.0+two*17.0)/(one+two+2.0)*27.0;
 }
 
 
