@@ -67,24 +67,24 @@ uGraph<VertexType>::uGraph(std::string fn){
 template<class VertexType>
 uGraph<VertexType>::uGraph(const uGraph<VertexType> & toCopy) {
 
-    auto ourVertices = this->getAllVertices();
+    auto ourVertices = getAllVertices();
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
-        this->deleteVertex(i);
+        deleteVertex(i);
     }
 
     list.clear();
 
-    this->num_vertices = 0;
-    this->num_edges = 0;
+    num_vertices = 0;
+    num_edges = 0;
 
     auto theirVertices = toCopy.getAllVertices();
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
-        this->insertVertex(i);
+        insertVertex(i);
 
         for(auto edge : edges) {
-            this->insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
+            insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
         }
     }
 }
@@ -106,10 +106,10 @@ uGraph<VertexType>::~uGraph() {
 template<class VertexType>
 uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCopy) {
     
-    auto ourVertices = this->getAllVertices();
+    auto ourVertices = getAllVertices();
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
-        this->deleteVertex(i);
+        deleteVertex(i);
     }
 
     list.clear();
@@ -127,7 +127,7 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
         auto edges = toCopy.getIncidentEdges(i);
 
         for(auto edge : edges) {
-            this->insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
+            insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
         }
     }
 
@@ -225,7 +225,7 @@ bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
 
-    newList->set_is_multi_graph(this->is_multi_graph);
+    newList->set_is_multi_graph(is_multi_graph);
 
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
@@ -249,7 +249,7 @@ bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
     bool ret = true;
 
     for(auto i :vertices) {
-        if(!this->insertVertex(i))
+        if(!insertVertex(i))
             ret = false;
     }
 
@@ -295,7 +295,7 @@ bool uGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
     bool ret = true;
 
     for(auto i :vertices) {
-        if(!this->deleteVertex(i))
+        if(!deleteVertex(i))
             ret = false;
     }
 
@@ -313,7 +313,7 @@ bool uGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 template<class VertexType>
 bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
 
-    AdjList<VertexType> *  adjList = this->findVertex(data);
+    AdjList<VertexType> *  adjList = findVertex(data);
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(adjList == nullptr)
@@ -385,8 +385,8 @@ bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
     if(v1 == v2)
         return false;
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr) 
@@ -409,8 +409,8 @@ bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
 template<class VertexType>
 bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2) {
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
@@ -433,7 +433,7 @@ bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
 template<class VertexType>
 int uGraph<VertexType>::getNumVertices() const {
 
-    return this->num_vertices;
+    return num_vertices;
 }
 
 
@@ -443,7 +443,7 @@ int uGraph<VertexType>::getNumVertices() const {
 template<class VertexType>
 int uGraph<VertexType>::getNumEdges() const{
 
-    return this->num_edges;
+    return num_edges;
 }
 
 
@@ -477,8 +477,8 @@ bool uGraph<VertexType>::containsEdge(const VertexType & src_vert, const VertexT
 template<class VertexType>
 double uGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType & v2) {
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
@@ -498,8 +498,8 @@ double uGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
 template<class VertexType>
 bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const VertexType & dest_vert, double weight) {
 
-    AdjList<VertexType> *  adj1 = this->findVertex(src_vert);
-    AdjList<VertexType> *  adj2 = this->findVertex(dest_vert);
+    AdjList<VertexType> *  adj1 = findVertex(src_vert);
+    AdjList<VertexType> *  adj2 = findVertex(dest_vert);
     bool ret = true;
 
     // if value returned in the end of the vector, the vertex doesn't exist
@@ -696,7 +696,7 @@ bool uGraph<VertexType>::isConnected() {
 
     uTraveler<VertexType> * trav = new uTraveler<VertexType>();
 
-    this->depthFirst(list[0]->getVertex()->getData(), trav);
+    depthFirst(list[0]->getVertex()->getData(), trav);
 
     bool ret = trav->graph.getNumVertices() == list.size();
 
@@ -761,7 +761,7 @@ bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
 template<class VertexType>
 bool uGraph<VertexType>::set_is_multi_graph(bool val) {
 
-    this->is_multi_graph = val;
+    is_multi_graph = val;
 
     for(auto i : list) {
         i->set_is_multi_graph(val);
@@ -1100,7 +1100,7 @@ template<class VertexType>
 bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
     // A non strongly-connected graph cannot be spanned, without this we risk an infinite loop
-    if(!this->isConnected())
+    if(!isConnected())
         return false;
 
     std::unordered_map<VertexType, std::pair<VertexType, double> > set; // Map : Vertex --> (prev_vertex, path_weight)
@@ -1191,7 +1191,7 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 
     // auto start = std::chrono::high_resolution_clock::now();
 
-    if(this->findVertex(source) == nullptr)
+    if(findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
     double max_weight = std::numeric_limits<double>::infinity();
@@ -1219,8 +1219,8 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
-    dist.reserve(this->getNumVertices());
-    prev.reserve(this->getNumVertices());
+    dist.reserve(getNumVertices());
+    prev.reserve(getNumVertices());
 
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
@@ -1235,7 +1235,7 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
     while(!queue.empty()) {
 
         double current_dist = queue.begin()->first;
-        AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
+        AdjList<VertexType> * current_vert = findVertex(queue.begin()->second);
         if(dest != nullptr && current_vert->getVertex()->getData() == *dest) {
             break;
         }
@@ -1246,7 +1246,7 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 
         for(auto & edge : *edges) {
 
-            AdjList<VertexType> * temp_vert = this->findVertex(edge->getVertex()->getData());
+            AdjList<VertexType> * temp_vert = findVertex(edge->getVertex()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
@@ -1285,7 +1285,7 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
     std::vector<VertexType> path;
     std::pair<std::vector<VertexType>, double> ret;
 
-    if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
+    if(findVertex(src) == nullptr || findVertex(dest) == nullptr)
         throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
 
     if(src == dest) {
@@ -1296,7 +1296,7 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         }
         return true;
     }
-    typename uGraph<VertexType>::dist_prev_pair * the_pair = this->dijkstrasMinimumTree(src, &dest);
+    typename uGraph<VertexType>::dist_prev_pair * the_pair = dijkstrasMinimumTree(src, &dest);
 
     prev = &the_pair->first;
     dist = &the_pair->second;

@@ -66,24 +66,24 @@ dGraph<VertexType>::dGraph(std::string fn){
 template<class VertexType>
 dGraph<VertexType>::dGraph(const dGraph<VertexType> & toCopy) {
 
-    auto ourVertices = this->getAllVertices();
+    auto ourVertices = getAllVertices();
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
-        this->deleteVertex(i);
+        deleteVertex(i);
     }
 
     list.clear();
 
-    this->num_vertices = 0;
+    num_vertices = 0;
     num_edges = 0;
 
     auto theirVertices = toCopy.getAllVertices();
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
-        this->insertVertex(i);
+        insertVertex(i);
 
         for(auto edge : edges) {
-            this->insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
+            insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
         }
     }
 }
@@ -106,10 +106,10 @@ dGraph<VertexType>::~dGraph() {
 template<class VertexType>
 dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCopy) {
     
-    auto ourVertices = this->getAllVertices();
+    auto ourVertices = getAllVertices();
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
-        this->deleteVertex(i);
+        deleteVertex(i);
     }
 
     list.clear();
@@ -126,7 +126,7 @@ dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCo
         auto edges = toCopy.getIncidentEdges(i);
 
         for(auto edge : edges) {
-            this->insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
+            insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
         }
     }
 
@@ -279,7 +279,7 @@ bool dGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
     bool ret = true;
 
     for(int i = 0; i < vertices.size(); i++) {
-        if(!this->insertVertex(vertices[i]))
+        if(!insertVertex(vertices[i]))
             ret = false;
     }
 
@@ -296,7 +296,7 @@ bool dGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
     bool ret = true;
 
     for(int i = 0; i < vertices.size(); i++) {
-        if(!this->deleteVertex(vertices[i]))
+        if(!deleteVertex(vertices[i]))
             ret = false;
     }
 
@@ -314,7 +314,7 @@ bool dGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 template<class VertexType>
 bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
-    AdjList<VertexType> *  adjList = this->findVertex(data);
+    AdjList<VertexType> *  adjList = findVertex(data);
 
     if(adjList == nullptr)
         return false;
@@ -376,8 +376,8 @@ bool dGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
         return false;
     }
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     if(adj1 == nullptr || adj2 == nullptr) 
         return false;
@@ -399,8 +399,8 @@ bool dGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
 template<class VertexType>
 bool dGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2) {
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
@@ -452,7 +452,7 @@ std::vector<Edge<VertexType> > dGraph<VertexType>::getAllEdges() const {
 template<class VertexType>
 int dGraph<VertexType>::getNumVertices() const {
 
-    return this->num_vertices;
+    return num_vertices;
 }
 
 
@@ -462,7 +462,7 @@ int dGraph<VertexType>::getNumVertices() const {
 template<class VertexType>
 int dGraph<VertexType>::getNumEdges() const{
 
-    return this->num_edges;
+    return num_edges;
 }
 
 
@@ -496,8 +496,8 @@ bool dGraph<VertexType>::containsEdge(const VertexType & src_vert, const VertexT
 template<class VertexType>
 double dGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType & v2) {
 
-   AdjList<VertexType> *  adj1 = this->findVertex(v1);
-   AdjList<VertexType> *  adj2 = this->findVertex(v2);
+   AdjList<VertexType> *  adj1 = findVertex(v1);
+   AdjList<VertexType> *  adj2 = findVertex(v2);
 
     if(adj1 == nullptr || adj2 == nullptr)
         throw std::logic_error("Can't find Vertices in Graph");
@@ -516,8 +516,8 @@ double dGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
 template<class VertexType>
 bool dGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const VertexType & dest_vert, double weight) {
 
-    AdjList<VertexType> *  adj1 = this->findVertex(src_vert);
-    AdjList<VertexType> *  adj2 = this->findVertex(dest_vert);
+    AdjList<VertexType> *  adj1 = findVertex(src_vert);
+    AdjList<VertexType> *  adj2 = findVertex(dest_vert);
 
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
@@ -787,7 +787,7 @@ bool dGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
 template<class VertexType>
 bool dGraph<VertexType>::set_is_multi_graph(bool val) {
 
-    this->is_multi_graph = val;
+    is_multi_graph = val;
 
     for(auto i : list) {
         i->set_is_multi_graph(val);
@@ -1129,7 +1129,7 @@ template<class VertexType>
 bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
     // A non connected graph cannot be spanned, without this we risk an infinite loop
-    if(!this->isConnected())
+    if(!isConnected())
         return false;
 
     std::unordered_map<VertexType, std::pair<VertexType, double> > set; // maps a vertex to a weight and the vertex that connects to it
@@ -1252,8 +1252,8 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
-    dist.reserve(this->getNumVertices());
-    prev.reserve(this->getNumVertices());
+    dist.reserve(getNumVertices());
+    prev.reserve(getNumVertices());
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
         dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
@@ -1268,7 +1268,7 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
 
         // grab from the front of the queue
         double current_dist = queue.begin()->first;
-        AdjList<VertexType> * current_vert = this->findVertex(queue.begin()->second);
+        AdjList<VertexType> * current_vert = findVertex(queue.begin()->second);
         if(dest != nullptr && current_vert->getVertex()->getData() == *dest) {
             break;
         }
@@ -1282,7 +1282,7 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
         // if it is lower than the current shortest path to that vertex
         for(auto & edge : *edges) {
 
-            AdjList<VertexType> * temp_vert = this->findVertex(edge->getTarget()->getData());
+            AdjList<VertexType> * temp_vert = findVertex(edge->getTarget()->getData());
             VertexType temp_data = temp_vert->getVertex()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
@@ -1327,7 +1327,7 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
     std::vector<VertexType> path;
     //std::pair<std::vector<VertexType>, double> ret;
 
-    if(this->findVertex(src) == nullptr || this->findVertex(dest) == nullptr)
+    if(findVertex(src) == nullptr || findVertex(dest) == nullptr)
         throw std::logic_error("SRC or DEST Vertices Do Not Exist in Graph\n");
 
     if(src == dest) {
@@ -1339,7 +1339,7 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         return true;
     }
 
-    typename dGraph<VertexType>::dist_prev_pair * the_pair = this->dijkstrasMinimumTree(src, &dest);
+    typename dGraph<VertexType>::dist_prev_pair * the_pair = dijkstrasMinimumTree(src, &dest);
     prev = &the_pair->first;
     dist = &the_pair->second;
 
