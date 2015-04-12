@@ -93,14 +93,16 @@ public:
     // @return - The new graph copy
     uGraph<VertexType> operator=(const uGraph<VertexType> &);
 
-    // @func   - operator=
-    // @args   - #1 constant reference to another graph object to copy into
-    // @return - The new graph copy
+    // @func   - operator==
+    // @args   - #1 constant reference another graph object to check for equality
+    // @return - bool, true if equal
+    // @note   - this function does not check for isometric equality, just pure structural equality
     bool operator==(const uGraph<VertexType> &);
 
     // @func   - operator=
-    // @args   - #1 constant reference to another graph object to copy into
-    // @return - The new graph copy
+    // @args   - #1 constant reference to another graph object to check for inequality
+    // @return - bool, true if not equal
+    // @note   - this function does not check for isometric equality, just pure structural equality
     bool operator!=(const uGraph<VertexType> &);
 
     // @func   - intersection
