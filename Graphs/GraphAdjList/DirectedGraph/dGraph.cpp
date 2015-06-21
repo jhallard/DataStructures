@@ -5,17 +5,18 @@
 *   @Repo     - https://github.com/jhallard/DataStructures/Graphs
 *   @Purpose  - This is my definition of the dGraph (undirected Graph) class. This class represents a templated, 
 *               undirected graph, upon which a user can perform operations like searches, path finding, minimium-cut, etc. 
-*               This class was implemented as part of my C++ Data Structures personal project. All code is open license and free to use, just leave some
-*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*               This class was implemented as part of my C++ Data Structures personal project. All code is open license and
+*               free to use, just leave some sort of note in your source code giving credit to me and a link to my github
+*               (github.com/jhallard)
 *
-*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consists of a vertex and a list 
-*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
-*               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
-*               v -> a* -> b* -> c* -> d* -> e* -> null
-*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, you just need to
-*               traverse the list of edges on the AdjList that contains vertex v.
-*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph data structure
-*               will look more like this :
+*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consists
+*               of a vertex and a list of edges that eminate from this vertex to the other vertices in the map, along with
+*               the weight associated with those edges. Thus if some vertex v had edges connected it with vertices a, b, c, d,
+*               and e, the adj list for vertex v would look like : v -> a* -> b* -> c* -> d* -> e* -> null
+*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from
+*               a given vertex v, you just need to traverse the list of edges on the AdjList that contains vertex v.
+*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. 
+*               So our graph data structure will look more like this :
 *               -----------------------------------
 *             1 |   a  -> c* -> d* -> null        |
 *             2 |   b  -> v* -> d* -> e* -> null  |
@@ -26,10 +27,12 @@
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
-*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies exactly what functions
-*               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
-*               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
-*               me to make many different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
+*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This
+*               interface specifies exactly what functions both the undirected and directed graph classes that I make must publically
+*               implement. This is done to help ensure that the all user interaction with the graph in well planned out, consistent,
+*               and doesn't derive itself in any way from the implementation details of the graph. This should allow me to make
+*               many different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way
+*               by the user.
 *
 *               Time Complexity :
 *               Below is a break down of the time and space complexity for the various operations performed by this graph.
@@ -654,7 +657,7 @@ bool dGraph<VertexType>::reverse() {
 // @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them
 // @return - Bool indicating success
 // @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
-//             that didn't already exist.
+//           that didn't already exist.
 template<class VertexType>
 bool dGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
 
@@ -806,11 +809,13 @@ bool dGraph<VertexType>::get_is_multi_graph() {
 
 
 // @func   - depthFirst
-// @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
+// @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components
+//           as they're discovered.
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
-//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
-//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+// @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it
+//           encounters a new vertex or edge. This function assumes that all vertex data is unique, so if this is a 
+//           graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map 
+//           to keep track of the seen and unseen vertices.
 template<class VertexType>
 bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
@@ -899,11 +904,13 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
 
 // @func   - breadthFirst
-// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
+// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph
+//           components as they're discovered. 
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
-//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
-//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+// @info   - Performs a breadth first traversal, calling the appropriate function inside of the Traveler class when
+//           it encounters a new vertex or edge. This function assumes that all vertex data is unique, so if this is
+//           a graph of strings, no two strings should be the same. This precondition allows us to use an 
+//           std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
 bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
@@ -1063,7 +1070,6 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
                 adj1->deleteEdge(edges[randEdge]->getVertex());
                 continue;
             }
-            // 
             // std::cout << "mid";
             // std::cout << adj1->getVertex()->getData() << " :: " << adj2->getVertex()->getData() << "\n";
 
@@ -1122,9 +1128,10 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 // @args   - none
 // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
 // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, As of right now it requires 
-//           that the graph be strongly connected, in-order to avoid an infinite loop. It also always starts at the first vertex inserted
-//           into the graph. It really should just take any vertex and create the minimum spanning tree of parts of the graph that are accessable 
-//           to that specific vertex. That way we can have an accompanying function that computes a minimum spanning forest over the graphs vertices.
+//           that the graph be strongly connected, in-order to avoid an infinite loop. It also always starts at the first 
+//           vertex inserted into the graph. It really should just take any vertex and create the minimum spanning tree of 
+//           parts of the graph that are accessable to that specific vertex. That way we can have an accompanying function 
+//           that computes a minimum spanning forest over the graphs vertices.
 template<class VertexType>
 bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
