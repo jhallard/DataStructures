@@ -1,14 +1,17 @@
 /**
 *   @Author   - John H Allard Jr.
-*   @File     - adjList.h
+*   @File     - AdjList.h
 *   @Data     - 11/13/2014
-*   @Purpose  - This file declares the adjascency list class, which defines a vertex and all of the edges that are incident to this vertex
-*               (for directed graphs, only outgoing edges). This is done by storing two main pieces of data, the VertexData associated
-*               with the vertex for this adjacenecy list, and a std::list object that contains a series of Edge pointers (Edge is a self
-*               defined type, see Edge/Edge.h). I also recently added a hash_map over the adjacent vertices for each adjacency list. This
-*               allows us to have constant look-up time to see if a given edge exists, instead of having to perform a linear scan through
-*               the edges. We still have to perform a linear scan to actually get the Edge from the list, because we can't map to iterators.
-*               The graph classes (uGraph and dGraph) will all have a std::vector of AdjList objects, representing the actual graph.
+*   @Purpose  - This file declares the adjascency list class, which defines a vertex and all of the edges
+*               that are incident to this vertex (for directed graphs, only outgoing edges). This is done
+*               by storing two main pieces of data, the VertexData associated with the vertex for this
+*               adjacenecy list, and a std::list object that contains a series of Edge pointers (Edge is
+*               a self defined type, see Edge/Edge.h). I also recently added a hash_map over the adjacent
+*               vertices for each adjacency list. This allows us to have constant look-up time to see if a
+*               given edge exists, instead of having to perform a linear scan through the edges. We still
+*               have to perform a linear scan to actually get the Edge from the list, because we can't map
+*               to iterators. The graph classes (uGraph and dGraph) will all have a std::vector of AdjList
+*               objects, representing the actual graph.
 **/
 
 
@@ -27,7 +30,7 @@
 template <class VertexType>
 class AdjList
 {
-    
+
 public:
 
     // @func - Constructor#1
@@ -59,7 +62,7 @@ public:
 
     // @func - addEdge #1
     // @args - #1 Vertex that the edge points to, #2 weighting of the edge
-    // @info - pusheds this edge onto the back of the edge list.
+    // @info - pushes this edge onto the back of the edge list.
     bool addEdge(Vertex<VertexType> * , double = 1.0);// std::numeric_limits<double>::infinity());
 
 
@@ -121,23 +124,30 @@ private:
     // @func   - removeSelfLoops()
     // @args   - none
     // @return - bool indicating if any were found
-    // @info   - This function removes any self-loops in the graph. It is private because the only time when the graph can have self-loops is when vertices
-    //           are collapsed into each other from another member function (like minimumCut), the user should never encounter a situation where self loops
-    //           arise in the graph (they are created and destroyed inside a function).
+    // @info   - This function removes any self-loops in the graph. It is private because the only time when the
+    //           graph can have self-loops is when vertices are collapsed into each other from another member
+    //           function (like minimumCut), the user should never encounter a situation where self arise in the
+    //           graph (they are created and destroyed inside a function).
     bool removeSelfLoops();
 
     // @member  - vertex
     // @info    - The vertex object for this adj list.
     Vertex<VertexType> vertex;
 
+    // @member - edge_list
+    // @info   - Simple list object, containing all of the edges that are adjacent to this vertex. For directed
+    //           graphs, this means all edges leaving the vertex for this adj list, for undirected graphs it
+    //           contains all edges leaving and entering this vertex.
     std::list<Edge<VertexType> * > edge_list;
+
+    // @member - edge_map
+    // @info   - A map that is used to determine is an edge exists in the edge_list member in O(1) time as apposed
+    //           to O(n) time if we needed to traverse the list.
+    std::unordered_map<VertexType, bool> edge_map;
 
     unsigned int num_edges;
 
     bool is_multi_graph;
-
-    std::unordered_map<VertexType, bool> edge_map;
-
 
 };
 

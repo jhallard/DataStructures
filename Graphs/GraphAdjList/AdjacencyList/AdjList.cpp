@@ -2,15 +2,17 @@
 *   @Author   - John H Allard Jr.
 *   @File     - AdjList.cpp
 *   @Data     - 11/13/2014
-*   @Purpose  - This file defines the adjascency list class, which defines a vertex and all of the edges that are incident to this vertex
-*               (for directed graphs, only outgoing edges). This is done by storing two main pieces of data, the VertexData associated
-*               with the vertex for this adjacenecy list, and a std::list object that contains a series of Edge pointers (Edge is a self
-*               defined type, see Edge/Edge.h). I also recently added a hash_map over the adjacent vertices for each adjacency list. This
-*               allows us to have constant look-up time to see if a given edge exists, instead of having to perform a linear scan through
-*               the edges. We still have to perform a linear scan to actually get the Edge from the list, because we can't map to iterators.
-*               The graph classes (uGraph and dGraph) will all have a std::vector of AdjList objects, representing the actual graph.
+*   @Purpose  - This file defines the adjascency list class, which defines a vertex and all of the edges
+*               that are incident to this vertex (for directed graphs, only outgoing edges). This is done
+*               by storing two main pieces of data, the VertexData associated with the vertex for this
+*               adjacenecy list, and a std::list object that contains a series of Edge pointers (Edge is
+*               a self defined type, see Edge/Edge.h). I also recently added a hash_map over the adjacent
+*               vertices for each adjacency list. This allows us to have constant look-up time to see if a
+*               given edge exists, instead of having to perform a linear scan through the edges. We still
+*               have to perform a linear scan to actually get the Edge from the list, because we can't map
+*               to iterators. The graph classes (uGraph and dGraph) will all have a std::vector of AdjList
+*               objects, representing the actual graph.
 **/
-
 
 #include "AdjList.h"
 
@@ -33,7 +35,6 @@ AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), edge
 template <class VertexType>
 AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV){
     this->vertex = newV;
-
 }
 
 
@@ -77,7 +78,7 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
 
     Edge<VertexType> * newEdge = new Edge<VertexType>(&this->vertex, vert, wt);
 
-        // no self loops
+    // no self loops
     if(this->vertex.getData() == vert->getData()) {
         delete(newEdge);
         return false;
@@ -117,7 +118,7 @@ bool AdjList<VertexType>::deleteEdge(const VertexType & data){
     for(; edge_iterator != edge_list.end(); ++edge_iterator) {
 
         if((*edge_iterator)->getTarget()->getData() == data) {
-            delete(*edge_iterator); 
+            delete(*edge_iterator);
             edge_list.erase(edge_iterator);
             num_edges--;
             return true;
@@ -150,7 +151,7 @@ bool AdjList<VertexType>::deleteAllEdges() {
     auto edge_iterator = edge_list.begin();
 
     for(; edge_iterator != edge_list.end(); ++edge_iterator) {
-            delete(*edge_iterator);
+        delete(*edge_iterator);
     }
 
     edge_list.clear();

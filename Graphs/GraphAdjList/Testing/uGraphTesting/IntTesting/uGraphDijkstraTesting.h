@@ -12,7 +12,7 @@ double setweight(int & one, int & two) {
 }
 
 
-void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations) { 
+void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations) {
 
     bool testval = true;
     int total = 0, count1 = 0;
@@ -28,7 +28,7 @@ void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations
             total++;
             graph->printGraph();
         }
-        auto elapsed = std::chrono::high_resolution_clock::now() - start;   
+        auto elapsed = std::chrono::high_resolution_clock::now() - start;
         long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
         average += m;
         count1++;
@@ -49,7 +49,7 @@ void analyzeGraphDijkstras(uGraph<int> * graph, int num_vertices, int iterations
 
 
 TEST(Dijkstras, MinTreeSearch) {
-    
+
     uGraph<int> * graph = new uGraph<int>();
     srand(time(0));
     int num_vertices = 1000;
@@ -168,7 +168,7 @@ TEST(Dijkstras, large_test_union) {
             final_graph.insertEdge(r, l, 2*weight+1.34);
         }
 
-    } 
+    }
     std::cout << "Finished \n";
 
 
@@ -180,9 +180,6 @@ TEST(Dijkstras, large_test_union) {
     analyzeGraphDijkstras(&final_graph, num_vertices, iterations);
 
 }
-
-
-
 
 
 
@@ -254,7 +251,7 @@ TEST(Dijkstras, large_test) {
             final_graph.insertEdge(r, l, 2*weight);
         }
 
-    } 
+    }
     std::cout << "Finished \n";
 
 

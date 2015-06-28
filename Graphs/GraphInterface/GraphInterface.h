@@ -2,10 +2,12 @@
 *   @Author   - John H Allard Jr.
 *   @File     - GraphInterface.h
 *   @Data     - 11/11/2014
-*   @Purpose  - This file defines an interface for a graph data structure. As C++ has no true interfaces, this class consists purely of public virtual
-*               functions, which ensures that the all of the graphs which will derive from this interface must implement every function listed below. 
-*               To see graph implementations that use this interface, look inside of the GraphAdjList or GraphAdjMat directories. All code is open 
-*               license and free to use, just leave some sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*   @Purpose  - This file defines an interface for a graph data structure. As C++ has no true interfaces, this
+*               class consists purely of public virtual functions, which ensures that the all of the graphs which
+*               will derive from this interface must implement every function listed below. To see graph
+*               implementations that use this interface, look inside of the GraphAdjList or GraphAdjMat directories.
+*               All code is open license and free to use, just leave some sort of note in your source code giving
+*               credit to me and a link to my github (github.com/jhallard)
 **/
 
 #ifndef GraphInterface_h
@@ -30,42 +32,42 @@ public:
 
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating succes
     virtual bool insertVertex(const VertexType &) = 0;
 
     // @func   - deleteVertex
     // @args   - Vertex data of the node to be deleted
-    // @return - Boolean indicating success 
+    // @return - Boolean indicating success
     virtual bool deleteVertex(const VertexType &) = 0;
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating succes
     virtual bool insertVertices(std::vector<VertexType>) = 0;
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be deleted.
-    // @return - Boolean indicating success 
+    // @return - Boolean indicating success
     virtual bool deleteVertices(std::vector<VertexType>) = 0;
 
     // @func   - getAllVertices
     // @args   - none
-    // @return - Vector of the data contained inside all vertices. 
+    // @return - Vector of the data contained inside all vertices.
     virtual std::vector<VertexType> getAllVertices() const = 0;
 
     // @func   - getAllEdges
     // @args   - none
-    // @return - Vector of all of the edges in the graph 
+    // @return - Vector of all of the edges in the graph
     virtual std::vector<Edge<VertexType> > getAllEdges() const = 0;
 
     // @func   - insertEdge
-    // @args   - #1 The "From" Node, #2 the "To" Node, #3 the weight for this new edge 
-    // @return - Boolean indicating succes 
+    // @args   - #1 The "From" Node, #2 the "To" Node, #3 the weight for this new edge
+    // @return - Boolean indicating succes
     virtual bool insertEdge(const VertexType &, const VertexType &, double = 2.0) = 0;//std::numeric_limits<double>::infinity()) = 0;
 
     // @func   - deleteEdge
     // @args   - #1 The "From" Node, #2 the "To" Node.
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating succes
     virtual bool deleteEdge(const VertexType &, const VertexType &) = 0;
 
     // @func   - getNumVertices
@@ -79,7 +81,7 @@ public:
     virtual int getNumEdges() const = 0;
 
     // @func   - containsVertex
-    // @args   - #1 data associated with the vertex that you wish to query for existence 
+    // @args   - #1 data associated with the vertex that you wish to query for existence
     // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     virtual bool containsVertex(const VertexType &) = 0;
 
@@ -148,7 +150,7 @@ public:
     // @args   - None
     // @return - Bool indicating whether or not the graph is bipartite
     // @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
-    //           hitting the same value twice in a row. 
+    //           hitting the same value twice in a row.
     virtual bool isBipartite() = 0;
 
     // @func   - getBipartition
@@ -165,7 +167,7 @@ public:
     virtual bool depthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - breadthFirst
-    // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
+    // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered.
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
     // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
@@ -174,39 +176,39 @@ public:
 
     // @func   - minimuminCut
     // @args   - none
-    // @return - 2 column vector of vertices, each column representing one half of the cut. 
+    // @return - 2 column vector of vertices, each column representing one half of the cut.
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     //           Not yet completed, only about half-way done. This function signature probably isn't even final.
     virtual std::vector<std::vector<VertexType> > minimumCut() = 0;
 
     // @func   - minimumunSpanningTree
     // @args   - none
-    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
-    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected
+    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree,
     virtual bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
     //           otherwise we stop when we find the destination node
-    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex.
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
-    virtual std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > 
+    virtual std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> >
     * dijkstrasMinimumTree(const VertexType &, const VertexType * = nullptr) = 0;
 
     // @func   - dijkstrasShortestPath
     // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
     // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
-    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
     virtual bool dijkstrasShortestPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr) = 0;
 
     // @func   - aStar
     // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices.
     virtual std::vector<VertexType> aStar(const VertexType &, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) = 0;
 
 

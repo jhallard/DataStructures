@@ -1,14 +1,14 @@
 /**
 *   @Author   - John H Allard Jr.
 *   @File     - uTraveler.h
-*   @Data     - 1/2/2014
-*   @Purpose  - This file defines the BipartitTraveler class. This class is used for two purposes, to check for bipartiteness of a graph and
-*               to return a bipartition of a graph. It does this by coloring adjacent vertices different colors and checking to see if it finds
-*               a vertex that is colored incorrectly.
+*   @Date     - 1/2/2014
+*   @Purpose  - This file defines the BipartitTraveler class. This class is used for two purposes, to check for
+*               bipartiteness of a graph and to return a bipartition of a graph. It does this by coloring adjacent
+*               vertices different colors and checking to see if it finds a vertex that is colored incorrectly.
 **/
 
-#ifndef BiPartite_Traveler_h
-#define BiPartite_Traveler_h
+#ifndef BIPARTITE_TRAVELER_H
+#define BIPARTITE_TRAVELER_H
 
 template<class V> class dGraph; // forward declaring dGraph class
 
@@ -20,8 +20,9 @@ public:
     bool current_color;
     bool is_bipartite;
     std::unordered_map<VertexType, bool> vertex_colors;
-    
-    BipartiteTraveler() : current_color(false), is_bipartite(true) {}  
+
+    BipartiteTraveler() : current_color(false), is_bipartite(true) {}
+
     ~BipartiteTraveler() {};
 
     void discover_vertex(const VertexType & vert) {
@@ -33,6 +34,7 @@ public:
             current_color = (vertex_colors.at(vert));
         }
     }
+
 
     void examine_edge(const Edge<VertexType> & edge) {
 
@@ -49,7 +51,7 @@ public:
 
     // @function - traverse_edge
     // @args     - #1 An edge object, this contains a pointer to the target verex and the weight on the edge.
-    // @info     - This function is called when we traverse an edge to a new vertex 
+    // @info     - This function is called when we traverse an edge to a new vertex
     void traverse_edge(const Edge<VertexType> & edge) {
 
         VertexType vert = edge.getVertex()->getData();

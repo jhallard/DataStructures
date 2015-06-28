@@ -12,8 +12,7 @@ std::vector<std::string> readFile() {
     std::string line;
     file.reserve(10500);
     std::ifstream infile("Testing/uGraphTesting/StringTesting/words.txt", std::ios_base::in);
-    while (getline(infile, line, '\n'))
-    {
+    while (getline(infile, line, '\n')) {
         file.push_back (line);
     }
 

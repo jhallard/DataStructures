@@ -2,8 +2,9 @@
 *   @Author   - John H Allard Jr.
 *   @File     - Vertex.h
 *   @Data     - 11/11/2014
-*   @Purpose  - This is the definition of the vertex class, which will be used by the different Graph classes in this directory. This class is small, and serves
-*               the purpose of wrapping a small amount of data and functions together to simplify the process of working with vertices in the Graph classes.
+*   @Purpose  - This is the definition of the vertex class, which will be used by the different Graph classes
+*               in this directory. This class is small, and serves the purpose of wrapping a small amount of
+*               data and functions together to simplify the process of working with vertices in the Graph classes.
 **/
 #ifndef MY_VERTEX_H
 #define MY_VERTEX_H

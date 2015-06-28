@@ -3,33 +3,37 @@
 *   @File     - dGraph.h
 *   @Date     - 11/12/2014
 *   @Repo     - https://github.com/jhallard/DataStructures/Graphs
-*   @Purpose  - This is my declaration of the dGraph (directed Graph) class. This class represents a templated, 
-*               directed graph, upon which a user can perform operation like searches, path finding, and other things. 
-*               This class was implemented as part of my C++. Data Structures personal project. All code is open license and free to use, just leave some
-*               sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
+*   @Purpose  - This is my declaration of the dGraph (directed Graph) class. This class represents a templated,
+*               directed graph, upon which a user can perform operation like searches, path finding, and other things.
+*               This class was implemented as part of my C++. Data Structures personal project. All code is open
+*               license and free to use, just leave some sort of note in your source code giving credit to me and
+*               a link to my github (github.com/jhallard)
 *
-*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consista vertex and a list 
-*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
-*               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
+*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list
+*               consists of vertex and a list of edges that eminate from this vertex to the other vertices in the
+*               map, along with the weight associated with those edges. Thus if some vertex v had edges connected
+*               it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
 *               v -> a* -> b* -> c* -> d* -> null
-*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, you just need to
-*               traverse the list of edges on the AdjList that contains vertex v.
-*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph data structure
-*               will look more like this :
+*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate
+*               from a given vertex v, you just need to traverse the list of edges on the AdjList that contains vertex v.
+*               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in
+*               the graph. So our graph data structure  will look more like this :
 *               -----------------------------------
 *             1 |   a  -> c* -> d* -> null        |
 *             2 |   b  -> v* -> d* -> e* -> null  |
 *             3 |   c  -> a* -> v* -> e* -> null  |
-*             4 |   d  -> a* -> b* -> null        | 
+*             4 |   d  -> a* -> b* -> null        |
 *             5 |   e  -> b* -> c* -> v* -> null  |
 *             6 |   v  -> b* -> c* -> null        |
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
-*               This class inherits from the pure, virtual GraphInterface class (GraphInterface/GraphInterface.h). This interface specifies exactly what functions
-*               both the undirected and directed graph classes that I make must publically implement. This is done to help ensure that the all user interaction
-*               with the graph in well planned out, consistent, and doesn't derive itself in any way from the implementation details of the graph. This should allow
-*               me to make amny different representations of graphs (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
+*               This class inherits from the pure, virtual GraphInterface class (GraphInterface/GraphInterface.h). This
+*               interface specifies exactly what functions both the undirected and directed graph classes that I make
+*               must publically implement. This is done to help ensure that the all user interaction with the graph in
+*               well planned out, consistent, and doesn't derive itself in any way from the implementation details of the
+*               graph. This should allow me to make amny different representations of graphs (adjlist's, adjmatrices, etc.)
+*               that can all be used in the exact same way by the user.
 **/
 
 #ifndef D_GRAPH_A_LIST_H
@@ -71,7 +75,7 @@ public:
 
     // @func  - Constructor#2
     // @args  - #1 String that contains the filename from which to load a graph
-    // @error - Can throw IO error if invalid filename or file structure to build graph 
+    // @error - Can throw IO error if invalid filename or file structure to build graph
     dGraph(std::string fn);
 
     // @func  - Copy Constructor
@@ -100,13 +104,13 @@ public:
     bool operator!=(const dGraph<VertexType> &);
 
     // @func   - intersection
-    // @args   - #1 constant reference to another graph 
+    // @args   - #1 constant reference to another graph
     // @return - A new dGraph that is the intersection of this graph and the argument graph
     // @info   - The intersection will return a new graph that contains only the vertices and edges that exist in both graphs.
     bool getIntersection(const dGraph<VertexType> &);
 
     // @func   - union
-    // @args   - #1 constant reference to another graph 
+    // @args   - #1 constant reference to another graph
     // @return - A new dGraph that is the union of this graph and the argument graph
     // @info   - The union will return a new graph that contains only the vertices that are in either graphs. The new graph will also
     //           only have edges that exist in either graphs.
@@ -115,22 +119,22 @@ public:
 
     // @func   - insertVertex
     // @args   - #1 The value of the node to be inserted
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating succes
     bool insertVertex(const VertexType &);
 
     // @func   - deleteVertex
     // @args   - none
-    // @return - Boolean indicating success 
+    // @return - Boolean indicating success
     bool deleteVertex(const VertexType &);
 
     // @func   - getAllVertices
     // @args   - none
-    // @return - Vector of the data contained inside all vertices. 
+    // @return - Vector of the data contained inside all vertices.
     std::vector<VertexType> getAllVertices() const;
 
     // @func   - getAllEdges
     // @args   - none
-    // @return - Vector of all of the edges in the graph 
+    // @return - Vector of all of the edges in the graph
     std::vector<Edge<VertexType> > getAllEdges() const;
 
     // @func   - updateVertex
@@ -140,22 +144,22 @@ public:
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
-    // @return - Boolean indicating succes 
+    // @return - Boolean indicating succes
     bool insertVertices(std::vector<VertexType>);
 
     // @func   - deleteVertices
     // @args   - #1 Vector of Vertex data corresponding to the vertices to be deleted.
-    // @return - Boolean indicating success 
+    // @return - Boolean indicating success
     bool deleteVertices(std::vector<VertexType>);
 
     // @func   - insertEdge
-    // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge 
-    // @return - Boolean indicating succes 
+    // @args   - #1 The "From" Node, #2 the "To" Node, #3 The weight for this new edge
+    // @return - Boolean indicating succes
     bool insertEdge(const VertexType &, const VertexType &, double = 1.0);//std::numeric_limits<double>::infinity());
 
     // @func   - deleteEdge
-    // @args   - #1 The "From" Node, the "To" Node. 
-    // @return - Boolean indicating succes 
+    // @args   - #1 The "From" Node, the "To" Node.
+    // @return - Boolean indicating succes
     bool deleteEdge(const VertexType &, const VertexType &);
 
     // @func   - numVertices
@@ -169,7 +173,7 @@ public:
     int getNumEdges() const;
 
     // @func   - containsVerex
-    // @args   - #1 data associated with the vertex that you wish to query for existence 
+    // @args   - #1 data associated with the vertex that you wish to query for existence
     // @return - Bool corresponding to the existence of a vertex with the given data in this graph
     bool containsVertex(const VertexType &);
 
@@ -211,8 +215,8 @@ public:
     // @func   - makeGraphDense
     // @args   - A function that takes two vertices and assigns a weight to their edge
     // @return - Bool indicating success
-    // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current vertices with uniform
-    //           edge weighting specified by the argument to the function.
+    // @info   - This function removes all current edes from the graph, and instead makes a dense graph out of the current
+    //           vertices with uniform edge weighting specified by the argument to the function.
     bool makeGraphDense(double setWeight(VertexType&, VertexType&) = nullptr);
 
     // @func   - reverse
@@ -244,7 +248,7 @@ public:
     // @args   - None
     // @return - Bool indicating whether or not the graph is bipartite
     // @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
-    //           hitting the same value twice in a row. 
+    //           hitting the same value twice in a row.
     bool isBipartite();
 
     // @func   - getBipartition
@@ -271,7 +275,7 @@ public:
     bool depthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
     // @func   - breadthFirst
-    // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
+    // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered.
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
     // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
     //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
@@ -280,20 +284,20 @@ public:
 
     // @func   - minimuminCut
     // @args   - none
-    // @return - 2 column vector of vertices, each column representing one half of the cut. 
+    // @return - 2 column vector of vertices, each column representing one half of the cut.
     // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
     std::vector<std::vector<VertexType> > minimumCut();
 
     // @func   - minimuminSpanningTree
     // @args   - none
-    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
-    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+    // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected
+    // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree,
     bool minimumSpanningTree(GraphTraveler<VertexType> * = nullptr);
 
     // @func   - dijkstrasMinimumTree
     // @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
     //           otherwise we stop when we find the destination node
-    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+    // @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex.
     //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
     // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
     //           the source vertex is not contained in the map.
@@ -303,15 +307,16 @@ public:
     // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
     // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
     // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
-    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+    //           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a
     //           structure that contains the shortest path from the source vertex to any vertex in the map.
     bool dijkstrasShortestPath(const VertexType &, const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
 
     // @func   - aStar
-    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer to a hueristic function on a given node
+    // @args   - #1 Data contained in starting vertex for search, #2 Vector of possible goal vertices to reach, #3 Pointer
+    //           to a hueristic function on a given node
     // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+    // @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices.
     std::vector<VertexType> aStar(const VertexType &, std::vector<VertexType>, double hueristic(VertexType&, VertexType&));
 
 
@@ -320,7 +325,7 @@ public:
     ////////           PRIVATE DATA      /////////////////
     //////////////////////////////////////////////////////
 private:
-    
+
     // @member - num_vertices
     // @info   - Number of vertices currently in the graph
     int num_vertices;
@@ -330,13 +335,14 @@ private:
     int num_edges;
 
     // @member - list
-    // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
-    //           from it to other vertices in the graph
+    // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents
+    //           that vertex and all of the edges eminating from it to other vertices in the graph
     std::vector< AdjList<VertexType> * > list;
 
     // @member - lookup_map
-    // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us to have an (amortized)
-    //           O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly through our vector of AdjLists.    
+    // @info   - Allows us to look up where in our vector of vertices a vertex with a given set of VertexData is. This allows us to
+    //           have an (amortized) O(1) lookup time to find a Vertex given a piece of VertexData, as apposed to scanning linearly
+    //           through our vector of AdjLists.
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookup_map;
@@ -347,9 +353,10 @@ private:
     bool is_multi_graph;
 
     // @typedef - (too long to retype)
-    // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained inside these two maps
-    //            is both the shortest path from the source vertex to any other node in the graph, and the net weight along that path. These two maps are 
-    //            decoded inside the helper function to return a single shortest path between two vertices, so the user doesn't have to decode it themselves.
+    // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained
+    //            inside these two maps is both the shortest path from the source vertex to any other node in the graph, and the net
+    //            weight along that path. These two maps are decoded inside the helper function to return a single shortest path
+    //            between two vertices, so the user doesn't have to decode it themselves.
     typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
 
 
