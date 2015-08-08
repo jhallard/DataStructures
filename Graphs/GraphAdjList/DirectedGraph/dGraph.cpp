@@ -175,8 +175,8 @@ bool dGraph<VertexType>::operator!=(const dGraph<VertexType> & toCopy) {
 // @func   - getIntersection
 // @args   - #1 constant reference to another graph
 // @return - A new dGraph that is the intersection of this graph and the argument graph
-// @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
-//           only have edges that exist in both graphs.
+// @info   - The intersection will return a new graph that contains only the vertices that are in both graphs.
+//           The new graph will also only have edges that exist in both graphs.
 template<class VertexType>
 bool dGraph<VertexType>::getIntersection(const dGraph<VertexType> & other_graph) {
 
@@ -184,12 +184,13 @@ bool dGraph<VertexType>::getIntersection(const dGraph<VertexType> & other_graph)
     std::vector<VertexType> common_vertices;
     dGraph<VertexType> new_graph;
 
-    // map all of our vertices
+    // map all of our vertices using the index 1
     for(auto & vertex : getAllVertices()) {
         vertex_map.insert(std::make_pair(vertex, 1));
     }
 
-    // map all of their vertices that intersect with our vertices
+    // map all of their vertices that intersect with our vertices using
+    // the index 2
     for(auto & vertex : other_graph.getAllVertices()) {
         if(vertex_map.find(vertex) != vertex_map.end()) {
             vertex_map.at(vertex) = 2;
@@ -238,7 +239,7 @@ bool dGraph<VertexType>::getUnion(const dGraph<VertexType> & other_graph) {
 }
 
 
-// @func   - insertNode
+// @func   - insertVertex
 // @args   - #1 The value of the node to be inserted
 // @return - Boolean indicating succes
 template<class VertexType>
@@ -271,9 +272,12 @@ bool dGraph<VertexType>::insertVertex(const VertexType & data) {
 
 }
 
-// @func   - deleteVertices
+// @func   - insertVertices
 // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
 // @return - Boolean indicating success, is false if any of the individual insertions fail
+// @TODO   - I think this should be turned into an atomic function, meaning it either inserts all of the
+//         - given vertices or none of them if any one fails. In it's current state it could fail on one
+//         - of the vertices and the user wouldn't know which one.
 template<class VertexType>
 bool dGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 
@@ -305,13 +309,14 @@ bool dGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 }
 
 
-// @func   - deleteNode
-// @args   - none
+// @func   - deleteVertex
+// @args   - #1 VertexData associated with vertex to be deleted
 // @return - Boolean indicating success
-// @info   - Because this is an undirected graph, we not only have to delete the vertex in question and any edges that
-//           eminate from it, but we also have to go to the other vertices and delete any edges that end at the vertex
-//           to be deleted. Thankfully, because of our use of maps and pointers this isn't difficult nor too costly. Running time
-//           should be O(n) where n is the number of edges that leave the vertex to be deleted.
+// @info   - Because this is a directed graph, we have to do a little bit more work to delete a vertex
+//           than we do with the undirected graph. For an undirected graph, we know all edges adjacent to
+//           a given vertex because they are all in that vertex's adjacency list. For an undirected graph,
+//           not only do we have to delete the edges leaving this vertex but also have to go and manually
+//           look at the other vertices to see if they have any edges that point into the vertex to be deleted.
 template<class VertexType>
 bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
@@ -336,8 +341,8 @@ bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
     // finally remove the node for the current vertex from our map of vertices.
     typename std::unordered_map<VertexType, AdjList<VertexType> * >::iterator get = lookup_map.find(data);
 
-    // if true then a vertex with the given data does not exist in our map, which is a problem, and means our internal structure
-    // is inconsistent, we'll just return false and turn a blind eye.
+    // if true then a vertex with the given data does not exist in our map, which is a problem,
+    // and means our internal structure is inconsistent, we'll just return false and turn a blind eye.
     if(get == lookup_map.end())
         return false;
     else
@@ -579,7 +584,7 @@ bool dGraph<VertexType>::processVertex(const VertexType & source, GraphTraveler<
 }
 
 // @func   - processVertices
-// @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
+// @args   - #1 Data contained in vertices that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
 // @return - Bool indicating if the vertex could be found or not.
 // @info   - This function will look at the all of the vertices in the vector and then examine all of the edges of each vertex
 //           (by calling the appropraite traveler functions)
@@ -622,8 +627,17 @@ bool dGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
         vertex->deleteAllEdges();
 
     for(int i = 0; i < list.size(); i++) {
+        auto v1 = list[i]->getVertex()->getData();
         for(int j = 0; j < list.size(); j++) {
-            insertEdge(list[i]->getVertex()->getData(), list[j]->getVertex()->getData());
+            auto v2 = list[j]->getVertex()->getData();
+
+            if(setWeight) {
+                double w = setWeight(v1, v2);
+                insertEdge(v1, v2, w);
+            }
+            else {
+                insertEdge(v1, v2);
+            }
         }
     }
 
@@ -830,39 +844,32 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
     typename std::unordered_map<VertexType, VertexType> prev;
 
     AdjList<VertexType> * root_vert = findVertex(root_data);
+    AdjList<VertexType> * current_vertex = nullptr;
 
     if(root_vert == nullptr)
         return false;
 
+    // visit the new vertex
+    if(traveler) traveler->starting_vertex(root_data);
+
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
-
-    AdjList<VertexType> *  current_vertex = nullptr;
-    bool first_iteration = true;
 
     while(q.size()) {
 
         Vertex<VertexType> * tempVert = q.back();q.pop_back();
         current_vertex = findVertex(tempVert->getData());
 
-        if(current_vertex == nullptr)
-            return false;
+        if(current_vertex == nullptr) return false;
 
         // visit the node that we just popped off the stack
         VertexType tempData = current_vertex->getVertex()->getData();
 
-        // visit the new vertex
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(root_vert->getVertex()->getData());
-            first_iteration = false;
-        }
-        else if(traveler) {
-            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+        if(traveler && prev.size()) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(tempData));
             Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
-            if(new_edge)
-                traveler->traverse_edge(*new_edge);
+            if(new_edge) traveler->traverse_edge(*new_edge);
         }
-
 
         std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
@@ -873,10 +880,7 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
-            if(traveler != nullptr) {
-                traveler->examine_edge(*edge);
-                // std::cout << "3st\n";
-            }
+            if(traveler) traveler->examine_edge(*edge);
 
             // if we haven't seen the target vertex for this edge
             if(get == marked.end()) {
@@ -893,8 +897,7 @@ bool dGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
     }
 
-    if(traveler != nullptr)
-        traveler->finished_traversal();
+    if(traveler) traveler->finished_traversal();
 
     return true;
 
@@ -923,17 +926,16 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
     typename std::unordered_map<VertexType, VertexType> prev;
 
     AdjList<VertexType> *  root_vert = findVertex(root_data);
+    AdjList<VertexType> *  current_vertex = nullptr;
 
     if(root_vert == nullptr)
         return false;
 
+    // visit the start vertex
+    if(traveler) traveler->starting_vertex(root_data);
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
-
-
-    AdjList<VertexType> *  current_vertex = nullptr;
-    bool first_iteration = true;
 
     while(q.size()) {
 
@@ -945,18 +947,11 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
 
         VertexType tempData = current_vertex->getVertex()->getData();
 
-        // visit the new vertex
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(root_vert->getVertex()->getData());
-            first_iteration = false;
-        }
-        else if(traveler) {
-            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+        if(traveler) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(tempData));
             Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
-            if(new_edge)
-                traveler->traverse_edge(*new_edge);
+            if(new_edge) traveler->traverse_edge(*new_edge);
         }
-
 
         std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
@@ -969,15 +964,12 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             // examine the new edge
-            if(traveler != nullptr)
-                traveler->examine_edge(*edge);
+            if(traveler) traveler->examine_edge(*edge);
 
             // if the current vertex hasn't been seen
             if(get == marked.end()) {
-
                 // add the source vertex for this target vertex to our map
                 prev.insert(std::pair<VertexType, VertexType>(tempData, edge->getSource()->getData()));
-
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex
@@ -987,8 +979,8 @@ bool dGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
         }
 
     }
-    if(traveler != nullptr)
-        traveler->finished_traversal();
+
+    if(traveler) traveler->finished_traversal();
 
     return true;
 }
@@ -1112,7 +1104,7 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 
     // retGraph->printGraph();
 
-    std::cout << "Vertex 1 " << finalList[0]->getVertex()->getData() << "\n\n\n";
+    std::cout << "Vertex 1 " << finalList[0]->getVertex()->getData() << "\n";
     std::cout << "Vertex 2 " << finalList[1]->getVertex()->getData() << "\n";
     std::cout << "Edges " <<finalList[0]->getAllEdges().size() << "\n";
 
@@ -1123,7 +1115,7 @@ std::vector<std::vector<VertexType> > dGraph<VertexType>::minimumCut() {
 
 
 // @func   - minimuminSpanningTree
-// @args   - none
+// @args   - #1 GraphTraveler object that is used to build the minimum spanning tree
 // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected
 // @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, As of right now it requires
 //           that the graph be strongly connected, in-order to avoid an infinite loop. It also always starts at the first
@@ -1151,17 +1143,11 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
     Vertex<VertexType> * best_vertex = list[0]->getVertex();
     Vertex<VertexType> * last_vertex = best_vertex;
 
-    bool first_iteration = true;
+    if(traveler) traveler->starting_vertex(best_vertex->getData());
 
     while(mst_set.size() != list.size()) {
         double lowest_weight = imax;
         int index = 0;   // index of the vertex with the lowest wieght found
-
-
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(set.at(best_vertex->getData()).first);
-            first_iteration = false;
-        }
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
@@ -1176,7 +1162,7 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         }
 
         best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
-        last_vertex =  findVertex(set.at(best_vertex->getData()).first)->getVertex();
+        last_vertex = findVertex(set.at(best_vertex->getData()).first)->getVertex();
 
         // Take the vertex with the smallest weight and mark it as connected to our min tree
         mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));
@@ -1190,25 +1176,20 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
 
-
         // Update the weighting of the vertices that are neighbors of the last vertex
         for(auto edge : edges) {
-
             if(traveler)  {
                 Edge<VertexType> new_edge(edge->getSource(), edge->getTarget(), edge->getWeight());
                 traveler->examine_edge(new_edge);
             }
-
             if(edge->getWeight() <= set.at(edge->getTarget()->getData()).second) {
                 set.at(edge->getTarget()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
             }
-
         }
 
     }
 
-    if(traveler)
-        traveler->finished_traversal();
+    if(traveler) traveler->finished_traversal();
 
     return true;
 }
@@ -1224,9 +1205,6 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 //           map, throws an exception if the source vertex is not contained in the map.
 template<class VertexType>
 typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source, const VertexType * dest) {
-
-    //auto start = std::chrono::high_resolution_clock::now();
-
 
     if(findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
@@ -1311,10 +1289,6 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
 
     ret->first = prev;
     ret->second = dist;
-    //auto elapsed = std::chrono::high_resolution_clock::now() - start;
-    //long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-
-    //std::cout << "Total Time : " << m << "\n";
 
     return ret;
 }
@@ -1401,6 +1375,7 @@ std::vector<VertexType> dGraph<VertexType>::aStar(const VertexType &, std::vecto
 
      // #TODO - Implement A* Path-finding algorithm
 
+    return std::vector<VertexType>();
 }
 
 

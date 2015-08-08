@@ -126,8 +126,8 @@ private:
     // @return - bool indicating if any were found
     // @info   - This function removes any self-loops in the graph. It is private because the only time when the
     //           graph can have self-loops is when vertices are collapsed into each other from another member
-    //           function (like minimumCut), the user should never encounter a situation where self arise in the
-    //           graph (they are created and destroyed inside a function).
+    //           function (like minimumCut), the user should never encounter a situation where self-loops arise
+    //           in the graph (they are created and destroyed inside a function).
     bool removeSelfLoops();
 
     // @member  - vertex

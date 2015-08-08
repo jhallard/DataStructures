@@ -26,14 +26,14 @@ AdjList<VertexType>::AdjList() : vertex(), edge_list(), num_edges(0){
 // @func - Constructor#2
 // @args - #1 Vertex data
 template <class VertexType>
-AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), edge_list() {
+AdjList<VertexType>::AdjList(const VertexType & newData) : vertex(newData), edge_list(), num_edges(0) {
 
 }
 
 // @func - Constructor#3
 // @args - #1 A vertex object to set as our vertex
 template <class VertexType>
-AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV){
+AdjList<VertexType>::AdjList(const Vertex<VertexType> & newV) :edge_list(), num_edges(0){
     this->vertex = newV;
 }
 
@@ -49,6 +49,7 @@ AdjList<VertexType>::~AdjList() {
     }
 
     edge_list.clear();
+    edge_map.clear();
 }
 
 
@@ -57,7 +58,6 @@ AdjList<VertexType>::~AdjList() {
 // @return - Bool indicating success or failure
 template <class VertexType>
 bool AdjList<VertexType>::setVertex(const Vertex<VertexType> & newData){
-
     this->vertex = newData;
     return true;
 }
@@ -84,6 +84,7 @@ bool AdjList<VertexType>::addEdge(Vertex<VertexType> * vert, double wt){
         return false;
     }
 
+    // no parallel edges
     if(edge_map.find(vert->getData()) != edge_map.end()) {
         delete(newEdge);
         return false;
@@ -135,8 +136,7 @@ bool AdjList<VertexType>::deleteEdge(const VertexType & data){
 template <class VertexType>
 bool AdjList<VertexType>::deleteEdge(Vertex<VertexType> * vert){
 
-    deleteEdge(vert->getData());
-
+   return deleteEdge(vert->getData());
 }
 
 // @func - deleteAllEdges
@@ -155,6 +155,7 @@ bool AdjList<VertexType>::deleteAllEdges() {
     }
 
     edge_list.clear();
+    edge_map.clear();
 
     return true;
 }
@@ -173,7 +174,7 @@ bool AdjList<VertexType>::containsEdge(const VertexType & data) {
 
 // @func - getEdge
 // @args - #1 Pointer to the edge to be returned.
-// @info - ffinds and returns the given edge if it exists
+// @info - finds and returns the given edge if it exists
 template <class VertexType>
 Edge<VertexType> * AdjList<VertexType>::getEdge(const Vertex<VertexType> & vert) {
 
@@ -243,9 +244,8 @@ template<class VertexType>
 bool AdjList<VertexType>::removeSelfLoops() {
 
     bool ret = false;
-    while(!this->deleteEdge(this->getVertex(), this->getVertex())) {
-        ret = true;
-    }
+
+    while(ret = deleteEdge(getVertex(), getVertex()));
 
     return ret;
 

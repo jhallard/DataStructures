@@ -277,9 +277,10 @@ public:
     // @func   - breadthFirst
     // @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered.
     // @return - Bool indicating if the function could find the starting vertex based on arg#1
-    // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
-    //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
-    //           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+    // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters
+    //           a new vertex or edge. This function assumes that all vertex data is unique, so if this is a graph of strings, no two
+    //           strings should be the same. This precondition allows us to use an std::unordered_map to keep track of the seen and
+    //           unseen vertices.
     bool breadthFirst(const VertexType &, GraphTraveler<VertexType> * = nullptr);
 
     // @func   - minimuminCut
@@ -334,6 +335,11 @@ private:
     // @info   - Number of Edges currently in the graph
     int num_edges;
 
+    // @member - is_multi_graph
+    // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
+    //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
+    bool is_multi_graph;
+
     // @member - list
     // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents
     //           that vertex and all of the edges eminating from it to other vertices in the graph
@@ -346,11 +352,6 @@ private:
     //           KeyType - VertexData (int, string, double, etc. Chosen at runtime by the user)
     //           Value   - A pointer to the AdjList object for the Vertex that contains the data contained by the key.
     std::unordered_map<VertexType,  AdjList<VertexType> *> lookup_map;
-
-    // @member - is_multi_graph
-    // @info   - This is intended to be used by the minimumCut function, because it requires that duplicate edges be valid. Setting this to true
-    //           will change the AdjList class to not reject duplicate edges, but it will still reject edges between the same vertex.
-    bool is_multi_graph;
 
     // @typedef - (too long to retype)
     // @info    - This is a pair of unordered_maps that is returned from the dijkstras algorithm to the helper function. Contained

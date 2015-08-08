@@ -3,16 +3,16 @@
 *   @File     - uGraph.h
 *   @Date     - 11/12/2014
 *   @Repo     - https://github.com/jhallard/DataStructures/Graphs
-*   @Purpose  - This is my definition of the uGraph (undirected Graph) class. This class represents a templated, 
-*               undirected graph, upon which a user can perform operations like searches, path finding, minimium-cut, etc. 
+*   @Purpose  - This is my definition of the uGraph (undirected Graph) class. This class represents a templated,
+*               undirected graph, upon which a user can perform operations like searches, path finding, minimium-cut, etc.
 *               This class was implemented as part of my C++ Data Structures personal project. All code is open license and free to use,
 *                just leave some sort of note in your source code giving credit to me and a link to my github (github.com/jhallard)
 *
-*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consists of a vertex and a list 
-*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges. 
+*   @Details  - This class uses a series of adjacency lists to represent a graph data structure. An adjacency list consists of a vertex and a list
+*               of edges that eminate from this vertex to the other vertices in the map, along with the weight associated with those edges.
 *               Thus if some vertex v had edges connected it with vertices a, b, c, d, and e, the adj list for vertex v would look like :
 *               v -> a* -> b* -> c* -> d* -> e* -> null
-*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v, 
+*               Where x* is an edge that leads from vertex v to vertex x. Thus to find all of the edges that eminate from a given vertex v,
 *               you just need to traverse the list of edges on the AdjList that contains vertex v.
 *               This above is just one adjacency list, our graph will have a single adjacency list for each vertex in the graph. So our graph
 *                data structure will look more like this :
@@ -20,16 +20,16 @@
 *    vertex 1 : |   a  -> c* -> d* -> null        |
 *    vertex 2 : |   b  -> v* -> d* -> e* -> null  |
 *    vertex 3 : |   c  -> a* -> v* -> e* -> null  |
-*    vertex 4 : |   d  -> a* -> b* -> null        | 
+*    vertex 4 : |   d  -> a* -> b* -> null        |
 *    vertex 5 : |   e  -> b* -> c* -> v* -> null  |
 *    vertex 6 : |   v  -> b* -> c* -> null        |
 *               -----------------------------------
 *
 *               Inheritance Hierarchy :
-*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies 
-*               exactly what functions both the undirected and directed graph classes that I make must publically implement. This is done 
-*               to help ensure that the all user interaction with the graph in well planned out, consistent, and doesn't derive itself in any way 
-*               from the implementation details of the graph. This should allow me to make many different representations of graphs 
+*               This class inherits from the pure, virtual GraphInterface class (../../GraphInterface/GraphInterface.h). This interface specifies
+*               exactly what functions both the undirected and directed graph classes that I make must publically implement. This is done
+*               to help ensure that the all user interaction with the graph in well planned out, consistent, and doesn't derive itself in any way
+*               from the implementation details of the graph. This should allow me to make many different representations of graphs
 *               (adjlist's, adjmatrices, etc.) that can all be used in the exact same way by the user.
 *
 *               Time Complexity :
@@ -49,7 +49,7 @@
 // @info - Initializes everything to empty
 template<class VertexType>
 uGraph<VertexType>::uGraph() : num_edges(0), num_vertices(0), is_multi_graph(false) {
-    
+
 }
 
 // @func  - Constructor#2
@@ -59,7 +59,7 @@ template<class VertexType>
 uGraph<VertexType>::uGraph(std::string fn){
 
 // #TODO Load the file given by 'fn' into the graph.
-    
+
 }
 
 // @func  - Copy Constructor
@@ -105,7 +105,7 @@ uGraph<VertexType>::~uGraph() {
 // @return - The new graph copy
 template<class VertexType>
 uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCopy) {
-    
+
     auto ourVertices = getAllVertices();
     // Go through, delete, and clean up all vertices and edges.z
     for(auto i : ourVertices) {
@@ -122,7 +122,7 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
     for(auto i : theirVertices) {
         insertVertex(i);
     }
-    
+
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
 
@@ -141,7 +141,7 @@ uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCo
 //           order, same with the adjacent edges for each vertex. To fix this, we need to hash all vertices for comparison.
 template<class VertexType>
 bool uGraph<VertexType>::operator==(const uGraph<VertexType> & toCopy) {
-    
+
     auto our_vertices = getAllVertices();
 
     auto their_vertices = toCopy.getAllVertices();
@@ -168,12 +168,12 @@ bool uGraph<VertexType>::operator==(const uGraph<VertexType> & toCopy) {
 // @return - True if they are not the same, false otherwise
 template<class VertexType>
 bool uGraph<VertexType>::operator!=(const uGraph<VertexType> & toCopy) {
-    
+
     return !(operator==(toCopy));
 }
 
 // @func   - intersection
-// @args   - #1 constant reference to another graph 
+// @args   - #1 constant reference to another graph
 // @return - A new dGraph that is the intersection of this graph and the argument graph
 // @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
 //           only have edges that exist in both graphs.
@@ -186,7 +186,7 @@ bool uGraph<VertexType>::getIntersection(const uGraph<VertexType> & other_graph)
 }
 
 // @func   - union
-// @args   - #1 constant reference to another graph 
+// @args   - #1 constant reference to another graph
 // @return - A new dGraph that is the union of this graph and the argument graph
 // @info   - The union will return a new graph that contains only the vertices that are in either graphs. The new graph will also
 //           only have edges that exist in either graphs.
@@ -207,7 +207,7 @@ bool uGraph<VertexType>::getUnion(const uGraph<VertexType> & other_graph) {
 
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
-// @return - Boolean indicating succes 
+// @return - Boolean indicating succes
 template<class VertexType>
 bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
 
@@ -237,12 +237,15 @@ bool uGraph<VertexType>::insertVertex(const VertexType & data ) {
     num_vertices++;
 
     return true;
-    
+
 }
 
 // @func   - insertVertices
 // @args   - #1 Vector of Vertex data corresponding to the vertices to be added.
 // @return - Boolean indicating success, is false if any of the individual insertions fail
+// @TODO   - I think this should be turned into an atomic function, meaning it either inserts all of the
+//         - given vertices or none of them if any one fails. In it's current state it could fail on one
+//         - of the vertices and the user wouldn't know which one.
 template<class VertexType>
 bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 
@@ -258,7 +261,7 @@ bool uGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 
 // @func   - getAllVertices
 // @args   - none
-// @return - Vector of the data contained inside all vertices. 
+// @return - Vector of the data contained inside all vertices.
 template<class VertexType>
 std::vector<VertexType> uGraph<VertexType>::getAllVertices() const {
     std::vector<VertexType> ret;
@@ -270,7 +273,7 @@ std::vector<VertexType> uGraph<VertexType>::getAllVertices() const {
 
 // @func   - getAllEdges
 // @args   - none
-// @return - Vector of all of the edges in the graph 
+// @return - Vector of all of the edges in the graph
 template<class VertexType>
 std::vector<Edge<VertexType> > uGraph<VertexType>::getAllEdges() const {
 
@@ -303,8 +306,8 @@ bool uGraph<VertexType>::deleteVertices(std::vector<VertexType> vertices) {
 }
 
 
-// @func   - deleteNode
-// @args   - none
+// @func   - deleteVertex
+// @args   - #1 VertexData associated with vertex to be deleted
 // @return - Boolean indicating success
 // @info   - Because this is an undirected graph, we not only have to delete the vertex in question and any edges that
 //           eminate from it, but we also have to go to the other vertices and delete any edges that end at the vertex
@@ -338,7 +341,7 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
         // delete that vertices edge with the vertex to be deleted
         temp->deleteEdge(data);
 
-        
+
     }
 
     // finally remove the node for the current vertex from our map of vertices.
@@ -348,7 +351,7 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
     // is inconsistent, we'll just return false and turn a blind eye.
     if(get == lookup_map.end())
         return false;
-    else 
+    else
         lookup_map.erase(get);
 
     // here we go through our list of adj lists and erase the one corresponding to the vertex we are deleting.
@@ -362,7 +365,7 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
             delete(toDelete);
             break;
         }
-    }        
+    }
 
     // decrement the number of vertices
     num_vertices--;
@@ -371,13 +374,13 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
     num_edges -= numEdgesToDelete;
 
     return true;
-    
+
 }
 
 
 // @func   - insertEdge
-// @args   - #1 The "From" Node, the "To" Node, the weight for this new edge 
-// @return - Boolean indicating succes 
+// @args   - #1 The "From" Node, the "To" Node, the weight for this new edge
+// @return - Boolean indicating succes
 template<class VertexType>
 bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2, double weight) {
 
@@ -389,9 +392,9 @@ bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
    AdjList<VertexType> *  adj2 = findVertex(v2);
 
     // if value returned in the end of the vector, the vertex doesn't exist
-    if(adj1 == nullptr || adj2 == nullptr) 
+    if(adj1 == nullptr || adj2 == nullptr)
         return false;
-    
+
     // add an edge from vertex 1 to vertex 2
     if(adj1->addEdge(adj2->getVertex(), weight) && adj2->addEdge(adj1->getVertex(), weight)) {
         num_edges++;
@@ -399,13 +402,13 @@ bool uGraph<VertexType>::insertEdge(const VertexType & v1, const VertexType & v2
     }
 
     return false;
-    
+
 }
 
 
 // @func   - deleteEdge
 // @args   - #1 The "From" Node, the "To" Node. #Note These two vertices define the edge
-// @return - Boolean indicating succes 
+// @return - Boolean indicating succes
 template<class VertexType>
 bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2) {
 
@@ -420,10 +423,10 @@ bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
     if(!adj1->deleteEdge(adj2->getVertex()) || !adj2->deleteEdge(adj1->getVertex()) ) {
         return false;
     }
-    
+
     num_edges--;
     return true;
-    
+
 }
 
 
@@ -448,7 +451,7 @@ int uGraph<VertexType>::getNumEdges() const{
 
 
 // @func   - containsVerex
-// @args   - #1 data associated with the vertex that you wish to query for existence 
+// @args   - #1 data associated with the vertex that you wish to query for existence
 // @return - Bool corresponding to the existence of a vertex with the given data in this graph
 template<class VertexType>
 bool uGraph<VertexType>::containsVertex(const VertexType & v) {
@@ -605,7 +608,7 @@ template<class VertexType>
 bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType&)) {
 
     double weight = std::numeric_limits<double>::infinity();
-    for(auto vertex : list) 
+    for(auto vertex : list)
         vertex->deleteAllEdges();
     num_edges = 0;
 
@@ -671,11 +674,11 @@ bool uGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
 // @info   - prints the adjecency list representation of the graph.
 template<class VertexType>
 void uGraph<VertexType>::printGraph() const {
-    
+
     for(auto vertex : list) {
         std::cout << "Vertex : " << vertex->getVertex()->getData() << " -> ";
 
-        std::vector<Edge<VertexType> *> edges = vertex->getAllEdges(); 
+        std::vector<Edge<VertexType> *> edges = vertex->getAllEdges();
 
         for(auto edge : edges) {
             std::cout << edge->getVertex()->getData() << ", ";
@@ -710,7 +713,7 @@ bool uGraph<VertexType>::isConnected() {
 // @args   - None
 // @return - Bool indicating whether or not the graph is bipartite
 // @info   - This function uses BFS, marking every other vertex a 0 or 1, and checking if it can reach all vertices without
-//           hitting the same value twice in a row. 
+//           hitting the same value twice in a row.
 template<class VertexType>
 bool uGraph<VertexType>::isBipartite() {
 
@@ -733,7 +736,7 @@ bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
     BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
 
     depthFirst(list[0]->getVertex()->getData(), traveler);
-    
+
     if(!traveler->is_bipartite)
         return false;
 
@@ -750,7 +753,7 @@ bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
     ret->second = v_vertices;
 
     delete(traveler);
-    
+
     return true;
 }
 
@@ -789,8 +792,8 @@ template<class VertexType>
 bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
     // Our deque object, stores the vertices as they appear to the search
-    // We actually use it as a stack for this problem, by inserting and removing from the 
-    // back of the queue 
+    // We actually use it as a stack for this problem, by inserting and removing from the
+    // back of the queue
     std::deque<Vertex<VertexType> *> q;
 
     // A map that allows us to 'mark' the vertices when they've been seen.
@@ -801,39 +804,32 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
     typename std::unordered_map<VertexType, VertexType> prev;
 
     AdjList<VertexType> * root_vert = findVertex(root_data);
+    AdjList<VertexType> * current_vertex = nullptr;
 
     if(root_vert == nullptr)
         return false;
 
+    // visit the new vertex
+    if(traveler) traveler->starting_vertex(root_data);
+
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
-
-    AdjList<VertexType> *  current_vertex = nullptr;
-    bool first_iteration = true;
 
     while(q.size()) {
 
         Vertex<VertexType> * tempVert = q.back();q.pop_back();
         current_vertex = findVertex(tempVert->getData());
 
-        if(current_vertex == nullptr) 
-            return false;
+        if(current_vertex == nullptr) return false;
 
         // visit the node that we just popped off the stack
         VertexType tempData = current_vertex->getVertex()->getData();
 
-        // visit the new vertex
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(root_vert->getVertex()->getData());
-            first_iteration = false;
-        }
-        else if(traveler) {
-            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+        if(traveler && prev.size()) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(tempData));
             Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
-            if(new_edge)
-                traveler->traverse_edge(*new_edge);
+            if(new_edge) traveler->traverse_edge(*new_edge);
         }
-        
 
         std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
@@ -841,13 +837,10 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
             Vertex<VertexType> * tempVert = edge->getVertex();
             VertexType tempData = tempVert->getData();
-            
+
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
-            if(traveler != nullptr) {
-                traveler->examine_edge(*edge);
-                // std::cout << "3st\n";
-            }
+            if(traveler) traveler->examine_edge(*edge);
 
             // if we haven't seen the target vertex for this edge
             if(get == marked.end()) {
@@ -864,16 +857,15 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 
     }
 
-    if(traveler != nullptr)
-        traveler->finished_traversal();
+    if(traveler) traveler->finished_traversal();
 
     return true;
-    
+
 }
 
 
 //@func   - breadthFirst
-// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered. 
+// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered.
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
 // @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
 //           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
@@ -964,7 +956,7 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
 
 // @func   - minimumCut
 // @args   - none
-// @return - 2 column vector of vertices, each column representing one half of the cut. 
+// @return - 2 column vector of vertices, each column representing one half of the cut.
 // @info   - Partitions the current graph into two subsets that have at the minmum number of edges between them.
 // @TODO   - Currently in beta-stage, needs to be tested and debugged. Is semi-working through.
 template<class VertexType>
@@ -978,7 +970,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
     // the following are used to choose an edge to contract randomly
     std::random_device rd;
     std::mt19937 gen(rd());
-    
+
 
     for(int i = 0; i < 3; i++) {
 
@@ -998,7 +990,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
             std::vector<Edge<VertexType> *> edges = i->getAllEdges();
 
             for(auto j : edges) {
-                newList.back()->addEdge(j->getVertex(), j->getWeight()); 
+                newList.back()->addEdge(j->getVertex(), j->getWeight());
             }
         }
 
@@ -1012,14 +1004,14 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
             std::vector<Edge<VertexType> *> edges = adj1->getAllEdges();
 
-            if(!edges.size()) 
+            if(!edges.size())
                 continue;
 
             std::uniform_int_distribution<> dist_Edges(0, edges.size()-1);
             int randEdge = dist_Edges(gen);
 
             AdjList<VertexType> * adj2 = nullptr;
-            
+
 
             typename std::vector<AdjList<VertexType> *>::iterator vertToDelete;
             for(typename std::vector<AdjList<VertexType> *>::iterator it = newList.begin() ; it != newList.end(); ++it) {
@@ -1031,13 +1023,13 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
                     vertToDelete = it;
                     break;
                 }
-            }   
+            }
 
             if(adj2 == nullptr) {
                 adj1->deleteEdge(edges[randEdge]->getVertex());
                 continue;
             }
-            // 
+            //
             // std::cout << "mid";
             // std::cout << adj1->getVertex()->getData() << " :: " << adj2->getVertex()->getData() << "\n";
 
@@ -1067,7 +1059,7 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
                     collapsed.erase(delVert);
                     // std::cout << "t4";
                 }
-            } 
+            }
 
             newList.erase(vertToDelete);
             // std::cout << "end\n";
@@ -1093,9 +1085,9 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 
 
 // @func   - minimumSpanningTree
-// @args   - none
-// @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected 
-// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, 
+// @args   - #1 GraphTraveler object that is used to build the minimum spanning tree
+// @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected
+// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree,
 template<class VertexType>
 bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
@@ -1143,7 +1135,7 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         }
 
         // Take the vertex with the smallest weight and mark it as connected to our min tree
-        mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));  
+        mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));
 
         best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
         last_vertex =  findVertex(set.at(best_vertex->getData()).first)->getVertex();
@@ -1152,7 +1144,7 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
         if(traveler)  {
             Edge<VertexType> new_edge(last_vertex, best_vertex, lowest_weight);
             traveler->traverse_edge(new_edge);
-        }                                           
+        }
 
         // Get all of that vertices neighbors
         std::vector<Edge<VertexType> *> edges = list[index]->getAllEdges();
@@ -1165,9 +1157,9 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
                 traveler->examine_edge(new_edge);
             }
 
-            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second) 
+            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second)
                 set.at(edge->getVertex()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
-            
+
         }
 
     }
@@ -1182,7 +1174,7 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 // @func   - dijkstrasMinimumTree
 // @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
 //           otherwise we stop when we find the destination node
-// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex. 
+// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex.
 //           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
 // @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
 //           the source vertex is not contained in the map.
@@ -1213,8 +1205,8 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
     // so far been discovered. The ordering function orders the vertices in the set based off of the double value only.
     priority_queue queue(f);
 
-    // a pair of maps, this returns both the path between the nodes and the net weight along each path to the user-accessible interface function 
-    typename uGraph<VertexType>::dist_prev_pair *  ret = new uGraph<VertexType>::dist_prev_pair(); 
+    // a pair of maps, this returns both the path between the nodes and the net weight along each path to the user-accessible interface function
+    typename uGraph<VertexType>::dist_prev_pair *  ret = new uGraph<VertexType>::dist_prev_pair();
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
@@ -1267,7 +1259,7 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 
     ret->first = prev;
     ret->second = dist;
-    
+
     return ret;
 }
 
@@ -1275,7 +1267,7 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 // @args   - #1 Source Vertex, #2 Dest Vertex, #3 the GraphTraveler-derived object that will recieve the vertices and edges in minimum order
 // @return - bool indicating success, will return false for graphs with no connection between src and dest vertices.
 // @info   - This function is intended for the user to call to compute the shortest path between any two vertices. This function calls
-//           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a 
+//           the dijkstras(...) function and decodes the output to give the user the specific path they are looking for, as opposed to a
 //           structure that contains the shortest path from the source vertex to any vertex in the map.
 template<class VertexType>
 bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const VertexType & dest, GraphTraveler<VertexType> * traveler) {
@@ -1311,7 +1303,7 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
             return false;//std::pair<std::vector<VertexType>, double>();
         }
         prev_vert = prev->at(prev_vert);
-        path.push_back(prev_vert); 
+        path.push_back(prev_vert);
         count++;
     }
 
@@ -1326,7 +1318,7 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
 
         for(int i = path.size()-2; i >= 0; --i) {
             current = path[i];
-            
+
             if(!containsEdge(last, current))
                 return false;
 
@@ -1347,11 +1339,13 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
 // @func   - aStar
 // @args   - #1 Data contained in starting vertex for search,  #2 Pointer to a hueristic function on a given node
 // @return - Vector containing, in-order, the vertices to take to reach your goal. Empty if you are there or no path exists.
-// @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices. 
+// @info   - Performs the A* path-finding algorithm to get from a starting vertex to any goal vertex in a list of vertices.
 template<class VertexType>
 std::vector<VertexType> uGraph<VertexType>::aStar(const VertexType &, std::vector<VertexType>, double hueristic(VertexType&, VertexType&)) {
 
      // #TODO - Implement A* Path-finding algorithm
+
+    return std::vector<VertexType>();
 
 }
 
@@ -1370,15 +1364,8 @@ AdjList<VertexType> * uGraph<VertexType>::findVertex(const VertexType & data) co
     auto get = lookup_map.find(data);
 
     // if true then a vertex with the given data does not exist in our map, so return nullptr.
-    if(get == lookup_map.end()) 
+    if(get == lookup_map.end())
         return nullptr;
-    
+
     return get->second;
  }
-
-
-
-
-
-
-

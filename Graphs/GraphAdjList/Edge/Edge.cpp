@@ -73,6 +73,7 @@ bool Edge<VertexType>::setSource(Vertex<VertexType> * vert) {
 template <class VertexType>
 bool Edge<VertexType>::setWeight(double wt){
     this->weight = wt;
+    return true;
 }
 
 
