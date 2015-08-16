@@ -100,6 +100,24 @@ uGraph<VertexType>::~uGraph() {
     list.clear();
 }
 
+
+// @func - destoryGraph
+// @info - deletes all internal vertices and edges, cleaning up memory in the process
+template<class VertexType>
+bool uGraph<VertexType>::destroyGraph() {
+    for(auto & vert : list) {
+        vert->getEdgeList()->clear();
+        delete(vert);
+    }
+
+    list.clear();
+    lookup_map.clear();
+    num_vertices = 0;
+    num_edges = 0;
+
+    return true;
+}
+
 // @func   - operator=
 // @args   - #1 constant reference to another graph object to copy into
 // @return - The new graph copy
@@ -107,15 +125,7 @@ template<class VertexType>
 uGraph<VertexType> uGraph<VertexType>::operator=(const uGraph<VertexType> & toCopy) {
 
     auto ourVertices = getAllVertices();
-    // Go through, delete, and clean up all vertices and edges.z
-    for(auto i : ourVertices) {
-        deleteVertex(i);
-    }
-
-    list.clear();
-
-    num_vertices = 0;
-    num_edges = 0;
+    destroyGraph();
 
     auto theirVertices = toCopy.getAllVertices();
 
@@ -177,6 +187,7 @@ bool uGraph<VertexType>::operator!=(const uGraph<VertexType> & toCopy) {
 // @return - A new dGraph that is the intersection of this graph and the argument graph
 // @info   - The intersection will return a new graph that contains only the vertices that are in both graphs. The new graph will also
 //           only have edges that exist in both graphs.
+//           TODO - implement this, why has it not been implemented yet?
 template<class VertexType>
 bool uGraph<VertexType>::getIntersection(const uGraph<VertexType> & other_graph) {
     std::unordered_map<VertexType, bool> their_map;
@@ -200,10 +211,8 @@ bool uGraph<VertexType>::getUnion(const uGraph<VertexType> & other_graph) {
         }
     }
 
-
     return true;
 }
-
 
 // @func   - insertNode
 // @args   - #1 The value of the node to be inserted
@@ -415,7 +424,6 @@ bool uGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
    AdjList<VertexType> *  adj1 = findVertex(v1);
    AdjList<VertexType> *  adj2 = findVertex(v2);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
 
@@ -483,7 +491,6 @@ double uGraph<VertexType>::getEdgeWeight(const VertexType & v1, const VertexType
    AdjList<VertexType> *  adj1 = findVertex(v1);
    AdjList<VertexType> *  adj2 = findVertex(v2);
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
         throw std::logic_error("Can't find Vertices in Graph");
 
@@ -503,9 +510,7 @@ bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const Vertex
 
     AdjList<VertexType> *  adj1 = findVertex(src_vert);
     AdjList<VertexType> *  adj2 = findVertex(dest_vert);
-    bool ret = true;
 
-    // if value returned in the end of the vector, the vertex doesn't exist
     if(adj1 == nullptr || adj2 == nullptr)
         return false;
 
@@ -515,10 +520,7 @@ bool uGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const Vertex
     if(edge1 == nullptr || edge2 == nullptr)
         return false;
 
-    ret = edge1->setWeight(weight);
-    ret = edge2->setWeight(weight);
-
-    return ret;
+    return (edge1->setWeight(weight) && edge2->setWeight(weight));
 }
 
 
@@ -535,7 +537,7 @@ std::vector< Edge<VertexType> > uGraph<VertexType>::getIncidentEdges(const Verte
     AdjList<VertexType> *  adj1 = findVertex(v1);
 
     if(adj1 == nullptr)
-       throw std::logic_error("getIncidentEdges() | Error : Vertex not found in graph\n");
+        throw std::logic_error("getIncidentEdges() | Error : Vertex not found in graph\n");
 
     std::vector<Edge<VertexType> *> edgeList = adj1->getAllEdges();
 
@@ -549,6 +551,7 @@ std::vector< Edge<VertexType> > uGraph<VertexType>::getIncidentEdges(const Verte
 // @func   - processVertex
 // @args   - #1 Data contained in vertex that you wish to process, #2 GraphTraveler object that will process the vertex and it's edges
 // @return - VBool indicating if the vertex could be found or not.
+// @info   - This function will look at the source vertex and then examine all of it's edges (by calling the traveler functions)
 template<class VertexType>
 bool uGraph<VertexType>::processVertex(const VertexType & source, GraphTraveler<VertexType> * traveler) const {
 
@@ -564,6 +567,7 @@ bool uGraph<VertexType>::processVertex(const VertexType & source, GraphTraveler<
         traveler->examine_edge(*edge);
     }
 
+    traveler->finished_traversal();
     return true;
 }
 
@@ -618,7 +622,7 @@ bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
         for(int j = i+1; j < list.size(); j++) {
             VertexType data2 = list[j]->getVertex()->getData();
             (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
-            insertEdge(data1, data2);
+            insertEdge(data1, data2, weight);
         }
     }
 
@@ -629,17 +633,17 @@ bool uGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType
 // @args   - none
 // @return - Bool indicating success
 // @info   - This function switches the direction of all edges
+//           @NOTICE - this function does nothing for undirected graphs, since they have no direction
 template<class VertexType>
 bool uGraph<VertexType>::reverse() {
     return true;
 }
 
-
 // @func   - invert
 // @args   - #1 Weighing function that takes in two vertices and assigns a weight to an edge between them
 // @return - Bool indicating success
 // @info   - This function inverts the current graph, which means it removes all existing edges and emplaces all possible edges
-//             that didn't already exist.
+//           that didn't already exist.
 template<class VertexType>
 bool uGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
 
@@ -656,10 +660,8 @@ bool uGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
             VertexType data2 = list[j]->getVertex()->getData();
             (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
 
-            if(containsEdge(data1, data2))
-                continue;
-
-            temp_graph.insertEdge(data1, data2, weight);
+            if(!containsEdge(data1, data2))
+                temp_graph.insertEdge(data1, data2, weight);
         }
     }
 
@@ -688,7 +690,6 @@ void uGraph<VertexType>::printGraph() const {
     }
     std::cout << "\n\n\n";
 }
-
 
 // @func   - isConnected
 // @args   - None
@@ -783,11 +784,13 @@ bool uGraph<VertexType>::get_is_multi_graph() {
 
 
 // @func   - depthFirst
-// @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components as they're discovered.
+// @args   - #1 Data associated with the starting vertex for the search, #2 Traveler class to process the graph components
+//           as they're discovered.
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
-//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
-//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+// @info   - Performs a depth first traversal, calling the appropraite function inside of the Traveler class when it
+//           encounters a new vertex or edge. This function assumes that all vertex data is unique, so if this is a
+//           graph of strings, no two strings should be the same. This precondition allows us to use an std::unordered_map
+//           to keep track of the seen and unseen vertices.
 template<class VertexType>
 bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
@@ -864,19 +867,21 @@ bool uGraph<VertexType>::depthFirst(const VertexType & root_data, GraphTraveler<
 }
 
 
-//@func   - breadthFirst
-// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph components as they're discovered.
+// @func   - breadthFirst
+// @args   - #1 Data associated with the starting vertex for the search,  #2 Traveler class to process the graph
+//           components as they're discovered.
 // @return - Bool indicating if the function could find the starting vertex based on arg#1
-// @info   - Performs a breadth first traversal, calling the appropraite function inside of the Traveler class when it encounters a new vertex or edge.
-//           This function assumes that all vertex data is unique, so if this is a graph of strings, no two strings should be the same.
-//           This precondition allows us to use an std::unordered_map to keep track of the seen and unseen vertices.
+// @info   - Performs a breadth first traversal, calling the appropriate function inside of the Traveler class when
+//           it encounters a new vertex or edge. This function assumes that all vertex data is unique, so if this is
+//           a graph of strings, no two strings should be the same. This precondition allows us to use an
+//           std::unordered_map to keep track of the seen and unseen vertices.
 template<class VertexType>
 bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTraveler<VertexType> * traveler) {
 
     // Our queue object, stores the vertices as they appear to the search
     std::deque<Vertex<VertexType> *> q;
 
-    // A map that allows us to 'mark' the vertices when they've been seen.
+    // A map that allows us to mark the vertices when they've been seen.
     // maps a set of unique vertex data to a bool that is true if that data has been seen before
     typename std::unordered_map<VertexType, bool> marked;
 
@@ -884,17 +889,16 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
     typename std::unordered_map<VertexType, VertexType> prev;
 
     AdjList<VertexType> *  root_vert = findVertex(root_data);
+    AdjList<VertexType> *  current_vertex = nullptr;
 
     if(root_vert == nullptr)
         return false;
 
+    // visit the start vertex
+    if(traveler) traveler->starting_vertex(root_data);
 
     marked.insert(std::pair<VertexType, bool>(root_data, true));
     q.push_back(root_vert->getVertex());
-
-
-    AdjList<VertexType> *  current_vertex = nullptr;
-    bool first_iteration = true;
 
     while(q.size()) {
 
@@ -906,18 +910,11 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
 
         VertexType tempData = current_vertex->getVertex()->getData();
 
-        // visit the new vertex
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(root_vert->getVertex()->getData());
-            first_iteration = false;
-        }
-        else if(traveler) {
-            AdjList<VertexType> * last_vertex = findVertex(prev.at(current_vertex->getVertex()->getData()));
+        if(traveler) {
+            AdjList<VertexType> * last_vertex = findVertex(prev.at(tempData));
             Edge<VertexType> * new_edge = last_vertex->getEdge(*current_vertex->getVertex());
-            if(new_edge)
-                traveler->traverse_edge(*new_edge);
+            if(new_edge) traveler->traverse_edge(*new_edge);
         }
-
 
         std::vector<Edge<VertexType> *> edges = current_vertex->getAllEdges();
 
@@ -930,15 +927,12 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
             typename std::unordered_map<VertexType, bool>::const_iterator get = marked.find(tempData);
 
             // examine the new edge
-            if(traveler != nullptr)
-                traveler->examine_edge(*edge);
+            if(traveler) traveler->examine_edge(*edge);
 
             // if the current vertex hasn't been seen
             if(get == marked.end()) {
-
                 // add the source vertex for this target vertex to our map
                 prev.insert(std::pair<VertexType, VertexType>(tempData, edge->getSource()->getData()));
-
                 // mark the vertex
                 marked.insert(std::pair<VertexType, bool>(tempVert->getData(), true));
                 // enqueue the new vertex
@@ -948,8 +942,8 @@ bool uGraph<VertexType>::breadthFirst(const VertexType & root_data, GraphTravele
         }
 
     }
-    if(traveler != nullptr)
-        traveler->finished_traversal();
+
+    if(traveler) traveler->finished_traversal();
 
     return true;
 }
@@ -1084,10 +1078,14 @@ std::vector<std::vector<VertexType> > uGraph<VertexType>::minimumCut() {
 }
 
 
-// @func   - minimumSpanningTree
+// @func   - minimuminSpanningTree
 // @args   - #1 GraphTraveler object that is used to build the minimum spanning tree
 // @return - Boolean that indicates if the minimum tree could be traversed or not, false if the graph is not strongly-connected
-// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree,
+// @info   - This function will traverse the graph is such an order as to build a minimum spanning tree, As of right now it requires
+//           that the graph be strongly connected, in-order to avoid an infinite loop. It also always starts at the first
+//           vertex inserted into the graph. It really should just take any vertex and create the minimum spanning tree of
+//           parts of the graph that are accessable to that specific vertex. That way we can have an accompanying function
+//           that computes a minimum spanning forest over the graphs vertices.
 template<class VertexType>
 bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * traveler) {
 
@@ -1111,16 +1109,11 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
     Vertex<VertexType> * best_vertex = list[0]->getVertex(); // the new best vertex to add to our map
     Vertex<VertexType> * last_vertex = best_vertex;          // the source vertex on the edge that will connec the new best_vertex
 
-    bool first_iteration = true;
+    if(traveler) traveler->starting_vertex(best_vertex->getData());
 
     while(mst_set.size() != list.size()) {
         double lowest_weight = imax;        // lowest weight found this iteration
         int index = 0;                      // index of the vertex with the lowest wieght found in our $list vector
-
-        if(traveler && first_iteration) {
-            traveler->starting_vertex(set.at(best_vertex->getData()).first);
-            first_iteration = false;
-        }
 
         // VERY inneficient! Here we scan linearly through all vertices to find the smallest, we need a priority queue!
         for(int i = 0; i < list.size(); i++) {
@@ -1134,11 +1127,10 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
             }
         }
 
+        best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
+        last_vertex = findVertex(set.at(best_vertex->getData()).first)->getVertex();
         // Take the vertex with the smallest weight and mark it as connected to our min tree
         mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));
-
-        best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
-        last_vertex =  findVertex(set.at(best_vertex->getData()).first)->getVertex();
 
         // examine the new edge inserted into the minimum-tree
         if(traveler)  {
@@ -1151,37 +1143,34 @@ bool uGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 
         // Update the weighting of the vertices that are neighbors of the last vertex
         for(auto edge : edges) {
-
             if(traveler)  {
                 Edge<VertexType> new_edge(edge->getSource(), edge->getTarget(), edge->getWeight());
                 traveler->examine_edge(new_edge);
             }
 
-            if(edge->getWeight() <= set.at(edge->getVertex()->getData()).second)
-                set.at(edge->getVertex()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
-
+            if(edge->getWeight() <= set.at(edge->getTarget()->getData()).second) {
+                set.at(edge->getTarget()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
+            }
         }
 
     }
 
-    if(traveler)
-        traveler->finished_traversal();
+    if(traveler) traveler->finished_traversal();
 
     return true;
 }
 
 
 // @func   - dijkstrasMinimumTree
-// @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will find the path to every node
-//           otherwise we stop when we find the destination node
-// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the path there from the source vertex.
-//           The second map takes a vertex and gives the total weight that it takes to get there from the source vertex.
-// @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the map, throws an exception if
-//           the source vertex is not contained in the map.
+// @args   - #1 Data contained in starting vertex for search, #2 optional destination vertex, if null we will
+//           find the path to every node otherwise we stop when we find the destination node
+// @return - A pair containing two maps. The first map takes a vertex and returns the previuos vertex in the
+//           path there from the source vertex.The second map takes a vertex and gives the total weight that
+//           it takes to get there from the source vertex.
+// @info   - Performs Dijkstra's path-finding algorithm to get from a starting vertex to any goal vertex in the
+//           map, throws an exception if the source vertex is not contained in the map.
 template<class VertexType>
 typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinimumTree(const VertexType & source, const VertexType * dest) {
-
-    // auto start = std::chrono::high_resolution_clock::now();
 
     if(findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
@@ -1197,8 +1186,8 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
-    auto f = [](const vert_dist_pair & a, const vert_dist_pair & b) -> bool { return  a.first-b.first < 0.000000001; };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first <= b.first; };
+    // auto f = [](const vert_dist_pair & a, const vert_dist_pair & b) -> bool { return  a.first-b.first < 0.000000001; };
 
     // The priority queue object that we use to run the algorithm. This is really a std::set with a specific ordering function. This set consists
     // of std::pairs, which is a pair of VertexData and a double value, which is the weight along the shortest path to reach that vertex that has
@@ -1207,17 +1196,19 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
 
     // a pair of maps, this returns both the path between the nodes and the net weight along each path to the user-accessible interface function
     typename uGraph<VertexType>::dist_prev_pair *  ret = new uGraph<VertexType>::dist_prev_pair();
+
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
     dist.reserve(getNumVertices());
     prev.reserve(getNumVertices());
-
+    scanned.reserve(getNumVertices());
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
-        dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
-        queue.insert(std::pair<double, VertexType>(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
+        dist.insert(std::make_pair(vertex->getVertex()->getData(), max_weight));
+        queue.insert(std::make_pair(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
+        scanned.insert(std::pair<VertexType,bool>(vertex->getVertex()->getData(), false));
     }
 
     queue.erase(std::make_pair(dist.at(source), source));
@@ -1227,23 +1218,27 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
     while(!queue.empty()) {
 
         double current_dist = queue.begin()->first;
+
         AdjList<VertexType> * current_vert = findVertex(queue.begin()->second);
         if(dest != nullptr && current_vert->getVertex()->getData() == *dest) {
             break;
         }
         queue.erase(queue.begin());
-        scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
+        scanned.at(current_vert->getVertex()->getData()) = true;
 
+        // get the incident edges for the current vertex
         auto edges = current_vert->getEdgeList();
 
+        // cycle through these edges and adjust the path weighting associated with the target vertex
+        // if it is lower than the current shortest path to that vertex
         for(auto & edge : *edges) {
+            if(scanned.at(edge->getTarget()->getData())) continue;
 
-            AdjList<VertexType> * temp_vert = findVertex(edge->getVertex()->getData());
-            VertexType temp_data = temp_vert->getVertex()->getData();
+            VertexType temp_data = edge->getTarget()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(scanned.find(temp_data) == scanned.end() && temp_weight < dist.at(temp_data)) {
+            if(temp_weight < dist.at(temp_data)) {
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
                 if(prev.find(temp_data) == prev.end())
@@ -1288,8 +1283,8 @@ bool uGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         }
         return true;
     }
-    typename uGraph<VertexType>::dist_prev_pair * the_pair = dijkstrasMinimumTree(src, &dest);
 
+    typename uGraph<VertexType>::dist_prev_pair * the_pair = dijkstrasMinimumTree(src, &dest);
     prev = &the_pair->first;
     dist = &the_pair->second;
 

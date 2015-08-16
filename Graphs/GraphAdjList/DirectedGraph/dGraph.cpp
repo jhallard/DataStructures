@@ -48,7 +48,7 @@
 // @args - None
 // @info - Initializes everything to empty
 template<class VertexType>
-dGraph<VertexType>::dGraph() : num_edges(0), num_vertices(0) {
+dGraph<VertexType>::dGraph() : num_edges(0), num_vertices(0), is_multi_graph(false) {
 
 }
 
@@ -94,11 +94,27 @@ dGraph<VertexType>::dGraph(const dGraph<VertexType> & toCopy) {
 // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
 template<class VertexType>
 dGraph<VertexType>::~dGraph() {
-    for(int i = 0; i < list.size(); i++) {
+    for(int i = 0; i < list.size(); i++)
         delete(list[i]);
+
+    list.clear();
+}
+
+// @func - destoryGraph
+// @info - deletes all internal vertices and edges, cleaning up memory in the process
+template<class VertexType>
+bool dGraph<VertexType>::destroyGraph() {
+    for(auto & vert : list) {
+        vert->getEdgeList()->clear();
+        delete(vert);
     }
 
     list.clear();
+    lookup_map.clear();
+    num_vertices = 0;
+    num_edges = 0;
+
+    return true;
 }
 
 // @func   - operator=
@@ -108,21 +124,14 @@ template<class VertexType>
 dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCopy) {
 
     auto ourVertices = getAllVertices();
-    // Go through, delete, and clean up all vertices and edges.z
-    for(auto i : ourVertices) {
-        deleteVertex(i);
-    }
+    destroyGraph();
 
-    list.clear();
-
-    num_vertices = 0;
-    num_edges = 0;
     auto theirVertices = toCopy.getAllVertices();
 
     for(auto i : theirVertices) {
         insertVertex(i);
     }
-
+    
     for(auto i : theirVertices) {
         auto edges = toCopy.getIncidentEdges(i);
 
@@ -130,7 +139,6 @@ dGraph<VertexType> dGraph<VertexType>::operator=(const dGraph<VertexType> & toCo
             insertEdge(i, edge.getTarget()->getData(), edge.getWeight());
         }
     }
-
     return *this;
 }
 
@@ -238,12 +246,15 @@ bool dGraph<VertexType>::getUnion(const dGraph<VertexType> & other_graph) {
     return true;
 }
 
-
 // @func   - insertVertex
 // @args   - #1 The value of the node to be inserted
 // @return - Boolean indicating succes
 template<class VertexType>
 bool dGraph<VertexType>::insertVertex(const VertexType & data) {
+
+    // if true then a vertex with the same data is already in our graph, so return false
+    if(lookup_map.find(data) != lookup_map.end())
+        return false;
 
     // Start by creating a new vertex
     Vertex<VertexType> newVertex;
@@ -252,12 +263,10 @@ bool dGraph<VertexType>::insertVertex(const VertexType & data) {
     if(!newVertex.setData(data))
         return false;
 
-    // if true then a vertex with the same data is already in our graph, so return false
-    if(lookup_map.find(data) != lookup_map.end())
-        return false;
-
     // allocate a new adjacency list on the heap for the new vertex
     AdjList<VertexType> * newList = new AdjList<VertexType>(newVertex);
+
+    newList->set_is_multi_graph(is_multi_graph);
 
     // push the new AdjList onto the vector of AdjLists
     list.push_back(newList);
@@ -283,13 +292,42 @@ bool dGraph<VertexType>::insertVertices(std::vector<VertexType> vertices) {
 
     bool ret = true;
 
-    for(int i = 0; i < vertices.size(); i++) {
-        if(!insertVertex(vertices[i]))
+    for(auto i :vertices) {
+        if(!insertVertex(i))
             ret = false;
     }
 
     return ret;
+}
 
+// @func   - getAllVertices
+// @args   - none
+// @return - Vector of the data contained inside all vertices.
+template<class VertexType>
+std::vector<VertexType> dGraph<VertexType>::getAllVertices() const{
+    std::vector<VertexType> ret;
+    for(auto i : list)
+        ret.push_back(i->getVertex()->getData());
+
+    return ret;
+}
+
+// @func   - getAllEdges
+// @args   - none
+// @return - Vector of all of the edges in the graph
+template<class VertexType>
+std::vector<Edge<VertexType> > dGraph<VertexType>::getAllEdges() const {
+
+    std::vector<Edge<VertexType> > edge_list;
+
+    for(auto vertex : list) {
+
+        for(auto edge : vertex->getAllEdges()) {
+            edge_list.push_back(*edge);
+        }
+    }
+
+    return edge_list;
 }
 
 // @func   - deleteVertices
@@ -421,36 +459,6 @@ bool dGraph<VertexType>::deleteEdge(const VertexType & v1, const VertexType & v2
 
 }
 
-// @func   - getAllVertices
-// @args   - none
-// @return - Vector of the data contained inside all vertices.
-template<class VertexType>
-std::vector<VertexType> dGraph<VertexType>::getAllVertices() const{
-    std::vector<VertexType> ret;
-    for(auto i : list)
-        ret.push_back(i->getVertex()->getData());
-
-    return ret;
-}
-
-// @func   - getAllEdges
-// @args   - none
-// @return - Vector of all of the edges in the graph
-template<class VertexType>
-std::vector<Edge<VertexType> > dGraph<VertexType>::getAllEdges() const {
-
-    std::vector<Edge<VertexType> > edge_list;
-
-    for(auto vertex : list) {
-
-        for(auto edge : vertex->getAllEdges()) {
-            edge_list.push_back(*edge);
-        }
-    }
-
-    return edge_list;
-}
-
 
 // @func   - getNumVertices
 // @args   - None
@@ -541,6 +549,7 @@ bool dGraph<VertexType>::setEdgeWeight(const VertexType & src_vert, const Vertex
 // @func   - getIncidentEdges
 // @args   - Data contained in vertex that you wish to recieve a list of adjacent vertices of.
 // @return - Vector of pairs, first item is the vertex that the edge points to, second is the weight of that edge.
+// @info   - This function will look at the source vertex and then examine all of it's edges (by calling the traveler functions)
 template<class VertexType>
 std::vector<Edge<VertexType> > dGraph<VertexType>::getIncidentEdges(const VertexType & v1) const{
 
@@ -623,21 +632,18 @@ bool dGraph<VertexType>::processVertices(const std::vector<VertexType> & vertice
 template<class VertexType>
 bool dGraph<VertexType>::makeGraphDense(double setWeight(VertexType&, VertexType&)) {
 
+    double weight = std::numeric_limits<double>::infinity();
     for(auto vertex : list)
         vertex->deleteAllEdges();
+    num_edges = 0;
 
     for(int i = 0; i < list.size(); i++) {
-        auto v1 = list[i]->getVertex()->getData();
-        for(int j = 0; j < list.size(); j++) {
-            auto v2 = list[j]->getVertex()->getData();
+        VertexType data1 = list[i]->getVertex()->getData();
 
-            if(setWeight) {
-                double w = setWeight(v1, v2);
-                insertEdge(v1, v2, w);
-            }
-            else {
-                insertEdge(v1, v2);
-            }
+        for(int j = 0; j < list.size(); j++) {
+            VertexType data2 = list[j]->getVertex()->getData();
+            (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
+            insertEdge(data1, data2, weight);
         }
     }
 
@@ -652,6 +658,7 @@ template<class VertexType>
 bool dGraph<VertexType>::reverse() {
 
     dGraph<VertexType> temp_graph;
+
     for(auto i : list)
         temp_graph.insertVertex(i->getVertex()->getData());
 
@@ -687,7 +694,7 @@ bool dGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
             (setWeight == nullptr)? weight = std::numeric_limits<double>::infinity() : weight = setWeight(data1, data2);
 
             if(!containsEdge(data1, data2))
-                temp_graph.insertEdge(data1, data2);
+                temp_graph.insertEdge(data1, data2, weight);
         }
     }
 
@@ -703,20 +710,19 @@ bool dGraph<VertexType>::invert(double setWeight(VertexType&, VertexType&)) {
 template<class VertexType>
 void dGraph<VertexType>::printGraph() const {
 
-    for(int i = 0; i < list.size(); i++) {
-        std::cout << "Vertex : " << list[i]->getVertex()->getData() << " -> ";
+    for(auto vertex : list) {
+        std::cout << "Vertex : " << vertex->getVertex()->getData() << " -> ";
 
-        std::vector<Edge<VertexType> *> edges = list[i]->getAllEdges();
+        std::vector<Edge<VertexType> *> edges = vertex->getAllEdges();
 
-        for(int j = 0; j < edges.size(); j++) {
-            std::cout << edges[j]->getVertex()->getData() << ", ";
+        for(auto edge : edges) {
+            std::cout << edge->getVertex()->getData() << ", ";
         }
 
         std::cout << "\n";
     }
     std::cout << "\n\n\n";
 }
-
 
 // @func   - isConnected
 // @args   - None
@@ -729,6 +735,7 @@ bool dGraph<VertexType>::isConnected() {
 
     dTraveler<VertexType> * trav = new dTraveler<VertexType>();
     dTraveler<VertexType> * trav2 = new dTraveler<VertexType>();
+    
 
     depthFirst(list[0]->getVertex()->getData(), trav);//, f);
 
@@ -743,7 +750,7 @@ bool dGraph<VertexType>::isConnected() {
 
     delete(trav);
     delete(trav2);
-
+    
     return ret;
 }
 
@@ -1163,7 +1170,6 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
 
         best_vertex = list[index]->getVertex();// best vertex to choose to add to the min tree
         last_vertex = findVertex(set.at(best_vertex->getData()).first)->getVertex();
-
         // Take the vertex with the smallest weight and mark it as connected to our min tree
         mst_set.insert(std::pair<VertexType, bool>(best_vertex->getData(), true));
 
@@ -1182,6 +1188,7 @@ bool dGraph<VertexType>::minimumSpanningTree(GraphTraveler<VertexType> * travele
                 Edge<VertexType> new_edge(edge->getSource(), edge->getTarget(), edge->getWeight());
                 traveler->examine_edge(new_edge);
             }
+
             if(edge->getWeight() <= set.at(edge->getTarget()->getData()).second) {
                 set.at(edge->getTarget()->getData()) = std::pair<VertexType, double>(list[index]->getVertex()->getData(), edge->getWeight());
             }
@@ -1209,7 +1216,7 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     if(findVertex(source) == nullptr)
         throw std::logic_error("Source Vertex Not in Graph\n");
 
-    double max_weight = std ::numeric_limits<double>::infinity();
+    double max_weight = std::numeric_limits<double>::infinity();
 
     // Convenient define, this pair will as the type of each entity in our priority queue (a std::set)
     using vert_dist_pair = std::pair<double, VertexType>;
@@ -1220,8 +1227,8 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
 
     // This function takes two pairs<weight, Vertex> and does the comparison only on the weight, not the vertex data. This is passed
     // into our std::set object to allow it to order the nodes according the lowest weight, which gives us a priority queue.
-    // auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first < b.first; };
-    auto f = [](const vert_dist_pair & a, const vert_dist_pair & b) -> bool { return  a.first-b.first < 0.000000001; };
+    auto f = [](const std::pair<double, VertexType> & a, const std::pair<double, VertexType> & b) -> bool { return  a.first <= b.first; };
+    // auto f = [](const vert_dist_pair & a, const vert_dist_pair & b) -> bool { return  a.first-b.first < 0.000000001; };
 
     // The priority queue object that we use to run the algorithm. This is really a std::set with a specific ordering function. This set consists
     // of std::pairs, which is a pair of VertexData and a double value, which is the weight along the shortest path to reach that vertex that has
@@ -1231,17 +1238,18 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     // a pair of maps, this returns both the path between the nodes and the net weight along each path to the user-accessible interface function
     typename dGraph<VertexType>::dist_prev_pair * ret = new dGraph<VertexType>::dist_prev_pair();
 
-
     std::unordered_map<VertexType, double> dist;     // Maps a vertex to it's distance from the source vertex
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
     dist.reserve(getNumVertices());
     prev.reserve(getNumVertices());
+    scanned.reserve(getNumVertices());
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
-        dist.insert(std::pair<VertexType, double>(vertex->getVertex()->getData(), max_weight));
+        dist.insert(std::make_pair(vertex->getVertex()->getData(), max_weight));
         queue.insert(std::make_pair(dist.at(vertex->getVertex()->getData()), vertex->getVertex()->getData()));
+        scanned.insert(std::pair<VertexType,bool>(vertex->getVertex()->getData(), false));
     }
 
     queue.erase(std::make_pair(dist.at(source), source));
@@ -1250,14 +1258,14 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
 
     while(!queue.empty()) {
 
-        // grab from the front of the queue
         double current_dist = queue.begin()->first;
+
         AdjList<VertexType> * current_vert = findVertex(queue.begin()->second);
         if(dest != nullptr && current_vert->getVertex()->getData() == *dest) {
             break;
         }
         queue.erase(queue.begin());
-        scanned.insert(std::pair<VertexType,bool>(current_vert->getVertex()->getData(), true));
+        scanned.at(current_vert->getVertex()->getData()) = true;
 
         // get the incident edges for the current vertex
         auto edges = current_vert->getEdgeList();
@@ -1265,26 +1273,24 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
         // cycle through these edges and adjust the path weighting associated with the target vertex
         // if it is lower than the current shortest path to that vertex
         for(auto & edge : *edges) {
+            if(scanned.at(edge->getTarget()->getData())) continue;
 
-            AdjList<VertexType> * temp_vert = findVertex(edge->getTarget()->getData());
-            VertexType temp_data = temp_vert->getVertex()->getData();
+            VertexType temp_data = edge->getTarget()->getData();
 
             double temp_weight = edge->getWeight() + current_dist;
 
-            if(scanned.find(temp_data) == scanned.end() && temp_weight <= dist.at(temp_data)) {
-
+            if(temp_weight < dist.at(temp_data)) {
                 queue.erase(std::make_pair(dist.at(temp_data), temp_data));
                 dist.at(temp_data) = temp_weight;
-                if(prev.find(temp_data) == prev.end()) {
+                if(prev.find(temp_data) == prev.end())
                     prev.emplace(temp_data, current_vert->getVertex()->getData());
-                }
-                else {
+                else
                     prev.at(temp_data) = current_vert->getVertex()->getData();
-                }
                 queue.insert(std::make_pair(dist.at(temp_data), temp_data));
             }
 
         }
+
     }
 
     ret->first = prev;
@@ -1349,9 +1355,8 @@ bool dGraph<VertexType>::dijkstrasShortestPath(const VertexType & src, const Ver
         for(int i = path.size()-2; i >= 0; --i) {
             current = path[i];
 
-            if(!containsEdge(last, current)) {
+            if(!containsEdge(last, current))
                 return false;
-            }
 
             Edge<VertexType> next_edge = *(findVertex(last)->getEdge(current));
 

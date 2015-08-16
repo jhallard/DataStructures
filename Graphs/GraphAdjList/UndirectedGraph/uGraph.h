@@ -88,6 +88,10 @@ public:
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
     ~uGraph();
 
+    // @func - destoryGraph
+    // @info - deletes all internal vertices and edges, cleaning up memory in the process
+    bool destroyGraph(); 
+
     // @func   - operator=
     // @args   - #1 constant reference to another graph object to copy into
     // @return - The new graph copy
@@ -341,8 +345,8 @@ private:
     int num_edges;
 
     // @member - list
-    // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents that vertex and all of the edges eminating
-    //           from it to other vertices in the graph
+    // @info   - A vector of pointers to adjacency lists, one adjlist for each vertex in our graph. Each adjlist represents 
+    //           that vertex and all of the edges eminating from it to other vertices in the graph
     std::vector< AdjList<VertexType> * > list;
 
     // @member - lookup_map

@@ -42,8 +42,8 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
-#include <stdexcept>
 #include <deque>
+#include <queue>
 #include <unordered_map>
 #include <set>
 #include <iostream>         // needed for printGraph function..
@@ -85,6 +85,10 @@ public:
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
     ~dGraph();
+
+    // @func - destoryGraph
+    // @info - deletes all internal vertices and edges, cleaning up memory in the process
+    bool destroyGraph(); 
 
     // @func   - operator=
     // @args   - #1 constant reference to another graph object, the value of which will be placed in this graph.

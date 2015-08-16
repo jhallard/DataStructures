@@ -44,7 +44,7 @@ public:
             vertex_colors.insert(std::pair<VertexType, bool>(vert, !current_color));
         }
         else if(vertex_colors.at(vert) == current_color) {
-                is_bipartite = false;
+            is_bipartite = false;
         }
     }
 
@@ -66,7 +66,7 @@ public:
 
 
     void starting_vertex(const VertexType & vert) {
-            vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
+        vertex_colors.insert(std::pair<VertexType, bool>(vert, current_color));
     }
 
     void finished_traversal() {
