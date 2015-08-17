@@ -17,8 +17,13 @@ The structures created in this project are all fully templated and made to be as
 #### Graphs
 Graphs are one of the most powerful and all-encompasing data structures known to man, and they are the source for some of the most interesting problems in computer science. This project contains a few different graph implementations, all of which come with their own implementation of BFS, DFS, min-cut, dijkstra's, and other popular graph algorithms. Below is a listing of the various flavors of graphs that are implemented.
 * GraphInterface - `/Graphs/GraphInterface/` : The interface class from which all of graph implementations in this project derive. 
-* uGraph - `/Graphs/GraphAdjList/UndirectedGraph/` : An implementation of a undirected graph that uses a series of adjacency lists to internally represent the graph structure. Almost fully implemented an tested, needs some more work.
-* dGraph - `/Graphs/GraphAdjList/DirectedGraph/` :  An implementation of a undirected graph that uses a series of adjacency lists to internally represent the graph structure. Currently about 75% implemented.
+* uGraph - `/Graphs/GraphAdjList/UndirectedGraph/` : An implementation of a undirected graph that uses a series of adjacency lists to internally represent the graph structure. 
+* dGraph - `/Graphs/GraphAdjList/DirectedGraph/` :  An implementation of a undirected graph that uses a series of adjacency lists to internally represent the graph structure.
+
+The graphs are pretty much finished and have been tested extensively, I'm currently working on improving the runtime performance for some of the core algorithms, like Dijkstra's and Minimum-Spanning-Tree. They both come with a decent-sized group of unit tests, which cover a large percentage of the main functionality of the graphs. 
+
+I'm currently implementing some programs that can generate a wide-array of connected graphs, which I will then put on the internet for others to use for testing purposes. Look for this in the near future.
+
 
 #### Dictionaries
 * HashDictionary - `Dictionaries/HashDictionary/` : This data structure represents a dictionary that uses hashing to insert and locate items. To resolve collisions, we use chaining with linked lists. I first implemented this for a data structures class around the spring of 2014, but I have recently begun to add changes and make improvements.
