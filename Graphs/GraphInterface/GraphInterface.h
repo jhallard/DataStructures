@@ -14,6 +14,7 @@
 #define GraphInterface_h
 
 #include <unordered_map>
+#include <map>
 #include <limits>
 #include <chrono>
 

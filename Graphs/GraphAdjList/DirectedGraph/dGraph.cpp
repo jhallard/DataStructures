@@ -377,7 +377,7 @@ bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
 
 
     // finally remove the node for the current vertex from our map of vertices.
-    typename std::unordered_map<VertexType, AdjList<VertexType> * >::iterator get = lookup_map.find(data);
+    auto get = lookup_map.find(data);
 
     // if true then a vertex with the given data does not exist in our map, which is a problem,
     // and means our internal structure is inconsistent, we'll just return false and turn a blind eye.
@@ -386,7 +386,7 @@ bool dGraph<VertexType>::deleteVertex(const VertexType & data) {
     else
         lookup_map.erase(get);
 
-    for(typename std::vector<AdjList<VertexType> *>::iterator it = list.begin() ; it != list.end(); ++it) {
+    for(auto it = list.begin() ; it != list.end(); ++it) {
 
         AdjList<VertexType> * adj1 = *it;
 
@@ -733,25 +733,22 @@ bool dGraph<VertexType>::isConnected() {
 
     dGraph<VertexType> temp_graph = *this;
 
-    dTraveler<VertexType> * trav = new dTraveler<VertexType>();
-    dTraveler<VertexType> * trav2 = new dTraveler<VertexType>();
+    // dTraveler<VertexType> * trav = new dTraveler<VertexType>();
+    // dTraveler<VertexType> * trav2 = new dTraveler<VertexType>();
     
+    dTraveler<VertexType> trav;
+    dTraveler<VertexType> trav2;
 
-    depthFirst(list[0]->getVertex()->getData(), trav);//, f);
+    depthFirst(list[0]->getVertex()->getData(), &trav);//, f);
 
-    if(trav->graph.getNumVertices() != list.size())
+    if(trav.graph.getNumVertices() != list.size())
         return false;
 
     temp_graph.reverse();
 
-    temp_graph.depthFirst(list[0]->getVertex()->getData(), trav2);
+    temp_graph.depthFirst(list[0]->getVertex()->getData(), &trav2);
 
-    bool ret = (trav2->graph.getNumVertices() == list.size());
-
-    delete(trav);
-    delete(trav2);
-    
-    return ret;
+    return (trav2.graph.getNumVertices() == list.size());
 }
 
 // @func   - isBipartite
@@ -762,14 +759,11 @@ bool dGraph<VertexType>::isConnected() {
 template<class VertexType>
 bool dGraph<VertexType>::isBipartite() {
 
-    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+    BipartiteTraveler<VertexType> traveler;
 
-    depthFirst(list[0]->getVertex()->getData(), traveler);
+    depthFirst(list[0]->getVertex()->getData(), &traveler);
 
-    bool ret = traveler->is_bipartite;
-    delete(traveler);
-
-    return ret;
+    return traveler.is_bipartite;
 }
 
 // @func   - Bipartition
@@ -778,16 +772,16 @@ bool dGraph<VertexType>::isBipartite() {
 template<class VertexType>
 bool dGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::vector<VertexType> > * ret) {
 
-    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+    BipartiteTraveler<VertexType> traveler;
 
-    depthFirst(list[0]->getVertex()->getData(), traveler);
+    depthFirst(list[0]->getVertex()->getData(), &traveler);
 
-    if(!traveler->is_bipartite)
+    if(!traveler.is_bipartite)
         return false;
 
     std::vector<VertexType> u_vertices, v_vertices;
 
-    for(auto vertex : traveler->vertex_colors) {
+    for(auto vertex : traveler.vertex_colors) {
         if(vertex.second)
             u_vertices.push_back(vertex.first);
         else
@@ -796,8 +790,6 @@ bool dGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
 
     ret->first = u_vertices;
     ret->second = v_vertices;
-
-    delete(traveler);
 
     return true;
 }
@@ -1242,9 +1234,9 @@ typename dGraph<VertexType>::dist_prev_pair * dGraph<VertexType>::dijkstrasMinim
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
-    dist.reserve(getNumVertices());
-    prev.reserve(getNumVertices());
-    scanned.reserve(getNumVertices());
+//    dist.reserve(getNumVertices());
+//    prev.reserve(getNumVertices());
+//    scanned.reserve(getNumVertices());
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
         dist.insert(std::make_pair(vertex->getVertex()->getData(), max_weight));

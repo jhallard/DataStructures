@@ -1,0 +1,5 @@
+[ 20%] Built target Main/main
+[ 30%] Building CXX object CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o
+CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/build.make:62: recipe for target 'CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/Testing/dGraphTesting/IntTesting/dGraphTestInt.cpp.o' failed
+CMakeFiles/Makefile2:104: recipe for target 'CMakeFiles/Testing/dGraphTesting/IntTesting/dGraphTestInt.dir/all' failed
+Makefile:83: recipe for target 'all' failed

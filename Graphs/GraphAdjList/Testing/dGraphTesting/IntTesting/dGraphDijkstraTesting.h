@@ -18,14 +18,14 @@ void analyzeGraphDijkstras(dGraph<int> * graph, int num_vertices, int iterations
         auto start = std::chrono::high_resolution_clock::now();
         try {
             if(!graph->dijkstrasShortestPath(r, y, trav)) {
-                std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+                std::cout <<info << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
                 testval = false;
                 total++;
                 graph->printGraph();
             }
         } catch (std::exception) {
-            std::cout << "Exception Caught : \n";
-            std::cout << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
+            std::cout << info << "Exception Caught : \n";
+            std::cout << info << " [" << k << "/" << iterations << "] " << "Path Not Found : " << r << " -> " << y << "\n";
         }
         auto elapsed = std::chrono::high_resolution_clock::now() - start;   
         long long m = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
@@ -36,10 +36,10 @@ void analyzeGraphDijkstras(dGraph<int> * graph, int num_vertices, int iterations
     }
 
     average = average/(count);
-    std::cout << "\n\nAnalysis : ___________________\n";
-    std::cout << "Graph Description : #Vertices = " << graph->getNumVertices() << "  #Edges = " << graph->getNumEdges() << "\n";
-    std::cout << "Wrong Paths :" << total << "/" << iterations << " \n";
-    std::cout << "Average RunTime : " << average << "\n\n\n";
+    std::cout << info << "Analysis : ___________________\n";
+    std::cout << info << "Graph Description : #Vertices = " << graph->getNumVertices() << "  #Edges = " << graph->getNumEdges() << "\n";
+    std::cout << info << "Wrong Paths :" << total << "/" << iterations << "\n";
+    std::cout << info << "Average RunTime : " << average << "\n";
     ASSERT_EQ(true, testval);
 
 }
@@ -91,7 +91,7 @@ TEST(Dijkstras, dense_graph_test) {
     double (*fptr)(int &, int &);
     fptr = setweight;
 
-    std::cout << "Making " << num_vertices << " vertices dense ..\n";
+    std::cout << info << "Making " << num_vertices << " vertices dense ..";
     graph.makeGraphDense(fptr);
     std::cout << "...finished \n";
 
@@ -142,7 +142,7 @@ TEST(Dijkstras, large_test_union_3) {
     int num_vertices = 20000;
     int vert_per_subgraph = 5;
     int rand_edges = 500000;
-    int iterations = 10;
+    int iterations = 5;
 
     dGraph<int> graph;
 

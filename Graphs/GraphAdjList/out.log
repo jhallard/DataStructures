@@ -1,0 +1,187 @@
+[==========] Running 31 tests from 9 test cases.
+[----------] Global test environment set-up.
+[----------] 10 tests from EdgesTest
+[ RUN      ] EdgesTest.empty_graph
+[       OK ] EdgesTest.empty_graph (0 ms)
+[ RUN      ] EdgesTest.insert_few
+[       OK ] EdgesTest.insert_few (1 ms)
+[ RUN      ] EdgesTest.insert_multiple
+[       OK ] EdgesTest.insert_multiple (0 ms)
+[ RUN      ] EdgesTest.insert_multiple_larger
+[       OK ] EdgesTest.insert_multiple_larger (0 ms)
+[ RUN      ] EdgesTest.edge_deletion
+[       OK ] EdgesTest.edge_deletion (0 ms)
+[ RUN      ] EdgesTest.edge_deletion2
+[       OK ] EdgesTest.edge_deletion2 (0 ms)
+[ RUN      ] EdgesTest.large_dense_graph
+[       OK ] EdgesTest.large_dense_graph (78 ms)
+[ RUN      ] EdgesTest.no_duplicates
+[       OK ] EdgesTest.no_duplicates (10 ms)
+[ RUN      ] EdgesTest.adj_vertices
+[       OK ] EdgesTest.adj_vertices (0 ms)
+[ RUN      ] EdgesTest.vertex_and_edge_deletion
+[       OK ] EdgesTest.vertex_and_edge_deletion (0 ms)
+[----------] 10 tests from EdgesTest (89 ms total)
+
+[----------] 3 tests from MinTreeTests
+[ RUN      ] MinTreeTests.simple_test
+[       OK ] MinTreeTests.simple_test (0 ms)
+[ RUN      ] MinTreeTests.larger_test
+MinSpanTree Time : 3556
+Vertices : 2000 -- Edges : 1999000
+Min Tree Vertices : 2000 -- Min Tree Edges : 1999
+[       OK ] MinTreeTests.larger_test (6883 ms)
+[ RUN      ] MinTreeTests.non_connected_error
+[       OK ] MinTreeTests.non_connected_error (0 ms)
+[----------] 3 tests from MinTreeTests (6883 ms total)
+
+[----------] 1 test from MinTreetTests
+[ RUN      ] MinTreetTests.simple_test2
+[       OK ] MinTreetTests.simple_test2 (0 ms)
+[----------] 1 test from MinTreetTests (0 ms total)
+
+[----------] 6 tests from VerticesTest
+[ RUN      ] VerticesTest.empty_graph
+[       OK ] VerticesTest.empty_graph (0 ms)
+[ RUN      ] VerticesTest.insert_one_by_one
+[       OK ] VerticesTest.insert_one_by_one (0 ms)
+[ RUN      ] VerticesTest.insert_all_at_once
+[       OK ] VerticesTest.insert_all_at_once (0 ms)
+[ RUN      ] VerticesTest.large_insert_delete
+[       OK ] VerticesTest.large_insert_delete (22 ms)
+[ RUN      ] VerticesTest.test_no_duplicates
+[       OK ] VerticesTest.test_no_duplicates (0 ms)
+[ RUN      ] VerticesTest.delete_test
+[       OK ] VerticesTest.delete_test (0 ms)
+[----------] 6 tests from VerticesTest (22 ms total)
+
+[----------] 1 test from UnionTests
+[ RUN      ] UnionTests.simple_test
+[       OK ] UnionTests.simple_test (0 ms)
+[----------] 1 test from UnionTests (0 ms total)
+
+[----------] 2 tests from Bipartite
+[ RUN      ] Bipartite.simple_positive_test
+[       OK ] Bipartite.simple_positive_test (0 ms)
+[ RUN      ] Bipartite.simple_negative_test
+[       OK ] Bipartite.simple_negative_test (0 ms)
+[----------] 2 tests from Bipartite (0 ms total)
+
+[----------] 1 test from Bipartition
+[ RUN      ] Bipartition.simple_positive_test
+[       OK ] Bipartition.simple_positive_test (0 ms)
+[----------] 1 test from Bipartition (0 ms total)
+
+[----------] 1 test from SpeedTests
+[ RUN      ] SpeedTests.large_bfs_dfs_test
+[       OK ] SpeedTests.large_bfs_dfs_test (2455 ms)
+[----------] 1 test from SpeedTests (2455 ms total)
+
+[----------] 6 tests from Dijkstras
+[ RUN      ] Dijkstras.MinTreeSearch
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 1000  #Edges = 999
+Wrong Paths :0/1000 
+Average RunTime : 2.221
+
+
+[       OK ] Dijkstras.MinTreeSearch (4364 ms)
+[ RUN      ] Dijkstras.dense_graph_test
+Making 2500 vertices dense ..
+...finished 
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 2500  #Edges = 3123750
+Wrong Paths :0/5 
+Average RunTime : 6959.2
+
+
+[       OK ] Dijkstras.dense_graph_test (40109 ms)
+[ RUN      ] Dijkstras.large_test_union_1
+Creating 160 Subgraphs with 10 vertices each...  
+Finished 
+Concatinating 160 Subgraphs...  
+Finished 
+Connecting subGraph Centers...  
+Finished 
+Adding Random Edges...  
+Finished 
+Checking for Connectivity...
+Confirmed
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 1600  #Edges = 12313
+Wrong Paths :0/20 
+Average RunTime : 22.25
+
+
+[       OK ] Dijkstras.large_test_union_1 (586 ms)
+[ RUN      ] Dijkstras.large_test_union_2
+Creating 270 Subgraphs with 15 vertices each...  
+Finished 
+Concatinating 270 Subgraphs...  
+Finished 
+Connecting subGraph Centers...  
+Finished 
+Adding Random Edges...  
+Finished 
+Checking for Connectivity...
+Confirmed
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 4050  #Edges = 41163
+Wrong Paths :0/10 
+Average RunTime : 73.5
+
+
+[       OK ] Dijkstras.large_test_union_2 (959 ms)
+[ RUN      ] Dijkstras.large_test_union_3
+Creating 10000 Subgraphs with 2 vertices each...  
+Finished 
+Concatinating 10000 Subgraphs...  
+Finished 
+Connecting subGraph Centers...  
+Finished 
+Adding Random Edges...  
+Finished 
+Checking for Connectivity...
+Confirmed
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 20000  #Edges = 144907
+Wrong Paths :0/2 
+Average RunTime : 347
+
+
+[       OK ] Dijkstras.large_test_union_3 (1703 ms)
+[ RUN      ] Dijkstras.large_test_union_4
+Creating 40000 Subgraphs with 3 vertices each...  
+Finished 
+Concatinating 40000 Subgraphs...  
+Finished 
+Connecting subGraph Centers...  
+Finished 
+Adding Random Edges...  
+Finished 
+Checking for Connectivity...
+Confirmed
+
+
+Analysis : ___________________
+Graph Description : #Vertices = 120000  #Edges = 2656220
+Wrong Paths :0/2 
+Average RunTime : 7316
+
+
+[       OK ] Dijkstras.large_test_union_4 (33501 ms)
+[----------] 6 tests from Dijkstras (81231 ms total)
+
+[----------] Global test environment tear-down
+[==========] 31 tests from 9 test cases ran. (90683 ms total)
+[  PASSED  ] 31 tests.

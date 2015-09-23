@@ -45,6 +45,7 @@
 #include <deque>
 #include <queue>
 #include <unordered_map>
+#include <map>
 #include <set>
 #include <iostream>         // needed for printGraph function..
 #include <limits>
@@ -84,7 +85,7 @@ public:
 
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
-    ~dGraph();
+    virtual ~dGraph();
 
     // @func - destoryGraph
     // @info - deletes all internal vertices and edges, cleaning up memory in the process
@@ -362,6 +363,7 @@ private:
     //            inside these two maps is both the shortest path from the source vertex to any other node in the graph, and the net
     //            weight along that path. These two maps are decoded inside the helper function to return a single shortest path
     //            between two vertices, so the user doesn't have to decode it themselves.
+    // typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
     typedef std::pair<std::unordered_map<VertexType, VertexType>, std::unordered_map<VertexType, double> > dist_prev_pair;
 
 

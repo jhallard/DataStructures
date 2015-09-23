@@ -86,7 +86,7 @@ public:
 
     // @func  - Destructor
     // @info  - Cleans up the dynamically allocated AdjList objects contains in the list vector.
-    ~uGraph();
+    virtual ~uGraph();
 
     // @func - destoryGraph
     // @info - deletes all internal vertices and edges, cleaning up memory in the process

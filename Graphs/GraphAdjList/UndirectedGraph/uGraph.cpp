@@ -364,7 +364,7 @@ bool uGraph<VertexType>::deleteVertex(const VertexType & data) {
         lookup_map.erase(get);
 
     // here we go through our list of adj lists and erase the one corresponding to the vertex we are deleting.
-    for(typename std::vector<AdjList<VertexType> *>::iterator it = list.begin() ; it != list.end(); ++it) {
+    for(auto it = list.begin() ; it != list.end(); ++it) {
 
         AdjList<VertexType> * adj1 = *it;
 
@@ -698,15 +698,11 @@ void uGraph<VertexType>::printGraph() const {
 template<class VertexType>
 bool uGraph<VertexType>::isConnected() {
 
-    uTraveler<VertexType> * trav = new uTraveler<VertexType>();
+    uTraveler<VertexType> trav; 
 
-    depthFirst(list[0]->getVertex()->getData(), trav);
+    depthFirst(list[0]->getVertex()->getData(), &trav);
 
-    bool ret = trav->graph.getNumVertices() == list.size();
-
-    delete(trav);
-
-    return ret;
+    return trav.graph.getNumVertices() == list.size();
 }
 
 
@@ -718,14 +714,11 @@ bool uGraph<VertexType>::isConnected() {
 template<class VertexType>
 bool uGraph<VertexType>::isBipartite() {
 
-    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+    BipartiteTraveler<VertexType> traveler;
 
-    depthFirst(list[0]->getVertex()->getData(), traveler);
+    depthFirst(list[0]->getVertex()->getData(), &traveler);
 
-    bool ret = traveler->is_bipartite;
-    delete(traveler);
-
-    return ret;
+    return traveler.is_bipartite;
 }
 
 // @func   - getBipartition
@@ -734,16 +727,16 @@ bool uGraph<VertexType>::isBipartite() {
 template<class VertexType>
 bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::vector<VertexType> > * ret) {
 
-    BipartiteTraveler<VertexType> * traveler = new BipartiteTraveler<VertexType>();
+    BipartiteTraveler<VertexType> traveler; 
 
-    depthFirst(list[0]->getVertex()->getData(), traveler);
+    depthFirst(list[0]->getVertex()->getData(), &traveler);
 
-    if(!traveler->is_bipartite)
+    if(!traveler.is_bipartite)
         return false;
 
     std::vector<VertexType> u_vertices, v_vertices;
 
-    for(auto vertex : traveler->vertex_colors) {
+    for(auto vertex : traveler.vertex_colors) {
         if(vertex.second)
             u_vertices.push_back(vertex.first);
         else
@@ -752,8 +745,6 @@ bool uGraph<VertexType>::getBipartition(std::pair<std::vector<VertexType>, std::
 
     ret->first = u_vertices;
     ret->second = v_vertices;
-
-    delete(traveler);
 
     return true;
 }
@@ -1201,9 +1192,9 @@ typename uGraph<VertexType>::dist_prev_pair * uGraph<VertexType>::dijkstrasMinim
     std::unordered_map<VertexType, VertexType> prev; // Maps a given vertex to the previous vertex that we took to get there
     std::unordered_map<VertexType, bool> scanned;    // Maps a given vertex to a bool, letting us know if we have examine all of it's neighbors.
 
-    dist.reserve(getNumVertices());
-    prev.reserve(getNumVertices());
-    scanned.reserve(getNumVertices());
+    // dist.reserve(getNumVertices());
+    // prev.reserve(getNumVertices());
+    // scanned.reserve(getNumVertices());
 
     for(auto & vertex : list) { // Initialize the distances to infinity for all vertices
         dist.insert(std::make_pair(vertex->getVertex()->getData(), max_weight));

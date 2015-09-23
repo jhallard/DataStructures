@@ -140,9 +140,9 @@ TEST(Dijkstras, large_test_union_2) {
 TEST(Dijkstras, large_test_union_3) {
 
     int num_vertices = 20000;
-    int vert_per_subgraph = 2;
+    int vert_per_subgraph = 5;
     int rand_edges = 500000;
-    int iterations = 2;
+    int iterations = 5;
 
     uGraph<int> graph;
 
